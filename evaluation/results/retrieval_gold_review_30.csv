@@ -1,0 +1,5 @@
+mode,questions,hit_rate_at_5,mrr_at_5,ndcg_at_5,p50_latency_ms,multi_source_recall_at_5
+bm25,30,0.6,0.4594,0.419,6.6153,0.25
+dense,30,0.6333,0.5056,0.4775,6.6403,0.3125
+hybrid,30,0.6667,0.4861,0.4981,6.6465,0.5
+hybrid_rerank,30,0.6333,0.5122,0.486,7.2744,0.4375

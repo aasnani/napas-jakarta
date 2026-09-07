@@ -20,6 +20,15 @@ uv run python -m evaluation.review_ground_truth \
 ```
 
 Blank decisions remain pending and the committed seed file is never overwritten.
+
+For a compact review pass, run `PYTHONPATH=. python evaluation/build_gold_review_30.py`
+to regenerate the 30-row packet and evidence from the frozen corpus. The
+packet records its corpus and chunk fingerprints, all four local retrieval
+modes, proposed chunk locators, and blank human fields. Use the focused
+workbook's `Start Here` sheet for progress and `Evidence` to inspect passages;
+do not mix its results with the 120-row development pool. The finalizer in
+`evaluation/finalize_gold_review.py` accepts only a complete CSV export with
+no `Pending` rows and checks every human chunk ID against `data/index/chunks.jsonl`.
 Run `make validate-sources` to check that every manifest entry has the required
 provenance, legal-status, geographic-scope, and checksum fields.
 Validate the resulting artifact with `uv run python -m evaluation.validate_ground_truth

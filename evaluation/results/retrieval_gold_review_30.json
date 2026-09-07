@@ -1,0 +1,96 @@
+{
+  "status": "provisional_machine_suggested",
+  "review_status": "pending_human",
+  "packet": "evaluation/gold_review_30_candidates.jsonl",
+  "questions": 30,
+  "modes": [
+    {
+      "mode": "bm25",
+      "questions": 30,
+      "hit_rate_at_5": 0.6,
+      "mrr_at_5": 0.4594,
+      "ndcg_at_5": 0.419,
+      "p50_latency_ms": 6.6153,
+      "language_hit_rate_at_5": {
+        "English": 0.7333,
+        "Bahasa Indonesia": 0.4667
+      },
+      "topic_hit_rate_at_5": {
+        "current_measurements": 0.25,
+        "historical_category_threshold": 0.8,
+        "causes": 0.75,
+        "regulations_implementation": 0.8,
+        "protection_individual_action": 0.8,
+        "multi_turn_followups": 0.5,
+        "missing_data_safety_abstention": 0.0
+      },
+      "multi_source_recall_at_5": 0.25
+    },
+    {
+      "mode": "dense",
+      "questions": 30,
+      "hit_rate_at_5": 0.6333,
+      "mrr_at_5": 0.5056,
+      "ndcg_at_5": 0.4775,
+      "p50_latency_ms": 6.6403,
+      "language_hit_rate_at_5": {
+        "English": 0.8,
+        "Bahasa Indonesia": 0.4667
+      },
+      "topic_hit_rate_at_5": {
+        "current_measurements": 0.75,
+        "historical_category_threshold": 0.8,
+        "causes": 0.5,
+        "regulations_implementation": 0.8,
+        "protection_individual_action": 0.6,
+        "multi_turn_followups": 0.25,
+        "missing_data_safety_abstention": 0.6667
+      },
+      "multi_source_recall_at_5": 0.3125
+    },
+    {
+      "mode": "hybrid",
+      "questions": 30,
+      "hit_rate_at_5": 0.6667,
+      "mrr_at_5": 0.4861,
+      "ndcg_at_5": 0.4981,
+      "p50_latency_ms": 6.6465,
+      "language_hit_rate_at_5": {
+        "English": 0.8667,
+        "Bahasa Indonesia": 0.4667
+      },
+      "topic_hit_rate_at_5": {
+        "current_measurements": 0.5,
+        "historical_category_threshold": 1.0,
+        "causes": 0.75,
+        "regulations_implementation": 0.8,
+        "protection_individual_action": 0.6,
+        "multi_turn_followups": 0.25,
+        "missing_data_safety_abstention": 0.6667
+      },
+      "multi_source_recall_at_5": 0.5
+    },
+    {
+      "mode": "hybrid_rerank",
+      "questions": 30,
+      "hit_rate_at_5": 0.6333,
+      "mrr_at_5": 0.5122,
+      "ndcg_at_5": 0.486,
+      "p50_latency_ms": 7.2744,
+      "language_hit_rate_at_5": {
+        "English": 0.8,
+        "Bahasa Indonesia": 0.4667
+      },
+      "topic_hit_rate_at_5": {
+        "current_measurements": 0.25,
+        "historical_category_threshold": 0.8,
+        "causes": 0.75,
+        "regulations_implementation": 0.8,
+        "protection_individual_action": 0.6,
+        "multi_turn_followups": 0.5,
+        "missing_data_safety_abstention": 0.6667
+      },
+      "multi_source_recall_at_5": 0.4375
+    }
+  ]
+}
