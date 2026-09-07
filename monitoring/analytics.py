@@ -182,13 +182,14 @@ def _from_postgres(dsn: str, days: int) -> dict[str, Any]:
     # Deliberately select telemetry columns only; question and comment fields
     # never cross the database boundary into the dashboard process.
     with psycopg.connect(dsn) as connection:
+        cutoff = (datetime.now(UTC) - timedelta(days=days)).isoformat()
         rows = connection.execute(
             """SELECT created_at, event, route, retrieval_mode, citation_grounded,
                       latency_ms, token_usage, estimated_cost, error_type,
                       abstention_type, feedback
                FROM interactions
-               WHERE created_at::timestamptz >= now() - (%s * interval '1 day')""",
-            (days,),
+               WHERE created_at >= %s""",
+            (cutoff,),
         ).fetchall()
     records = [
         {
