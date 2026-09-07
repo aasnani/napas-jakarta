@@ -57,6 +57,9 @@ SOURCE_DATA_URL=<the official Jakarta CSV/JSON export URL>
 HISTORICAL_AIR_URL=https://air-quality-api.open-meteo.com/v1/air-quality
 HISTORICAL_REFRESH_UTC_HOUR=17
 HISTORICAL_REFRESH_DAYS=92
+OFFICIAL_CONNECT_TIMEOUT_SECONDS=5
+OFFICIAL_READ_TIMEOUT_SECONDS=15
+OFFICIAL_FETCH_RETRIES=2
 PREFECT_SERVER_ANALYTICS_ENABLED=false
 ```
 
@@ -142,6 +145,14 @@ separate table. The latter is explicitly city-model context, not an official
 station reading. The CSV files are retained in the image as a fallback, but
 Railway's container filesystem is ephemeral and must not be treated as the
 durable database.
+
+The official portal request uses bounded socket/read timeouts and retries
+transient connection or read failures. If the portal remains unavailable, the
+cron publishes the latest retained local snapshot (or the committed demo
+snapshot only when no retained file exists) and records `source_status` and
+`source_error` in `ingestion_report.json`; it never labels that fallback as a
+new live observation. HTTP errors and schema changes still fail visibly so a
+source contract problem is not silently hidden.
 
 Railway may skip a scheduled run when the previous run is still active, so the
 ingestion command is deliberately finite and idempotent. The schedule is an
