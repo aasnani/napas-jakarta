@@ -1,117 +1,72 @@
 # Evaluation
 
-Run `make eval` to regenerate the committed retrieval and generation artifacts.
-Run `python -m ingestion.corpus` to regenerate the document/chunk inventory and
-`data/index/corpus_report.json`; it records intentional provenance exceptions,
-unexplained manifest/local identity mismatches, duplicate checksums, rejection
-diagnostics and the corpus fingerprint.
-The committed retrieval set now contains 150 stratified seed questions. Each
-row is explicitly marked `seeded_pending_human_review`; manually review and
-correct the questions and relevance labels before submission. The benchmark
-reports hit@5, MRR, nDCG, and p50 latency while retaining the planned categories.
-
-Use `make export-review` to create a spreadsheet-friendly review sheet. After
-filling `reviewed_relevant_document_ids`, apply it to a separate artifact:
+Run the offline checks from a locked checkout:
 
 ```bash
-uv run python -m evaluation.review_ground_truth \
-  --apply evaluation/ground_truth_review.csv \
-  --reviewer YOUR_NAME \
-  --output evaluation/ground_truth_reviewed.jsonl
+make eval
+PYTHONPATH=. uv run python evaluation/eval_gold_review_30_retrieval.py
+make validate-sources
+uv run ruff check .
 ```
 
-Blank decisions remain pending and the committed seed file is never overwritten.
+## Retrieval
 
-For a compact review pass, run `PYTHONPATH=. python evaluation/build_gold_review_30.py`
-to regenerate the 30-row packet and evidence from the frozen corpus. The
-packet records its corpus and chunk fingerprints, all four local retrieval
-modes, proposed chunk locators, and blank human fields. Use the focused
-workbook's `Start Here` sheet for progress and `Evidence` to inspect passages;
-do not mix its results with the 120-row development pool. The finalizer in
-`evaluation/finalize_gold_review.py` accepts only a complete CSV export with
-no `Pending` rows and checks every human chunk ID against `data/index/chunks.jsonl`.
-Run `make validate-sources` to check that every manifest entry has the required
-provenance, legal-status, geographic-scope, and checksum fields.
-Validate the resulting artifact with `uv run python -m evaluation.validate_ground_truth
---input evaluation/ground_truth_reviewed.jsonl` before using it in the benchmark.
+`evaluation/gold_review_30_final.jsonl` contains 30 bilingual questions with
+completed human review of relevant structure-aware chunks. The evaluator maps a
+reviewed chunk to its parent document rank and writes
+`evaluation/results/retrieval_gold_review_30.json` and CSV.
 
-`evaluation/results/retrieval_gold_review_30.json` is the human-reviewed
-30-question retrieval benchmark. Run it with:
+The primary comparison is the `document_rag` slice: routes expected to use
+documentary evidence. Typed measurement, index, and abstention routes remain in
+the all-system set and are checked separately through deterministic tool and
+safety contracts. The artifact names the exact route list used for the slice.
+The selected `hybrid` method is configured by `RETRIEVAL_MODE=hybrid` in the
+environment template and is used by the API, NiceGUI, and local compatibility
+UI unless a supported value is explicitly supplied.
+
+The all-system hybrid result has question hit@5 of 0.6667 and chunk recall@5 of
+0.5789. Its English hit@5 is 0.8667 and Bahasa Indonesia hit@5 is 0.4667; the
+four multi-turn questions have hit@5 of 0.25. This is an important limitation,
+not a claim of equal bilingual quality. The follow-up work is to expand reviewed
+Bahasa Indonesia evidence and inspect retrieval failures before changing the
+selected method.
+
+## Answer generation
+
+`app.provider.PROMPTS` is the single source for generation prompt variants.
+The runtime uses `PROMPT_VARIANT=strict` by default and records `strict-v1` in
+answer telemetry. `evaluation/eval_generation.py` imports those exact strings;
+it does not maintain separate shortened prompts.
+
+The offline fallback and provider outputs are **heuristic contract checks**. They measure
+non-empty output, citation-token structure, numeric consistency, safety, and a
+simple Bahasa signal. They do not judge semantic relevance, factual
+groundedness, completeness of every claim, or user usefulness. Provider calls
+are never made by ordinary tests. The result artifact also records a shared
+prompt regression contract: the selected variant/version and stable hashes for
+the exact runtime/evaluator prompt strings. The deterministic fallback does not
+invoke a model, so it is not presented as a prompt-arm comparison. When an
+approved configured provider key is
+available, bound a rerun explicitly, for example:
 
 ```bash
-PYTHONPATH=. python evaluation/eval_gold_review_30_retrieval.py
+GENERATION_PROVIDER_LIMIT=2 uv run python -m evaluation.eval_generation
 ```
 
-It fails closed unless all 30 rows in `gold_review_30_final.jsonl` are marked
-`human_reviewed` and every `human_relevant_chunk_ids` entry resolves in the
-current corpus. Since retrieval returns documents, each reviewed chunk is
-scored at its parent-document rank; the JSON and CSV report exact covered chunk
-IDs plus overall, language, topic and multi-source slices. The documented
-selection order is chunk recall, question hit rate, MRR, nDCG, then lower p50
-latency. The current result selects `hybrid`, matching the shipped default.
+This command sends two representative cases through each named prompt variant
+for the configured model, records the exact prompt version, and writes
+`evaluation/results/generation_results.json`. Inspect the answers as well as the
+heuristics; a small bounded run does not establish broad performance.
 
-`evaluation/results/retrieval_results.json` records the expanded-v1 corpus
-fingerprint and all four retrieval arms, including nDCG@5 and p50 latency. The
-current production choice is `hybrid` because it leads on MRR and nDCG; the
-shipped default is synchronized in `.env.example`, `app/api.py`, and `app/rag.py`.
-`generation_results.json` is an offline contract harness covering the expanded
-154-case local set (150 benchmark rows plus four core contract cases),
-citations, route selection, and health-safety refusal; provider-backed model/prompt arms
-require an explicitly configured `OPENAI_API_KEY`.
-The app also supports Claude's native Messages API: set `LLM_PROVIDER=anthropic`,
-`ANTHROPIC_API_KEY`, and `LLM_MODEL=claude-haiku-4-5-20251001` in the local
-`.env` file. The key is never read from committed files.
-It also records two deterministic prompt arms and their selected winner so the
-comparison is reproducible without network access; these fallback results must
-be replaced or supplemented with provider-backed outputs before claiming an
-LLM score.
-The answer contract distinguishes unknown citations from citation omissions:
-`contract_valid` is true only when citations are both supplied and drawn from
-the retrieved evidence.
-Exact citations use `[source-id § locator]` and response `citations` records map
-each claim to a retrieved `source_id`, `chunk_id`, locator, excerpt and URL.
-`citation_validation` rejects unknown chunks/locators; `app.citations` keeps
-legacy tokens parseable for existing clients. Current claim-level human review
-and provider-backed groundedness scores are pending and must not be inferred
-from the offline retrieval or fallback artifacts.
-The deterministic fallback includes targeted ISPU/category and WHO-versus-law
-answers, so these contract metrics remain meaningful even without an API key.
-When configured, `eval_generation.py` runs two temperature-zero prompt arms and
-optionally a second model from `LLM_MODEL_2`, always against the same retrieved
-context, and records outputs for manual/judge assessment. It never calls a provider
-during ordinary tests.
-The OpenAI-compatible provider path has a mocked contract test (including base
-URL, timeout, retry, model, and language parameters); provider failures return
-to the deterministic cited fallback.
-With the local Claude configuration, a bounded four-question provider smoke
-run was completed using `claude-haiku-4-5-20251001`; its two prompt arms are
-saved in `evaluation/results/generation_provider_claude_smoke.json`. Larger
-provider runs should be scheduled with an appropriate request budget/rate
-limit rather than launched accidentally from an offline test.
-The latest bounded provider artifact contains 10 representative intent-group
-cases per arm (20 requests) using Claude Haiku 4.5. The strict arm scored 1.0
-on relevance, citation, numeric consistency, and safety, with 0.9 on the
-language heuristic; the helpful arm scored 0.7 citation correctness and 0.6
-citation completeness. The strict arm is therefore the current prompt choice.
-`GENERATION_PROVIDER_LIMIT` controls this budget when rerunning the provider arm.
+## Other contracts
 
-`eval_tools.py` evaluates 50 stratified route cases and checks latest and
-historical tool execution, argument resolution, numeric/unit consistency,
-metadata completeness, staleness detection, missing-data behavior, and
-rejection of unsupported calculations. It also records p50/p95 route latency
-and p50 latest-tool latency. `eval_rewrite.py` compares rewriting
-off versus deterministic Jakarta abbreviation normalization. These are local
-contract benchmarks; the final submission should add human-reviewed examples
-and measured latency slices.
-`eval_chunking.py` runs the fixed/structure/semantic chunker comparison through
-the dense retrieval protocol and commits its result for the final decision.
-`eval_abstention.py` evaluates 18 safety and out-of-domain cases and verifies
-that refusals do not fabricate citations.
-`eval_conversation.py` evaluates 29 representative two- and three-turn follow-ups,
-including district comparison, topic carry-over, policy status, and vulnerable-
-group safety context. It verifies standalone-query resolution and route
-selection, including topic switches and carried-forward entities.
-`eval_ingestion.py` runs two isolated demo ingestions and records stable
-fingerprints, accepted rows, and validation errors in `ingestion_results.json`.
-Generation cases include both English and Bahasa Indonesia; provider-backed
-runs can be sliced by the recorded `language` field.
+`eval_tools.py` covers deterministic route arguments, numeric/unit consistency,
+freshness, missing data, and unsupported calculations. `eval_abstention.py`
+checks safety and out-of-domain refusals. `eval_conversation.py` checks bounded
+two- and three-turn follow-ups. `eval_ingestion.py` runs isolated demo ingests
+to verify validation and idempotency. `make validate-sources` verifies required
+source provenance fields.
+
+Use `make export-review` to create a spreadsheet-friendly review sheet. The
+finalizer accepts only completed review rows and validates every reviewed chunk
+ID against the current corpus.

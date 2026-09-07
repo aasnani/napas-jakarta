@@ -4,7 +4,8 @@
 
 **Try the deployed app:** [web-production-e07b9.up.railway.app](https://web-production-e07b9.up.railway.app)<br>
 **API health:** [web-production-e07b9.up.railway.app/health](https://web-production-e07b9.up.railway.app/health)<br>
-**Monitoring:** [web-production-e07b9.up.railway.app/monitoring](https://web-production-e07b9.up.railway.app/monitoring)
+**Monitoring:** [web-production-e07b9.up.railway.app/monitoring](https://web-production-e07b9.up.railway.app/monitoring)<br>
+**API reference:** [web-production-e07b9.up.railway.app/docs](https://web-production-e07b9.up.railway.app/docs) · **Build information:** [web-production-e07b9.up.railway.app/version](https://web-production-e07b9.up.railway.app/version)
 
 Napas Jakarta helps people turn an air-quality reading into an informed next step. It combines current Jakarta station observations, a separately labelled city-level historical series, and curated official regulations and public-health guidance. Ask in English or Bahasa Indonesia; answers identify their sources, show observation time where relevant, and avoid treating general guidance as medical diagnosis or legal advice.
 
@@ -182,6 +183,7 @@ The web deployment also serves FastAPI endpoints. These examples use a local sta
 ```bash
 # Service and source state
 curl http://localhost:8000/health
+curl http://localhost:8000/version
 curl http://localhost:8000/sources
 
 # Grounded answer
@@ -196,7 +198,7 @@ curl 'http://localhost:8000/measurements/latest?location=Jakarta%20Pusat&polluta
 curl 'http://localhost:8000/monitoring/summary?days=30'
 ```
 
-Other useful endpoints include `POST /measurements/compare`, `POST /measurements/history`, `POST /measurements/unhealthy-days`, `POST /measurements/standard`, `GET /policies/status`, `GET /policies/timeline`, and `POST /feedback`. Request models are defined in [app/api.py](app/api.py).
+Other useful endpoints include `POST /measurements/compare`, `POST /measurements/history`, `POST /measurements/unhealthy-days`, `POST /measurements/standard`, `GET /policies/status`, `GET /policies/timeline`, and `POST /feedback`. The deployed OpenAPI reference is available at [/docs](https://web-production-e07b9.up.railway.app/docs); request models are defined in [app/api.py](app/api.py).
 
 ## Evaluation and quality checks
 
@@ -204,14 +206,14 @@ Evaluation artefacts are committed so results can be inspected and regenerated. 
 
 | Retrieval mode | Question hit@5 | Chunk recall@5 | MRR@5 | nDCG@5 | p50 latency |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| BM25 | 0.6000 | 0.4912 | 0.4594 | 0.4326 | 6.2206 ms |
-| Dense | 0.6333 | 0.4912 | 0.4833 | 0.4587 | 6.1378 ms |
-| **Hybrid (selected)** | **0.6667** | **0.5789** | 0.4694 | **0.4856** | 6.1650 ms |
-| Hybrid + rerank | 0.6333 | 0.5439 | **0.4956** | 0.4806 | 6.7447 ms |
+| BM25 | 0.6000 | 0.4912 | 0.4594 | 0.4326 | 6.7377 ms |
+| Dense | 0.6333 | 0.4912 | 0.4833 | 0.4587 | 6.6935 ms |
+| **Hybrid (selected)** | **0.6667** | **0.5789** | 0.4694 | **0.4856** | 6.6969 ms |
+| Hybrid + rerank | 0.6333 | 0.5439 | **0.4956** | 0.4806 | 7.4200 ms |
 
-The selection order is chunk recall, question hit rate, MRR, nDCG, then lower p50 latency. Results are in [retrieval_gold_review_30.json](evaluation/results/retrieval_gold_review_30.json); reviewed rows are in [gold_review_30_final.jsonl](evaluation/gold_review_30_final.jsonl).
+The selection order is chunk recall, question hit rate, MRR, nDCG, then lower p50 latency. The separate document-RAG slice has 20 questions: hybrid has 0.7500 question hit@5 and 0.6585 chunk recall@5; hybrid + rerank has the same hit and recall but higher MRR (0.6417). The all-system slice also includes typed tool, index, and abstention routes. For hybrid, the reviewed Bahasa Indonesia hit@5 is 0.4667 versus 0.8667 for English, so the current retrieval quality is not equivalent across languages. Results are in [retrieval_gold_review_30.json](evaluation/results/retrieval_gold_review_30.json); reviewed rows are in [gold_review_30_final.jsonl](evaluation/gold_review_30_final.jsonl).
 
-For provider generation, two ten-case Claude Haiku prompt arms were run against the same representative intent groups. The selected **strict** arm recorded 1.0 for relevance, citation correctness, citation completeness, numeric consistency, and safety, and 0.9 for the language heuristic. The helpful arm recorded 0.7 citation correctness and 0.6 citation completeness. These are bounded provider checks, not a claim of broad real-world performance; see [generation_provider_claude_smoke.json](evaluation/results/generation_provider_claude_smoke.json).
+Generation prompt variants live in `app.provider.PROMPTS`; `PROMPT_VARIANT=strict` selects the deployed default and records `strict-v1` with each answer. [generation_results.json](evaluation/results/generation_results.json) records the selected prompt’s stable hash and verifies that runtime and the optional provider evaluator use the same named variants. Its offline fallback results are **heuristic contract checks**, not a semantic evaluation of relevance, groundedness, or broad real-world performance. A fresh provider comparison is deliberately skipped unless a provider key is explicitly configured; see [the evaluation method](docs/evaluation.md).
 
 Additional reproducible checks cover citation resolvability, completeness, and locator accuracy; 29 two- and three-turn conversation cases; deterministic tool arguments, numeric consistency, freshness, missing data, and rejected unsupported calculations; query rewriting, chunking choices, ingestion idempotency, and safety/out-of-domain abstention.
 
@@ -227,9 +229,9 @@ uv run ruff check .
 
 ## Monitoring, feedback, and privacy
 
-The in-app [Monitoring page](https://web-production-e07b9.up.railway.app/monitoring) reads aggregate service telemetry from PostgreSQL and falls back to local JSONL during development or a database outage. It shows traffic, latency percentiles, answer routes, retrieval modes, citation-grounded rate, thumbs-up/down feedback, conversation depth, and estimated usage/cost.
+The in-app [Monitoring page](https://web-production-e07b9.up.railway.app/monitoring) reads aggregate service telemetry from PostgreSQL and falls back to local JSONL during development or a database outage. It shows traffic, latency percentiles, answer routes, retrieval modes, citation-grounded rate, thumbs-up/down feedback, and estimated usage/cost.
 
-The dashboard deliberately does not retrieve or display question text, rewritten queries, or feedback comments. Interaction logging uses a bounded anonymous session identifier rather than an IP address or personal profile. Feedback is attached to an interaction ID so aggregate quality signals can be analysed without exposing a resident's conversation in the dashboard. Do not enter sensitive health or personal information into the app.
+The dashboard deliberately does not retrieve or display question text, rewritten queries, or feedback comments. Interaction logging uses a bounded anonymous session identifier rather than an IP address or personal profile. Private interaction content is retained for 30 days by default and is accessible only to the deployed service and database operators; the scheduled ingestion service removes expired records. Feedback is attached to an interaction ID so aggregate quality signals can be analysed without exposing a resident's conversation in the dashboard. Do not enter sensitive health or personal information into the app.
 
 ## Deployment
 

@@ -1,43 +1,45 @@
 # Architecture
 
-The Streamlit UI and FastAPI API call the same service-layer function in
-`app/rag.py`. A conservative router sends current, historical, comparison, and
-unhealthy-day questions to deterministic measurement tools, while policy/health
-questions use document retrieval. The
-answer includes source IDs, exact chunk locators, structured claim citations,
-timestamps, a rewritten query, route, and citation validation result.
-`ingestion/flow.py` first runs the deterministic corpus inventory in
-`ingestion/corpus.py`, then loads the official export adapter, normalizes
-measurements, creates structure-aware chunks, and can be scheduled
-as a Prefect flow. Validated measurements are upserted into PostgreSQL when a
-DSN is configured, while offline runs use the committed CSV snapshot.
-PostgreSQL also stores interaction events and Grafana reads the same schema with
-live/evaluation traffic separated.
+The deployed product is a combined NiceGUI and FastAPI ASGI service. NiceGUI
+provides the resident-facing Ask, map, overview, trends, and Monitoring pages;
+FastAPI exposes the same domain functions at HTTP endpoints. `app/ui.py` is a
+legacy Streamlit compatibility UI for local experiments only and is not the
+deployed surface.
 
-The dependency-light retrieval modes (sparse token, character-dense, hybrid
-RRF, and rerank) are evaluated locally. `ingestion/indexing.py` is the optional
-Qdrant/SentenceTransformers adapter for a production vector index; it is kept
-behind the `retrieval` extra so evaluation never requires a paid or heavyweight
-service. The pinned Qdrant server image and client range are compatible; a
-local smoke test builds the collection and verifies its point count.
-When the retrieval extra and model cache are available, `hybrid_rerank` uses a
-multilingual CrossEncoder (`RERANKER_MODEL`); otherwise it falls back to the
-measured lexical reranker without changing the API contract.
-`make index` builds dense vectors; `make index ARGS="--hybrid"` builds parallel
-dense and sparse collections and `qdrant_hybrid_search` fuses their candidates
-with reciprocal rank fusion.
-Set `QDRANT_URL` and choose `qdrant_hybrid` to make the service consume that
-index; unavailable Qdrant falls back to the local evaluated hybrid path.
+The request router sends current readings, comparisons, history, policy
+timelines, and index interpretation to deterministic Python tools. Questions
+about documentary evidence, public-health guidance, regulations, and causes use
+retrieval over the curated local corpus. The configured retrieval method is
+read from `RETRIEVAL_MODE`; `hybrid` is the selected default. Both the NiceGUI
+and API paths record the actual method used with each answer event.
 
-The API accepts bounded chat history and the UI stores session messages. The
-provider sends up to three recent exchanges (the current turn is not duplicated)
-to Claude or the OpenAI-compatible provider; retrieved evidence remains the
-sole grounding source. Station coordinates are persisted by ingestion and are
-loaded before any remote refresh attempt, so a Streamlit rerun does not need a
-network call to build the map.
+Answer generation reads a named prompt from `app.provider.PROMPTS`. The selected
+value is `PROMPT_VARIANT=strict` by default, and the same prompt dictionary is
+used by the bounded provider check. Answer telemetry records its prompt version
+without storing a provider key. If no provider is configured or a provider is
+unavailable, the app returns a cited deterministic response.
 
-The UI is organized into Ask, Live map, Current overview, and Trends tabs. The
-overview is appropriate for a one-snapshot feed; trend charts are shown only
-when multiple observation timestamps exist. A selectable station filter links
-the map to a station detail table while preserving the source and freshness
-metadata.
+Runtime observations prefer PostgreSQL. Packaged CSV and ingestion artifacts
+remain a transparent fallback when PostgreSQL is missing, empty, or unavailable.
+`GET /sources` deliberately separates current loaded-store facts from the
+packaged fallback summary; it does not relabel an image-local report as a live
+run. Successful PostgreSQL ingestion writes a minimal `ingestion_runs` record,
+which gives the runtime block its most recent completed ingestion time and row
+count. `GET /version` returns only safe build metadata, plus the selected
+retrieval and prompt variants.
+
+The full local Compose environment includes PostgreSQL, Qdrant, Grafana, the
+combined web service, a standalone API, and one-shot ingest/index services.
+Railway intentionally deploys only the web service, PostgreSQL, and scheduled
+ingestion because in-process hybrid retrieval is the configured production
+method and the Monitoring page renders aggregate data directly. See
+[deployment on Railway](deployment-railway.md) for the operational layout.
+
+Interaction storage contains question text, rewritten queries, a bounded
+anonymous session ID, response metadata, and optional feedback comments so the
+team can diagnose product quality. These fields are never returned by the
+aggregate Monitoring endpoint or rendered publicly. The scheduled ingestion
+service deletes interaction and feedback rows older than the bounded
+`INTERACTION_RETENTION_DAYS` setting (30 days by default). Access is limited to
+the deployed service and its database operators; users should not enter
+sensitive personal or health information.
