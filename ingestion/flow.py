@@ -50,8 +50,25 @@ def run_ingestion(data_dir: str | Path = "data") -> dict[str, int]:
     documents = load_documents(root / "docs")
     chunks = [chunk for document in documents for chunk in structure_chunks(document)]
     source_url = os.getenv("SOURCE_DATA_URL", "").strip()
+    source_status = "committed-demo-snapshot"
+    source_error = None
     if source_url:
-        measurements = fetch_measurements(source_url, raw_output=root / "raw")
+        output = root / "processed" / "measurements.csv"
+        try:
+            measurements = fetch_measurements(source_url, raw_output=root / "raw")
+            source_status = "live"
+        except requests.RequestException as exc:
+            source_error = f"{type(exc).__name__}: {exc}"
+            # A cron outage must not erase or fabricate observations.  Prefer
+            # the latest image/local snapshot, then the explicitly committed
+            # demo snapshot as a documented last resort.
+            fallback = output if output.exists() else root / "demo" / "measurements.csv"
+            if not fallback.exists():
+                raise RuntimeError(
+                    "official source unavailable and no local measurement snapshot exists"
+                ) from exc
+            measurements = load_measurements(fallback)
+            source_status = "retained-local-snapshot" if fallback == output else "committed-demo-snapshot"
         try:
             stations = fetch_stations(source_url)
         except (OSError, RuntimeError, ValueError, requests.RequestException):
@@ -64,9 +81,11 @@ def run_ingestion(data_dir: str | Path = "data") -> dict[str, int]:
                                                              "latitude", "longitude", "source"))
                 writer.writeheader()
                 writer.writerows(stations)
-        output = root / "processed" / "measurements.csv"
         existing = load_measurements(output) if output.exists() else []
-        measurements = merge_measurements(existing, measurements)
+        # Do not append fallback data to itself; normal live snapshots still
+        # merge into the retained history as before.
+        if source_status == "live":
+            measurements = merge_measurements(existing, measurements)
         output.parent.mkdir(parents=True, exist_ok=True)
         fields = ("station_id", "station_name", "district", "observed_at", "pollutant",
                   "concentration", "concentration_unit", "ispu_value", "ispu_category", "source",
@@ -102,6 +121,8 @@ def run_ingestion(data_dir: str | Path = "data") -> dict[str, int]:
     report = {
         "fetched_at": datetime.now(UTC).isoformat(),
         "source": source_url or "committed-demo-snapshot",
+        "source_status": source_status,
+        "source_error": source_error,
         "documents": len(documents), "chunks": len(chunks), "measurements": len(measurements),
         "manifest_sources": corpus_report["manifest_sources"],
         "corpus_words": corpus_report["local_words"],

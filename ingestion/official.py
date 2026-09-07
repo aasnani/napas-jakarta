@@ -11,6 +11,7 @@ import csv
 import hashlib
 import io
 import json
+import os
 import re
 from collections.abc import Iterable
 from dataclasses import replace
@@ -130,12 +131,54 @@ def _spku_payload(text: str) -> list[dict[str, Any]]:
     return payload
 
 
-def fetch_measurements(url: str, timeout: int = 30, raw_output: str | Path | None = None) -> list[Measurement]:
+def _get_official(url: str, timeout: int, retries: int | None = None):
+    """GET an official endpoint with bounded retries for transient failures.
+
+    The Jakarta portal can occasionally accept a connection and then stall
+    while reading its page.  Cron should absorb a short outage, but it must
+    also terminate rather than retry forever.  Only request failures are
+    retried; HTTP errors and schema errors remain visible to the caller.
+    """
     import requests
 
-    response = requests.get(url, timeout=(10, timeout),
-                            headers={"User-Agent": "napas-jakarta/0.1"})
-    response.raise_for_status()
+    connect_timeout = max(
+        1,
+        int(os.getenv("OFFICIAL_CONNECT_TIMEOUT_SECONDS", min(timeout, 10))),
+    )
+    read_timeout = max(
+        1,
+        int(os.getenv("OFFICIAL_READ_TIMEOUT_SECONDS", timeout)),
+    )
+    attempts = max(
+        1,
+        (int(os.getenv("OFFICIAL_FETCH_RETRIES", "2")) + 1)
+        if retries is None
+        else retries + 1,
+    )
+    last_error: requests.RequestException | None = None
+    for attempt in range(attempts):
+        try:
+            response = requests.get(
+                url,
+                timeout=(connect_timeout, read_timeout),
+                headers={"User-Agent": "napas-jakarta/0.1"},
+            )
+            response.raise_for_status()
+            return response
+        except requests.HTTPError:
+            # A published HTTP error is not a transient socket outage; surface
+            # it immediately so source or schema problems remain visible.
+            raise
+        except requests.RequestException as exc:
+            last_error = exc
+            if attempt + 1 == attempts:
+                break
+    assert last_error is not None
+    raise last_error
+
+
+def fetch_measurements(url: str, timeout: int = 30, raw_output: str | Path | None = None) -> list[Measurement]:
+    response = _get_official(url, timeout)
     body = response.content
     if raw_output is not None:
         destination = Path(raw_output)
@@ -155,11 +198,7 @@ def fetch_measurements(url: str, timeout: int = 30, raw_output: str | Path | Non
 
 def fetch_stations(url: str, timeout: int = 30) -> list[dict[str, Any]]:
     """Fetch official station metadata from the same published portal snapshot."""
-    import requests
-
-    response = requests.get(url, timeout=(10, timeout),
-                            headers={"User-Agent": "napas-jakarta/0.1"})
-    response.raise_for_status()
+    response = _get_official(url, timeout)
     stations = spku_html_stations(response.content.decode("utf-8-sig"))
     if not stations:
         raise ValueError("official portal returned no station coordinates")

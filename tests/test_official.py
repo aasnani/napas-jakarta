@@ -67,6 +67,32 @@ def test_official_portal_snapshot_rows_are_normalized():
     assert stations[0]["latitude"] == -6.2
 
 
+def test_official_fetch_retries_transient_read_timeout(monkeypatch):
+    import requests
+
+    from ingestion import official
+
+    class Response:
+        content = b"window.__SPKU_DATA__ = [];"
+
+        def raise_for_status(self):
+            return None
+
+    attempts = {"count": 0}
+
+    def get(*args, **kwargs):
+        attempts["count"] += 1
+        if attempts["count"] < 3:
+            raise requests.ReadTimeout("portal stalled")
+        return Response()
+
+    monkeypatch.setattr(requests, "get", get)
+    monkeypatch.setenv("OFFICIAL_FETCH_RETRIES", "2")
+    response = official._get_official("https://example.test", timeout=1)
+    assert response.content.startswith(b"window.__SPKU_DATA__")
+    assert attempts["count"] == 3
+
+
 def test_chunk_variants_have_stable_ids():
     document = load_documents(Path(__file__).parents[1] / "data/docs")[0]
     variants = [
@@ -155,3 +181,29 @@ def test_live_report_fingerprint_is_stable_across_fetches(tmp_path, monkeypatch)
     flow.run_ingestion(data_dir)
     second = json.loads((data_dir / "ingestion_report.json").read_text())["measurement_sha256"]
     assert first == second
+
+
+def test_ingestion_uses_retained_snapshot_when_official_source_times_out(tmp_path, monkeypatch):
+    import json
+    import shutil
+
+    import requests
+
+    from ingestion import flow
+
+    source_root = Path(__file__).parents[1] / "data"
+    data_dir = tmp_path / "data"
+    shutil.copytree(source_root, data_dir)
+    monkeypatch.setenv("SOURCE_DATA_URL", "https://example.test/official")
+
+    def timeout(*args, **kwargs):
+        raise requests.ReadTimeout("portal stalled")
+
+    monkeypatch.setattr(flow, "fetch_measurements", timeout)
+    monkeypatch.setattr(flow, "fetch_stations", lambda *args, **kwargs: [])
+
+    result = flow.run_ingestion(data_dir)
+    report = json.loads((data_dir / "ingestion_report.json").read_text())
+    assert result["measurements"] == len(load_measurements(data_dir / "processed/measurements.csv"))
+    assert report["source_status"] == "retained-local-snapshot"
+    assert report["source_error"].startswith("ReadTimeout:")
