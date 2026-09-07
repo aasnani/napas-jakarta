@@ -185,7 +185,7 @@ def _from_postgres(dsn: str, days: int) -> dict[str, Any]:
         rows = connection.execute(
             """SELECT created_at, event, route, retrieval_mode, citation_grounded,
                       latency_ms, token_usage, estimated_cost, error_type,
-                      abstention_type, feedback, conversation_turn
+                      abstention_type, feedback
                FROM interactions
                WHERE created_at::timestamptz >= now() - (%s * interval '1 day')""",
             (days,),
@@ -203,7 +203,6 @@ def _from_postgres(dsn: str, days: int) -> dict[str, Any]:
             "error_type": row[8],
             "abstention_type": row[9],
             "feedback": row[10],
-            "conversation_turn": row[11],
         }
         for row in rows
     ]
