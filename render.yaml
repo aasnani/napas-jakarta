@@ -1,0 +1,51 @@
+services:
+  - type: web
+    name: napas-jakarta
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    dockerCommand: uvicorn app.web:app --host 0.0.0.0 --port=$PORT
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: PORT
+        value: "8502"
+      - key: SOURCE_DATA_URL
+        value: https://udara.jakarta.go.id/
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: LLM_PROVIDER
+        value: anthropic
+      - key: LLM_MODEL
+        value: claude-haiku-4-5-20251001
+      - key: RETRIEVAL_MODE
+        value: hybrid
+      - key: HISTORICAL_AIR_URL
+        value: https://air-quality-api.open-meteo.com/v1/air-quality
+      - key: POSTGRES_DSN
+        sync: false
+      - key: QDRANT_URL
+        sync: false
+      - key: PREFECT_SERVER_ANALYTICS_ENABLED
+        value: "false"
+  - type: cron
+    name: napas-jakarta-ingestion
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    dockerCommand: sh -c 'python -m ingestion.flow && python -m ingestion.historical'
+    schedule: "0 * * * *"
+    plan: starter
+    envVars:
+      - key: SOURCE_DATA_URL
+        value: https://udara.jakarta.go.id/
+      - key: POSTGRES_DSN
+        sync: false
+      - key: QDRANT_URL
+        sync: false
+      - key: HISTORICAL_AIR_URL
+        value: https://air-quality-api.open-meteo.com/v1/air-quality
+      - key: PREFECT_SERVER_ANALYTICS_ENABLED
+        value: "false"

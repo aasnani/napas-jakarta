@@ -1,0 +1,42 @@
+[
+  {
+    "instrument_id": "pl2se-erp",
+    "title": "Pengendalian Lalu Lintas Secara Elektronik (ERP/PL2SE)",
+    "instrument_type": "draft_regulation",
+    "jurisdiction": "DKI Jakarta",
+    "status_as_of": "2025-11-28",
+    "legal_status": "draft; not an enacted operating regulation",
+    "source_url": "https://www.jakarta.go.id/siaran-pers/3850-SP-HMS-01-2023",
+    "events": [
+      {"date": "2018-01-01", "stage": "legislative_programme", "type": "proposed", "description": "Entered the legislative programme but was not discussed; the exact programme date should be verified from the legislative record."},
+      {"date": "2022-01-11", "stage": "drafting", "type": "resubmitted", "description": "The draft was revised and resubmitted for discussion with the DPRD; legal basis, tariff, road, and vehicle provisions remained to be settled."},
+      {"date": "2025-11-28", "stage": "drafting", "type": "status_update", "description": "DKI described a traffic-management draft covering ERP, progressive parking, and stronger low-emission zones."}
+    ]
+  },
+  {
+    "instrument_id": "lez-expansion",
+    "title": "Expansion of Jakarta Low Emission Zones",
+    "instrument_type": "policy_proposal",
+    "jurisdiction": "DKI Jakarta",
+    "status_as_of": "2026-06-24",
+    "legal_status": "pilot and roadmap; wider implementation status requires current JDIH verification",
+    "source_url": "https://www.jakarta.go.id/index.php/siaran-pers/6814-SP-HMS-06-2026",
+    "events": [
+      {"date": "2019-08-22", "stage": "pilot", "type": "implemented", "description": "Kota Tua was designated as Jakarta's initial low-emission area."},
+      {"date": "2026-06-24", "stage": "roadmap", "type": "proposed", "description": "Jakarta and Breathe Cities launched an integrated low-emission-zone roadmap covering transport and additional sectors."}
+    ]
+  },
+  {
+    "instrument_id": "emission-testing-enforcement",
+    "title": "Vehicle emission-test enforcement measures",
+    "instrument_type": "implementation_policy",
+    "jurisdiction": "DKI Jakarta",
+    "status_as_of": "2024-12-03",
+    "legal_status": "existing testing obligation; additional enforcement mechanisms under preparation",
+    "source_url": "https://lingkunganhidup.jakarta.go.id/article/post-355",
+    "events": [
+      {"date": "2020-07-22", "stage": "regulation", "type": "enacted", "description": "Pergub DKI No. 66 of 2020 established motor-vehicle emissions-testing rules."},
+      {"date": "2024-12-03", "stage": "enforcement", "type": "planned", "description": "DLH described electronic ticketing, highest parking disincentives, and pollution-based vehicle taxation as measures being prepared to improve compliance."}
+    ]
+  }
+]

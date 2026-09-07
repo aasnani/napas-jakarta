@@ -1,0 +1,49 @@
+{
+  "status": "provider evaluation (anthropic)",
+  "arms": [
+    {
+      "prompt": "strict",
+      "model": "claude-haiku-4-5-20251001",
+      "outputs": [
+        {
+          "question": "What does an ISPU value of 125 mean?",
+          "answer": "According to the provided context, an ISPU value of 125 means the air quality falls into the \"Tidak Sehat\" (Unhealthy) category [ispu]. ISPU is a unitless index, not a PM2.5 concentration, and a value of 125 falls within the 101\u2013200 range, which corresponds to the Unhealthy classification in the Indonesian air quality categories [ispu]."
+        },
+        {
+          "question": "Apakah pedoman WHO adalah hukum Indonesia?",
+          "answer": "Tidak, pedoman WHO bukan hukum Indonesia. Pedoman kualitas udara WHO adalah rekomendasi berbasis kesehatan, bukan hukum Indonesia. [who-guidance]"
+        },
+        {
+          "question": "Can you diagnose my breathing problem?",
+          "answer": "I cannot diagnose your breathing problem. [health-disclaimer]\n\nPlease contact a qualified clinician or healthcare provider who can properly evaluate your symptoms and provide an accurate diagnosis. They will be able to examine you and determine the cause of your breathing difficulties.\n\nIf you have questions about air quality or general public health guidance, I'd be happy to help with those instead."
+        },
+        {
+          "question": "Bagaimana kualitas udara terbaru di Jakarta Pusat?",
+          "answer": "# Kualitas Udara Jakarta Pusat\n\nBerdasarkan data terbaru dari stasiun pemantauan resmi [jakarta-monitoring]:\n\n**Kondisi Terakhir:**\n- **Kategori ISPU:** Sedang (nilai ISPU: 99)\n- **Polutan Utama:** PM2.5\n- **Konsentrasi Rata-rata PM2.5:** 42,06 \u00b5g/m\u00b3\n- **Waktu Pengamatan:** 6 September 2026, pukul 06:30 WIB\n\n**Catatan Penting:**\n1. Data ini berasal dari satu stasiun pemantauan dan tidak mewakili seluruh Jakarta Pusat [jakarta-monitoring]\n2. Data ini sudah berusia beberapa jam, sehingga kondisi saat ini mungkin berbeda\n3. Kategori \"Sedang\" menurut standar ISPU Indonesia [ispu] berarti kualitas udara masih dalam tingkat sedang\n\n**Rekomendasi:**\nUntuk informasi kualitas udara real-time dan terkini, silakan kunjungi portal resmi Pemerintah Provinsi DKI Jakarta di https://udara.jakarta.go.id/lokasi-spku [jakarta-monitoring].\n\nJika Anda mengalami gejala kesehatan yang persisten terkait paparan udara, sebaiknya konsultasikan dengan tenaga kesehatan profesional [health-disclaimer]."
+        }
+      ]
+    },
+    {
+      "prompt": "helpful",
+      "model": "claude-haiku-4-5-20251001",
+      "outputs": [
+        {
+          "question": "What does an ISPU value of 125 mean?",
+          "answer": "# ISPU Value of 125 Explanation\n\nAn ISPU value of 125 falls into the **Tidak Sehat (Unhealthy)** category, which ranges from 101\u2013200 on the Indonesian air quality index scale.[ispu]\n\n## What This Means for Jakarta Residents\n\nAt this level, air quality is considered unhealthy. This is an important distinction: **ISPU 125 is a unitless index number, not a direct measurement of PM2.5 concentration**\u2014it's a standardized scale used to communicate air quality status to the public.[ispu]\n\n**Practical implications:**\n- Air pollution levels are elevated enough to affect health\n- Vulnerable groups (children, elderly, people with respiratory conditions) should take precautions\n- The general public may also experience health effects with prolonged exposure\n\nFor current air quality conditions in Jakarta and specific health recommendations, you should check real-time ISPU readings from official Indonesian environmental monitoring sources."
+        },
+        {
+          "question": "Apakah pedoman WHO adalah hukum Indonesia?",
+          "answer": "# Apakah Pedoman WHO adalah Hukum Indonesia?\n\nTidak, pedoman kualitas udara WHO **bukan hukum Indonesia**. [who-guidance]\n\nPedoman WHO adalah **rekomendasi berbasis kesehatan** yang dirancang untuk melindungi kesehatan masyarakat. Namun, pedoman ini tidak memiliki kekuatan hukum yang mengikat di Indonesia.\n\n## Implikasi untuk Jakarta\n\nDi Jakarta, standar kualitas udara yang berlaku secara hukum adalah:\n- **Standar Nasional Indonesia (SNI)** yang ditetapkan oleh pemerintah Indonesia\n- **Peraturan Pemerintah** tentang baku mutu udara ambien\n\nMeskipun pedoman WHO tidak mengikat secara hukum, pemerintah Indonesia sering menggunakannya sebagai **referensi** dalam menetapkan standar nasional yang lebih ketat untuk melindungi kesehatan penduduk.\n\n**Catatan:** Jika Anda ingin mengetahui standar kualitas udara yang berlaku secara resmi di Jakarta, sebaiknya merujuk pada peraturan pemerintah Indonesia yang terkini."
+        },
+        {
+          "question": "Can you diagnose my breathing problem?",
+          "answer": "I cannot diagnose your breathing problem. [health-disclaimer]\n\n**What you should do:**\nPlease contact a qualified clinician or doctor who can properly examine you and provide a diagnosis. This is especially important if you're experiencing breathing difficulties.\n\n**What I can help with:**\nIf you're concerned about air quality in Jakarta as a contributing factor to respiratory issues, I can:\n- Explain current air-quality data and pollution levels\n- Share general public-health guidance about air pollution and respiratory health\n- Suggest resources for checking Jakarta's air quality\n\nIf you'd like information about any of these topics, please let me know."
+        },
+        {
+          "question": "Bagaimana kualitas udara terbaru di Jakarta Pusat?",
+          "answer": "# Kualitas Udara Jakarta Pusat\n\n## Data Terbaru\nBerdasarkan data dari Dinas Lingkungan Hidup Provinsi DKI Jakarta, berikut kondisi udara Jakarta Pusat:\n\n**Pengukuran terakhir (6 September 2026, pukul 06:30 WIB):**\n- **ISPU:** 99 (kategori **Sedang**)\n- **Polutan utama:** PM2.5\n- **Konsentrasi PM2.5:** rata-rata 42,06 \u00b5g/m\u00b3\n\n## Interpretasi\n\nKategori \"Sedang\" menurut standar ISPU Indonesia berarti kualitas udara berada dalam rentang 51\u2013100. Pada level ini, kelompok sensitif (anak-anak, lansia, dan orang dengan kondisi kesehatan tertentu) mungkin mulai merasakan efek kesehatan.\n\n**Catatan penting:** Data ini berasal dari satu stasiun pemantauan dan mencerminkan kondisi di lokasi tersebut pada waktu pengukuran. Kualitas udara dapat bervariasi di berbagai wilayah Jakarta Pusat.\n\n## Saran Praktis\n- Jika Anda termasuk kelompok sensitif, pertimbangkan untuk mengurangi aktivitas di luar ruangan yang berat\n- Gunakan masker jika beraktivitas di luar\n- Pantau update terbaru di portal resmi: https://udara.jakarta.go.id/lokasi-spku\n\n**Disclaimer:** Informasi ini bersifat edukatif dan bukan diagnosis medis. Jika Anda mengalami gejala kesehatan yang persisten atau berat, konsultasikan dengan tenaga kesehatan profesional."
+        }
+      ]
+    }
+  ]
+}

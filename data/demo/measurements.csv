@@ -1,0 +1,6 @@
+station_id,station_name,district,observed_at,pollutant,concentration,concentration_unit,ispu_value,ispu_category,source
+DKI01,Bundaran HI,Jakarta Pusat,2026-09-06T06:30:00+07:00,PM2.5,42.06,ug/m3,99,Sedang,Udara Jakarta demo snapshot
+DKI17,SDN 07 Kramat Pela,Jakarta Selatan,2026-09-06T06:30:00+07:00,PM2.5,18.20,ug/m3,54,Sedang,Udara Jakarta demo snapshot
+DKI82,Taman Sutoyo,Jakarta Timur,2026-09-06T06:30:00+07:00,PM2.5,55.10,ug/m3,110,Tidak Sehat,Udara Jakarta demo snapshot
+DKI05,Kebon Jeruk,Jakarta Barat,2026-09-06T06:30:00+07:00,PM2.5,24.80,ug/m3,71,Sedang,Udara Jakarta demo snapshot
+DKI02,Kelapa Gading,Jakarta Utara,2026-09-06T06:30:00+07:00,PM2.5,61.00,ug/m3,119,Tidak Sehat,Udara Jakarta demo snapshot

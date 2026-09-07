@@ -1,0 +1,364 @@
+{
+  "cases": 29,
+  "resolution_accuracy": 1.0,
+  "route_accuracy": 1.0,
+  "history_strategy": "six recent messages plus deterministic older-user summary",
+  "rows": [
+    {
+      "case_id": "conversation-01",
+      "questions": [
+        "What is the current air quality in Jakarta Pusat?",
+        "How does that compare with the north?"
+      ],
+      "condensed_question": "What is the current air quality in Jakarta Pusat?; follow-up: How does that compare with the north?",
+      "rewritten_query": "What is the current air quality in Jakarta Pusat?; follow-up: How does that compare with Jakarta Utara?",
+      "route": "historical_tool",
+      "resolved": true,
+      "route_correct": true
+    },
+    {
+      "case_id": "conversation-02",
+      "questions": [
+        "What is the current air quality in Jakarta Selatan?",
+        "What about the east?"
+      ],
+      "condensed_question": "What is the current air quality in Jakarta Selatan?; follow-up: What about the east?",
+      "rewritten_query": "What is the current air quality in Jakarta Selatan?; follow-up: What about Jakarta Timur?",
+      "route": "latest_measurements",
+      "resolved": true,
+      "route_correct": true
+    },
+    {
+      "case_id": "conversation-03",
+      "questions": [
+        "What are Jakarta's air pollution sources?",
+        "What can individuals do?"
+      ],
+      "condensed_question": "What are Jakarta's air pollution sources?; follow-up: What can individuals do?",
+      "rewritten_query": "What are Jakarta's air pollution sources?; follow-up: What can individuals do?",
+      "route": "exposure_reduction",
+      "resolved": true,
+      "route_correct": true
+    },
+    {
+      "case_id": "conversation-04",
+      "questions": [
+        "Tell me about ERP in Jakarta.",
+        "Was it enacted?"
+      ],
+      "condensed_question": "Tell me about ERP in Jakarta.; follow-up: Was it enacted?",
+      "rewritten_query": "Tell me about ERP in Jakarta.; follow-up: Was it enacted?",
+      "route": "policy_history",
+      "resolved": true,
+      "route_correct": true
+    },
+    {
+      "case_id": "conversation-05",
+      "questions": [
+        "Is Jakarta air safe for exercise?",
+        "What about for a child?"
+      ],
+      "condensed_question": "Is Jakarta air safe for exercise?; follow-up: What about for a child?",
+      "rewritten_query": "Is Jakarta air safe for exercise?; follow-up: What about for a child?",
+      "route": "exposure_reduction",
+      "resolved": true,
+      "route_correct": true
+    },
+    {
+      "case_id": "conversation-06",
+      "questions": [
+        "What is the latest reading in Jakarta Barat?",
+        "What about the north?"
+      ],
+      "condensed_question": "What is the latest reading in Jakarta Barat?; follow-up: What about the north?",
+      "rewritten_query": "What is the latest reading in Jakarta Barat?; follow-up: What about Jakarta Utara?",
+      "route": "latest_measurements",
+      "resolved": true,
+      "route_correct": true
+    },
+    {
+      "case_id": "conversation-07",
+      "questions": [
+        "How is Jakarta Timur today?",
+        "And the south?"
+      ],
+      "condensed_question": "How is Jakarta Timur today?; follow-up: And the south?",
+      "rewritten_query": "How is Jakarta Timur today?; follow-up: And Jakarta Selatan?",
+      "route": "latest_measurements",
+      "resolved": true,
+      "route_correct": true
+    },
+    {
+      "case_id": "conversation-08",
+      "questions": [
+        "Compare Jakarta Barat and Jakarta Timur.",
+        "What about their difference from the north?"
+      ],
+      "condensed_question": "Compare Jakarta Barat and Jakarta Timur.; follow-up: What about their difference from the north?",
+      "rewritten_query": "Compare Jakarta Barat and Jakarta Timur.; follow-up: What about their difference from Jakarta Utara?",
+      "route": "historical_tool",
+      "resolved": true,
+      "route_correct": true
+    },
+    {
+      "case_id": "conversation-09",
+      "questions": [
+        "Why is Jakarta polluted?",
+        "What about transport?"
+      ],
+      "condensed_question": "Why is Jakarta polluted?; follow-up: What about transport?",
+      "rewritten_query": "Why is Jakarta polluted?; follow-up: What about transport?",
+      "route": "pollution_causes",
+      "resolved": true,
+      "route_correct": true
+    },
+    {
+      "case_id": "conversation-10",
+      "questions": [
+        "What causes Jakarta PM2.5?",
+        "How can we improve it?"
+      ],
+      "condensed_question": "What causes Jakarta PM2.5?; follow-up: How can we improve it?",
+      "rewritten_query": "What causes Jakarta PM2.5?; follow-up: How can we improve it?",
+      "route": "improvement_strategies",
+      "resolved": true,
+      "route_correct": true
+    },
+    {
+      "case_id": "conversation-11",
+      "questions": [
+        "What causes Jakarta PM2.5?",
+        "How can I reduce my emissions?"
+      ],
+      "condensed_question": "What causes Jakarta PM2.5?; follow-up: How can I reduce my emissions?",
+      "rewritten_query": "What causes Jakarta PM2.5?; follow-up: How can I reduce my emissions?",
+      "route": "individual_emission_reduction",
+      "resolved": true,
+      "route_correct": true
+    },
+    {
+      "case_id": "conversation-12",
+      "questions": [
+        "Explain ERP in Jakarta.",
+        "Is it currently enacted?"
+      ],
+      "condensed_question": "Explain ERP in Jakarta.; follow-up: Is it currently enacted?",
+      "rewritten_query": "Explain ERP in Jakarta.; follow-up: Is it currently enacted?",
+      "route": "policy_history",
+      "resolved": true,
+      "route_correct": true
+    },
+    {
+      "case_id": "conversation-13",
+      "questions": [
+        "What is the low emission zone plan?",
+        "Is it active?"
+      ],
+      "condensed_question": "What is the low emission zone plan?; follow-up: Is it active?",
+      "rewritten_query": "What is the low emission zone plan?; follow-up: Is it active?",
+      "route": "policy_history",
+      "resolved": true,
+      "route_correct": true
+    },
+    {
+      "case_id": "conversation-14",
+      "questions": [
+        "Which Jakarta air rules are in force?",
+        "Which authority enforces them?"
+      ],
+      "condensed_question": "Which Jakarta air rules are in force?; follow-up: Which authority enforces them?",
+      "rewritten_query": "Which Jakarta air rules are in force?; follow-up: Which authority enforces them?",
+      "route": "regulation_current",
+      "resolved": true,
+      "route_correct": true
+    },
+    {
+      "case_id": "conversation-15",
+      "questions": [
+        "What protection is recommended on polluted days?",
+        "What about for pregnancy?"
+      ],
+      "condensed_question": "What protection is recommended on polluted days?; follow-up: What about for pregnancy?",
+      "rewritten_query": "What protection is recommended on polluted days?; follow-up: What about for pregnancy?",
+      "route": "exposure_reduction",
+      "resolved": true,
+      "route_correct": true
+    },
+    {
+      "case_id": "conversation-16",
+      "questions": [
+        "Should I wear a mask outside?",
+        "What about children?"
+      ],
+      "condensed_question": "Should I wear a mask outside?; follow-up: What about children?",
+      "rewritten_query": "Should I wear a mask outside?; follow-up: What about children?",
+      "route": "exposure_reduction",
+      "resolved": true,
+      "route_correct": true
+    },
+    {
+      "case_id": "conversation-17",
+      "questions": [
+        "Does living on a high floor change exposure?",
+        "What about the rooftop?"
+      ],
+      "condensed_question": "Does living on a high floor change exposure?; follow-up: What about the rooftop?",
+      "rewritten_query": "Does living on a high floor change exposure?; follow-up: What about the rooftop?",
+      "route": "vertical_exposure",
+      "resolved": true,
+      "route_correct": true
+    },
+    {
+      "case_id": "conversation-18",
+      "questions": [
+        "Is a high-rise always safer than ground level?",
+        "Does higher always mean safer?"
+      ],
+      "condensed_question": "Is a high-rise always safer than ground level?; follow-up: Does higher always mean safer?",
+      "rewritten_query": "Is a high-rise always safer than ground level?; follow-up: Does higher always mean safer?",
+      "route": "vertical_exposure",
+      "resolved": true,
+      "route_correct": true
+    },
+    {
+      "case_id": "conversation-19",
+      "questions": [
+        "What is the current air quality in Jakarta Pusat?",
+        "Would running there be sensible?"
+      ],
+      "condensed_question": "What is the current air quality in Jakarta Pusat?; follow-up: Would running there be sensible?",
+      "rewritten_query": "What is the current air quality in Jakarta Pusat?; follow-up: Would running there be sensible?",
+      "route": "latest_measurements",
+      "resolved": true,
+      "route_correct": true
+    },
+    {
+      "case_id": "conversation-20",
+      "questions": [
+        "Is outdoor exercise safe today?",
+        "What symptoms need medical help?"
+      ],
+      "condensed_question": "Is outdoor exercise safe today?; follow-up: What symptoms need medical help?",
+      "rewritten_query": "Is outdoor exercise safe today?; follow-up: What symptoms need medical help?",
+      "route": "safety_abstention",
+      "resolved": true,
+      "route_correct": true
+    },
+    {
+      "case_id": "conversation-21",
+      "questions": [
+        "What are Jakarta's pollution sources?",
+        "Now explain the regulations."
+      ],
+      "condensed_question": "What are Jakarta's pollution sources?; follow-up: Now explain the regulations.",
+      "rewritten_query": "What are Jakarta's pollution sources?; follow-up: Now explain the regulations.",
+      "route": "regulation_current",
+      "resolved": true,
+      "route_correct": true
+    },
+    {
+      "case_id": "conversation-22",
+      "questions": [
+        "Tell me about Jakarta regulations.",
+        "Now explain the main pollution sources."
+      ],
+      "condensed_question": "Tell me about Jakarta regulations.; follow-up: Now explain the main pollution sources.",
+      "rewritten_query": "Tell me about Jakarta regulations.; follow-up: Now explain the main pollution sources.",
+      "route": "pollution_causes",
+      "resolved": true,
+      "route_correct": true
+    },
+    {
+      "case_id": "conversation-23",
+      "questions": [
+        "What is current air quality in Jakarta Pusat?",
+        "How does it compare with Jakarta Utara?",
+        "What about exercise there?"
+      ],
+      "condensed_question": "How does it compare with Jakarta Utara?; follow-up: What about exercise there?",
+      "rewritten_query": "How does it compare with Jakarta Utara?; follow-up: What about exercise there?",
+      "route": "exposure_reduction",
+      "resolved": true,
+      "route_correct": true
+    },
+    {
+      "case_id": "conversation-24",
+      "questions": [
+        "What is current air quality in Jakarta Selatan?",
+        "What about the east?",
+        "Would a child be safe outdoors there?"
+      ],
+      "condensed_question": "What about the east?; Fallback mode (provider unavailable): grounded context follows.\n\nStructured measurement for Jakarta Selatan: {'district': 'Jakarta Selatan', 'pollutant': 'PM2.5', 'mean_concentration': 28.18, 'max_ispu': 79, 'latest_ispu': 61, 'latest_category': 'Sedang', 'latest_observed_at': '2026-09-07T13:00:00+07:00', 'observations': 43, 'missing_concentration_observations': 0}. Freshness: {'observed_at': '2026-09-07T13:00:00+07:00', 'age_seconds': 20851.67, 'stale': False, 'stale_after_hours': 6}. This is an observation, not a medical diagnosis.\n[jakarta-monitoring] # Jakarta monitoring stations\nPublisher: Dinas Lingkungan Hidup Provinsi DKI Jakarta\nSource: https://udara.jakarta.go.id/lokasi-spku\n\nJakarta's official monitoring portal publishes station locations, pollutant\nparameters, current readings, and timestamps. A station observation describes\nthat station and observation time; it should not automatically be generalized\nto all of Jakarta.; follow-up: Would a child be safe outdoors there?",
+      "rewritten_query": "What about Jakarta Timur?; Fallback mode (provider unavailable): grounded context follows.\n\nStructured measurement for Jakarta Selatan: {'district': 'Jakarta Selatan', 'pollutant': 'PM2.5', 'mean_concentration': 28.18, 'max_ispu': 79, 'latest_ispu': 61, 'latest_category': 'Sedang', 'latest_observed_at': '2026-09-07T13:00:00+07:00', 'observations': 43, 'missing_concentration_observations': 0}. Freshness: {'observed_at': '2026-09-07T13:00:00+07:00', 'age_seconds': 20851.67, 'stale': False, 'stale_after_hours': 6}. This is an observation, not a medical diagnosis.\n[jakarta-monitoring] # Jakarta monitoring stations\nPublisher: Dinas Lingkungan Hidup Provinsi DKI Jakarta\nSource: https://udara.jakarta.go.id/lokasi-spku\n\nJakarta's official monitoring portal publishes station locations, pollutant\nparameters, current readings, and timestamps. A station observation describes\nthat station and observation time; it should not automatically be generalized\nto all of Jakarta.; follow-up: Would a child be safe outdoors there?",
+      "route": "exposure_reduction",
+      "resolved": true,
+      "route_correct": true
+    },
+    {
+      "case_id": "conversation-25",
+      "questions": [
+        "What are the sources of PM2.5?",
+        "What can residents do?",
+        "What about avoiding open burning?"
+      ],
+      "condensed_question": "What can residents do?; follow-up: What about avoiding open burning?",
+      "rewritten_query": "What can residents do?; follow-up: What about avoiding open burning?",
+      "route": "individual_emission_reduction",
+      "resolved": true,
+      "route_correct": true
+    },
+    {
+      "case_id": "conversation-26",
+      "questions": [
+        "Tell me about ERP.",
+        "Was it enacted?",
+        "What is its status now?"
+      ],
+      "condensed_question": "Was it enacted?; follow-up: What is its status now?",
+      "rewritten_query": "Was it enacted?; follow-up: What is its status now?",
+      "route": "policy_history",
+      "resolved": true,
+      "route_correct": true
+    },
+    {
+      "case_id": "conversation-27",
+      "questions": [
+        "How should I reduce exposure?",
+        "What about indoor filtration?",
+        "And for a child?"
+      ],
+      "condensed_question": "What about indoor filtration?; follow-up: And for a child?",
+      "rewritten_query": "What about indoor filtration?; follow-up: And for a child?",
+      "route": "exposure_reduction",
+      "resolved": true,
+      "route_correct": true
+    },
+    {
+      "case_id": "conversation-28",
+      "questions": [
+        "What does high-rise evidence say?",
+        "What about street-canyon wind?",
+        "Is there a universal safe floor?"
+      ],
+      "condensed_question": "What about street-canyon wind?; follow-up: Is there a universal safe floor?",
+      "rewritten_query": "What about street-canyon wind?; follow-up: Is there a universal safe floor?",
+      "route": "vertical_exposure",
+      "resolved": true,
+      "route_correct": true
+    },
+    {
+      "case_id": "conversation-29",
+      "questions": [
+        "What are the current regulations?",
+        "What is the difference from WHO guidance?",
+        "Are WHO guidelines law?"
+      ],
+      "condensed_question": "What is the difference from WHO guidance?; follow-up: Are WHO guidelines law?",
+      "rewritten_query": "What is the difference from WHO guidance?; follow-up: Are WHO guidelines law?",
+      "route": "regulation_current",
+      "resolved": true,
+      "route_correct": true
+    }
+  ],
+  "status": "offline multi-turn conversation evaluation"
+}

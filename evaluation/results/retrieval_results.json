@@ -1,0 +1,60 @@
+{
+  "corpus": "expanded-v1",
+  "corpus_sha256": "377ba2e4b26b2f8be68b4ec854d234fad27b11f7c9d0745fe2e04f1ff9b905a4",
+  "questions": 150,
+  "results": [
+    {
+      "mode": "bm25",
+      "hit_rate_at_5": 0.6133,
+      "mrr_at_5": 0.4133,
+      "ndcg_at_5": 0.4552,
+      "p50_latency_ms": 6.2744,
+      "questions": 150,
+      "language_hit_rate_at_5": {
+        "English": 0.72,
+        "Bahasa Indonesia": 0.5067
+      },
+      "multi_source_recall_at_5": 0.0
+    },
+    {
+      "mode": "dense",
+      "hit_rate_at_5": 0.66,
+      "mrr_at_5": 0.513,
+      "ndcg_at_5": 0.5378,
+      "p50_latency_ms": 6.2497,
+      "questions": 150,
+      "language_hit_rate_at_5": {
+        "English": 0.88,
+        "Bahasa Indonesia": 0.44
+      },
+      "multi_source_recall_at_5": 0.7
+    },
+    {
+      "mode": "hybrid",
+      "hit_rate_at_5": 0.7067,
+      "mrr_at_5": 0.5274,
+      "ndcg_at_5": 0.563,
+      "p50_latency_ms": 6.2717,
+      "questions": 150,
+      "language_hit_rate_at_5": {
+        "English": 0.8133,
+        "Bahasa Indonesia": 0.6
+      },
+      "multi_source_recall_at_5": 0.3
+    },
+    {
+      "mode": "hybrid_rerank",
+      "hit_rate_at_5": 0.6933,
+      "mrr_at_5": 0.4789,
+      "ndcg_at_5": 0.5268,
+      "p50_latency_ms": 6.8546,
+      "questions": 150,
+      "language_hit_rate_at_5": {
+        "English": 0.7867,
+        "Bahasa Indonesia": 0.6
+      },
+      "multi_source_recall_at_5": 0.3
+    }
+  ],
+  "status": "150-question stratified seed benchmark; human review pending"
+}

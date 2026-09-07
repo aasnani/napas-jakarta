@@ -1,0 +1,21 @@
+{
+  "schema_version": "authoritative-fetch-v1",
+  "captured_at": "2026-09-07",
+  "method": "authoritative web search/open; shell DNS unavailable",
+  "records": [
+    {"source_id": "pp-22-2021-air-quality", "url": "https://peraturan.bpk.go.id/Details/161852/pp-no-22tahun-2021", "status": "html_metadata_abstract_captured", "binary_url": "https://peraturan.bpk.go.id/Download/354244/Salinan%20PP%20Nomor%2022%20Tahun%202021.pdf"},
+    {"source_id": "permen-lhk-8-2023-vehicle-emissions", "url": "https://peraturan.bpk.go.id/Details/262504/permen-lhk-no-8-tahun-2023", "status": "html_metadata_abstract_captured", "binary_url": "https://peraturan.bpk.go.id/Details/262504/permen-lhk-no-8-tahun-2023"},
+    {"source_id": "pergub-66-2020-vehicle-testing", "url": "https://peraturan.bpk.go.id/Details/153923/pergub-prov-dki-jakarta-no-66-tahun-2020", "status": "html_metadata_abstract_captured", "binary_url": "https://peraturan.bpk.go.id/Details/153923/pergub-prov-dki-jakarta-no-66-tahun-2020"},
+    {"source_id": "who-aqg-2021-extract", "url": "https://www.who.int/publications/i/item/9789240034228", "status": "html_publication_and_table_captured", "binary_url": "https://iris.who.int/bitstream/handle/10665/345329/9789240034228-eng.pdf"},
+    {"source_id": "who-personal-interventions-2024", "url": "https://www.who.int/news-room/questions-and-answers/item/air-pollution-personal-interventions-and-risk-communication", "status": "html_captured"},
+    {"source_id": "epa-air-cleaners-home-2026", "url": "https://www.epa.gov/indoor-air-quality-iaq/guide-air-cleaners-home", "status": "html_captured"},
+    {"source_id": "permen-lhk-13-2021-cems", "url": "https://peraturan.bpk.go.id/Download/288590/Permen%20LHK%20Nomor%2013%20Tahun%202021.pdf", "status": "search_extract_captured_pdf_inaccessible"},
+    {"source_id": "ma-jakarta-air-lawsuit-record", "url": "https://putusan3.mahkamahagung.go.id/pengadilan/profil/pengadilan/pn-jakarta-pusat.html", "status": "official_portal_locator_captured_case_document_pending"},
+    {"source_id": "jakarta-sppu-official-status-2024", "url": "https://www.jakarta.go.id/siaran-pers/4802-SP-HMS-06-2024", "status": "official_statement_locator_captured"}
+  ],
+  "blocked": [
+    "Direct shell downloads failed with DNS resolution error in the execution environment.",
+    "The web fetcher rejects application/octet-stream PDFs and returned 403 for one WHO PDF URL.",
+    "No binary or long copyrighted quotation is committed; licensed/official fetch should populate data/raw/authoritative when network access is available."
+  ]
+}

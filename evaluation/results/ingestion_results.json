@@ -1,0 +1,26 @@
+{
+  "runs": 2,
+  "first_counts": {
+    "documents": 29,
+    "chunks": 113,
+    "measurements": 5
+  },
+  "second_counts": {
+    "documents": 29,
+    "chunks": 113,
+    "measurements": 5
+  },
+  "idempotent_fingerprint": true,
+  "validation": {
+    "accepted": 5,
+    "rejected": 0,
+    "errors": {
+      "duplicate_keys": 0,
+      "invalid_units": 0,
+      "negative_values": 0,
+      "future_timestamps": 0
+    },
+    "stations": 5
+  },
+  "status": "offline deterministic ingestion evaluation"
+}

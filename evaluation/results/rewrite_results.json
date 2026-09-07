@@ -1,0 +1,14 @@
+[
+  {
+    "rewrite_mode": "off",
+    "retrieval": "dense",
+    "hit_rate_at_5": 0.92,
+    "questions": 150
+  },
+  {
+    "rewrite_mode": "rules",
+    "retrieval": "dense",
+    "hit_rate_at_5": 0.92,
+    "questions": 150
+  }
+]

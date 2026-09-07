@@ -1,0 +1,1 @@
+"""Napas Jakarta application package."""

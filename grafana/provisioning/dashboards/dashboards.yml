@@ -1,0 +1,10 @@
+apiVersion: 1
+providers:
+  - name: Napas Jakarta
+    orgId: 1
+    folder: Napas Jakarta
+    type: file
+    disableDeletion: true
+    updateIntervalSeconds: 30
+    options:
+      path: /etc/grafana/provisioning/dashboards

@@ -1,0 +1,13 @@
+{
+  "claims": 11,
+  "citation_resolvability": 1.0,
+  "orphaned_records": [],
+  "citation_completeness": 1.0,
+  "locator_accuracy": 1.0,
+  "supported_claim_rate": null,
+  "source_authority_review": "pending_human_review",
+  "review_status": [
+    "pending_human_review"
+  ],
+  "method": "exact source_id/chunk_id/locator join; semantic entailment is not automated"
+}

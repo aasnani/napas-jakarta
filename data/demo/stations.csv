@@ -1,0 +1,6 @@
+station_id,station_name,district,latitude,longitude,source
+DKI01,Bundaran HI,Jakarta Pusat,-6.1944,106.8229,Approximate demo metadata; verify with official SPKU directory
+DKI17,SDN 07 Kramat Pela,Jakarta Selatan,-6.2607,106.7970,Approximate demo metadata; verify with official SPKU directory
+DKI82,Taman Sutoyo,Jakarta Timur,-6.2383,106.8794,Approximate demo metadata; verify with official SPKU directory
+DKI05,Kebon Jeruk,Jakarta Barat,-6.1904,106.7635,Approximate demo metadata; verify with official SPKU directory
+DKI02,Kelapa Gading,Jakarta Utara,-6.1588,106.9056,Approximate demo metadata; verify with official SPKU directory

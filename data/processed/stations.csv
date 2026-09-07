@@ -1,0 +1,106 @@
+station_id,station,district,latitude,longitude,source
+015724e5-cea6-464c-9c8a-4982a8567a79,DKI_PM25_64 SMPN 88 Jakarta (ROOFTOP),Kota Adm. Jakarta Barat,-6.19306,106.794973,https://udara.jakarta.go.id/
+022441fc-0402-4b51-af62-ba5c8e4fa37f,DKJ35 Rusunawa Pesakih,Kota Adm. Jakarta Barat,-6.161974,106.716769,https://udara.jakarta.go.id/
+04c6a78b-bb4e-44e2-9456-5b5f29ed966c,LCS-09 PT. JIEP,Kota Adm. Jakarta Timur,-6.20697,106.91962,https://udara.jakarta.go.id/
+0801e8e7-5b99-4546-bf4b-478d0e26fc03,DKI_PM25_20 TPS 3R Siaga Pejaten Barat,Kota Adm. Jakarta Selatan,-6.268989,106.837096,https://udara.jakarta.go.id/
+08bc1f24-cf3b-4d6c-99a2-6393c0b11f4f,DKI_PENJARINGAN Rusun Penjaringan,Kota Adm. Jakarta Utara,-6.129308030415923,106.79575684232952,https://udara.jakarta.go.id/
+09953843-9c1e-4950-98d7-0eaa5b191061,DKI_PM25_67 RPTRA Taman Pinus,Kota Adm. Jakarta Utara,-6.140051,106.917764,https://udara.jakarta.go.id/
+0ce85903-2c94-491f-9d3d-a22b25e92386,DKI_PM25_76 RPTRA Anggrek Bintaro,Kota Adm. Jakarta Selatan,-6.264257,106.770436,https://udara.jakarta.go.id/
+0d12b23f-2986-4974-9d88-53e1ec616962,DKI_PM25_72 SDN 18 Cipinang Muara,Kota Adm. Jakarta Timur,-6.236803,106.889094,https://udara.jakarta.go.id/
+19309ede-b9bd-4bd9-902f-b8535f2d82d9,DKI_PM25_78 RPTRA Pulobesar,Kota Adm. Jakarta Utara,-6.15562,106.880943,https://udara.jakarta.go.id/
+19d87909-d7d0-445e-a086-057731bbbe30,DKI_CENDRAWASIH GOR Cendrawasih,Kota Adm. Jakarta Barat,-6.143301552250624,106.72061039751402,https://udara.jakarta.go.id/
+219dd54c-4129-40b3-b5c6-80f042dd88f9,DKI_PM25_49 RPTRA Harapan Mulia,Kota Adm. Jakarta Pusat,-6.169828,106.855026,https://udara.jakarta.go.id/
+23ace949-02d5-4000-a5e5-2e3dc130d704,DKI_PM25_62 RPTRA Ria Damkar Joglo 2,Kota Adm. Jakarta Barat,-6.21887055477562,106.723318740138,https://udara.jakarta.go.id/
+2420af88-7961-41aa-9d16-090da63e4ef7,DKI2 Kelapa Gading,Kota Adm. Jakarta Utara,-6.154085,106.908249,https://udara.jakarta.go.id/
+25e97534-6bbe-40ac-a340-8dd4fcf9ed5f,LCS-08 Terminal Kalideres,Kota Adm. Jakarta Barat,-6.15396,106.70605,https://udara.jakarta.go.id/
+27fd1b91-2ed5-4c51-894a-b6b058f5588b,LCS-14 Pulau Pramuka,Kab. Adm. Kep. Seribu,-5.74466,106.61298,https://udara.jakarta.go.id/
+2879eea5-cadb-4392-ac09-62ca585b75d6,DKJ33 Lebak Bulus,Kota Adm. Jakarta Selatan,-6.301071,106.789206,https://udara.jakarta.go.id/
+2c0d984d-0f4a-4f8a-8564-ddd78fd76b34,DKI_PM25_17 SDN 20 Pejaten Timur,Kota Adm. Jakarta Selatan,-6.2737557,106.850605,https://udara.jakarta.go.id/
+2d554554-7567-4ac1-ab87-536260d2ba79,DKI1 Bundaran HI,Kota Adm. Jakarta Pusat,-6.195459,106.822731,https://udara.jakarta.go.id/
+3029cf23-cfec-4917-86f4-0afb1c3fe70a,DKI_PM25_56 SDN 01 Sukapura,Kota Adm. Jakarta Utara,-6.150574,106.921919,https://udara.jakarta.go.id/
+31c9bb04-39b0-4b7b-a5ef-b6609f4741f9,DKI_PM25_80 Kamal Park,Kota Adm. Jakarta Barat,-6.102668,106.700401,https://udara.jakarta.go.id/
+35a9757b-1bb9-468b-8354-a61c6280f5ca,DKI_PM25_46 SDN 10 Johar Baru Pagi,Kota Adm. Jakarta Pusat,-6.18121,106.860386,https://udara.jakarta.go.id/
+3611712a-2eca-427d-a3fc-25e653fca2f0,"DKI_GOMBOLPAYA TMB Gombol Paya, Kalideres",Kota Adm. Jakarta Barat,-6.134634778409541,106.6891883099439,https://udara.jakarta.go.id/
+38146348-8e39-48fd-9b80-9a07270976ce,DKI105 JGC Shinano,Kota Adm. Jakarta Timur,-6.159329,106.969286,https://udara.jakarta.go.id/
+428162ac-9555-4000-a2b1-d235c196b7cb,DKI_PM25_27 RPTRA Manunggal Petukangan Selatan,Kota Adm. Jakarta Selatan,-6.243737,106.747235,https://udara.jakarta.go.id/
+42b53155-7cfe-4543-aec2-5832c886d36f,LCS-01 Patung Pemuda Membangun,Kota Adm. Jakarta Selatan,-6.229448,106.79978,https://udara.jakarta.go.id/
+46cebc3e-fcc7-49fe-955f-ec2448c33c71,DKI_PM25_71 Rusunawa KS Tubun,Kota Adm. Jakarta Barat,-6.1865608,106.8096856,https://udara.jakarta.go.id/
+487c98af-c775-4cad-b541-95c33ad4371f,DKI_PM25_58 RPTRA Pandawa,Kota Adm. Jakarta Barat,-6.184001,106.763099,https://udara.jakarta.go.id/
+493b612d-8277-47b6-9727-3854f13d5f48,DKI_PM25_55 RPTRA Melati Duri Pulo,Kota Adm. Jakarta Pusat,-6.163207,106.809255,https://udara.jakarta.go.id/
+4aba46b6-6337-4b59-87e6-2c8f2934a043,DKI_PM25_57 RSUD Cipayung,Kota Adm. Jakarta Timur,-6.307085,106.905332,https://udara.jakarta.go.id/
+4addd804-bfcd-4f33-a2bb-bf8b9f6412f9,DKI_PM25_29 RPTRA Rawa Badak Utara,Kota Adm. Jakarta Utara,-6.117076,106.896598,https://udara.jakarta.go.id/
+4c663e14-ddf6-4212-81b7-b9db9f9dc83c,DKI_PM25_42 Taman Sutoyo,Kota Adm. Jakarta Timur,-6.257937,106.870456,https://udara.jakarta.go.id/
+542cbe5e-859d-434f-8fed-e67fcf9cd50c,DKI_PM25_47 SDN 12 Gedong,Kota Adm. Jakarta Timur,-6.301248,106.856648,https://udara.jakarta.go.id/
+5609315d-61fb-4269-a5cd-f01ac8cf8a70,DKI_PM25_63 SDN 06 Makassar,Kota Adm. Jakarta Timur,-6.279235,106.880195,https://udara.jakarta.go.id/
+570b6df8-7785-4720-8ca6-d544eb3df355,DKI_PM25_60 Taman Maju Bersama (TMB) Dupa Indah,Kota Adm. Jakarta Barat,-6.171999,106.775773,https://udara.jakarta.go.id/
+576c96d1-07d3-459b-814b-824361ad96fe,DKI_PM25_38 Taman Ismail Marzuki,Kota Adm. Jakarta Pusat,-6.189948,106.839821,https://udara.jakarta.go.id/
+5a49f89a-f128-4c15-8bc3-66da51517e81,DKI_PM25_33 RPTRA Citra Permata,Kota Adm. Jakarta Timur,-6.221678,106.870318,https://udara.jakarta.go.id/
+5c00fad4-ccdc-48c3-b897-1dd426635203,DKI_PM25_36 SDN 04 Cibubur,Kota Adm. Jakarta Timur,-6.344574,106.874146,https://udara.jakarta.go.id/
+5c375f43-82cd-479f-bfc6-2c6567653095,DKI_PM25_48 RPTRA Mawar,Kota Adm. Jakarta Selatan,-6.297187,106.770068,https://udara.jakarta.go.id/
+5c6cfb14-61e6-4794-a7d7-a0003d44969d,DKI_PM25_37 SDN 01 Cempaka Putih Barat,Kota Adm. Jakarta Pusat,-6.175124,106.863204,https://udara.jakarta.go.id/
+5d0e04d6-66b3-48e9-be13-81b16af54d45,DKI_PM25_18 SDN 02 Pagi Ujung Menteng,Kota Adm. Jakarta Timur,-6.183194,106.960562,https://udara.jakarta.go.id/
+6110e49c-2f9c-403d-bdbe-8bf98475f151,DKI_PM25_61 SDN 03 Cijantung,Kota Adm. Jakarta Timur,-6.319594,106.851231,https://udara.jakarta.go.id/
+61246172-d1ec-4e25-8c96-ddf74f967dc5,DKI3 Jagakarsa,Kota Adm. Jakarta Selatan,-6.336216,106.818082,https://udara.jakarta.go.id/
+69dec38f-8fb8-467d-9701-4fe488e378dc,DKI_PM25_85 SDN 03 Kebayoran Lama Utara,Kota Adm. Jakarta Selatan,-6.250298,106.776891,https://udara.jakarta.go.id/
+6a6f0ec4-7742-46ed-91d9-7bc94e6d8c18,DKI99 SMKN 04 Jakarta,Kota Adm. Jakarta Utara,-6.141497,106.953288,https://udara.jakarta.go.id/
+6bafe2cf-c558-4b54-907b-34c9430edaf0,DKJ32 Ancol,Kota Adm. Jakarta Utara,-6.12244299,106.8376502,https://udara.jakarta.go.id/
+6da19e57-b64d-4781-9280-a9a20e2e843f,DKI_PM25_24 Kantor Kecamatan Pulogadung,Kota Adm. Jakarta Timur,-6.198879,106.904644,https://udara.jakarta.go.id/
+6f041190-f963-4b8b-8cfc-ae979a8dc94a,DKI104 SDN 05 Cakung Timur,Kota Adm. Jakarta Timur,-6.16545,106.963007,https://udara.jakarta.go.id/
+730cae5b-25db-42e0-9150-e3f0abc23e3c,LCS-10 SPKU Kelapa Gading,Kota Adm. Jakarta Utara,-6.15421,106.91045,https://udara.jakarta.go.id/
+738500d3-df50-40ab-97bb-b8da394aac53,DKI_PM25_52 Padepokan Restu Bumi Asrama Ciracas,Kota Adm. Jakarta Timur,-6.316993,106.874609,https://udara.jakarta.go.id/
+759fafcc-8b5e-4b10-a0ba-ce49ba2e6bfd,DKI_PM25_74 RPTRA Penjaringan Indah,Kota Adm. Jakarta Utara,-6.134137,106.795785,https://udara.jakarta.go.id/
+7d5d927f-e760-476c-bb20-a45d6480b98c,LCS-02 Jl. DI Panjaitan,Kota Adm. Jakarta Timur,-6.174472,106.876083,https://udara.jakarta.go.id/
+7e380d05-b4f7-4efe-9ab9-a5a259e785a0,"DKI_MANGGALABISMA RPTRA Manggala Bisma, Papanggo",Kota Adm. Jakarta Utara,-6.127813057843073,106.86804428721646,https://udara.jakarta.go.id/
+7ed27231-325b-498f-99c4-4886359e4306,DKI_PM25_54 SMPN 179 Jakarta,Kota Adm. Jakarta Timur,-6.331141,106.852423,https://udara.jakarta.go.id/
+80071522-f32d-4eeb-99d0-126f83979d56,DKI_PULOMAS Jakarta Equestrian Pulomas,Kota Adm. Jakarta Timur,-6.17846467732303,106.88717854232955,https://udara.jakarta.go.id/
+802a2208-80d3-464e-8e0c-dd2770fa35ab,DKJ37 Taman Sungai Kendal,Kota Adm. Jakarta Utara,-6.138291,106.968288,https://udara.jakarta.go.id/
+81676dc9-cf43-42ae-808c-c127f438d841,DKI_PM25_79 SDN 07 Paseban (ROOFTOP),Kota Adm. Jakarta Pusat,-6.1934228,106.8553405,https://udara.jakarta.go.id/
+839ecba9-6e30-4266-b272-a1dcd1ea2d2f,DKI_PM25_82 SDN 07 Peganggsaan Dua,Kota Adm. Jakarta Utara,-6.175007,106.911456,https://udara.jakarta.go.id/
+84b864cd-fb40-4f95-a347-2e854857177a,DKJ34 Pondok Rangon,Kota Adm. Jakarta Timur,-6.341538,106.91799,https://udara.jakarta.go.id/
+8bc0eb43-1ca6-4d63-961e-826ac20ae2d7,LCS-12 Stadion JIS,Kota Adm. Jakarta Utara,-6.12521,106.8587,https://udara.jakarta.go.id/
+8dea5257-ec1b-4d25-8d3f-b5024e330b40,DKJ36 Tebet Eco Park,Kota Adm. Jakarta Selatan,-6.239564,106.852862,https://udara.jakarta.go.id/
+928156b8-b6d2-4097-b57f-2c0ea6102e67,DKI_PM25_81 RPTRA Rorotan Indah 2,Kota Adm. Jakarta Utara,-6.156868,106.955973,https://udara.jakarta.go.id/
+93ba95c3-d8e4-48ff-bae0-21510ae9aa90,DKI_PM25_83 RPTRA Gading Tarian,Kota Adm. Jakarta Utara,-6.171162,106.907712,https://udara.jakarta.go.id/
+998c53c2-b5b4-48e8-8221-7568cee4f36b,DKI_RAGUNAN PPOP Ragunan,Kota Adm. Jakarta Selatan,-6.304420728716271,106.8289196394899,https://udara.jakarta.go.id/
+9ce99524-9672-46e7-8982-b9df21e53d52,DKI_PM25_30 RPTRA Duren Tiga,Kota Adm. Jakarta Selatan,-6.255385,106.842706,https://udara.jakarta.go.id/
+9d75e672-3aa7-4d11-bbed-c4f4ae8b34cf,DKI100 SDN 03 Rorotan,Kota Adm. Jakarta Utara,-6.143968,106.956991,https://udara.jakarta.go.id/
+a188c80b-8233-41e1-9239-9f7143acbab8,DKI4 Lubang Buaya,Kota Adm. Jakarta Timur,-6.2908,106.908501,https://udara.jakarta.go.id/
+a67fb637-93c1-4e90-bd72-d920b37ba41e,LCS-04 Jl. Fatmawati,Kota Adm. Jakarta Selatan,-6.27533,106.7977,https://udara.jakarta.go.id/
+af31a885-1f01-4d5c-a4ee-f27f52ead207,DKI_PM25_40 SDN 01 Manggarai,Kota Adm. Jakarta Selatan,-6.212814,106.856324,https://udara.jakarta.go.id/
+b24e4361-bcc4-4014-849f-c1909ab68a70,DKI_PM25_22 Kantor Kelurahan Kapuk Muara,Kota Adm. Jakarta Utara,-6.137185,106.764126,https://udara.jakarta.go.id/
+b6163f52-c25d-4cd5-99cc-8da8900c55af,DKI_PM25_16 Jakarta Islamic Center (JIC),Kota Adm. Jakarta Utara,-6.123743,106.918003,https://udara.jakarta.go.id/
+ba324a83-d5f1-4e33-8112-be45892f46a7,DKI_PM25_15 Kantor SUDIN LH Jakarta Timur (ROOFTOP),Kota Adm. Jakarta Timur,-6.28847332651929,106.883013732949,https://udara.jakarta.go.id/
+bd4ad116-78d8-457a-88fd-d9aef7f00a6d,DKI_PM25_88 SDN 04 Cipinang Melayu,Kota Adm. Jakarta Timur,-6.251542,106.917473,https://udara.jakarta.go.id/
+bf554216-ad15-460f-a9e5-2c64db9c6a9e,pm25_kemayoran Kemayoran BMKG,Kota Adm. Jakarta Pusat,-6.155868028046293,106.84194772134708,https://udara.jakarta.go.id/
+c031bd5c-329e-4798-a76e-23471f86b09c,DKI103 Taman RW 009,Kota Adm. Jakarta Utara,-6.153326,106.971152,https://udara.jakarta.go.id/
+c27e2ffc-23b0-4a81-a84b-d4c9525f116a,DKI_PM25_84 RPTRA Cideng Kenangan,Kota Adm. Jakarta Pusat,-6.16709091941493,106.807504595481,https://udara.jakarta.go.id/
+c668593f-4fc4-469b-8efb-669f7a5c0c26,DKI_PM25_87 SDN 01 Pondok Kelapa Pagi,Kota Adm. Jakarta Timur,-6.239175,106.932967,https://udara.jakarta.go.id/
+c801532d-ae07-4dd4-8332-9de9f332d52a,DKI_TANJONGTIMOR Pulau Panggang,Kab. Adm. Kep. Seribu,-5.741774124848568,106.60386650063936,https://udara.jakarta.go.id/
+caaa1a3e-5d7d-405b-af84-1a6ca0f29ac7,LCS-06 Taman Telur,Kota Adm. Jakarta Selatan,-6.2504,106.81523,https://udara.jakarta.go.id/
+cbd6c191-2c82-4eec-b29f-0a90f6082fc6,DKI_PM25_77 Kantor SUDIN LH Jakarta Barat (ROOFTOP),Kota Adm. Jakarta Barat,-6.15256590728919,106.772468995311,https://udara.jakarta.go.id/
+cc0c1c0b-f16c-45a5-a707-aec6eda7a450,DKI_PM25_14 SDN 04 Bintaro,Kota Adm. Jakarta Selatan,-6.270335,106.757735,https://udara.jakarta.go.id/
+ccb9546d-47b3-4264-86c0-10f2b43974a9,DKI_PM25_50 Kantor LLHD Jakarta Selatan (ROOFTOP),Kota Adm. Jakarta Selatan,-6.225848,106.834948,https://udara.jakarta.go.id/
+cccfe0b4-ab44-4b51-95b8-b73a767c2bcf,LCS-07 Pasar Minggu,Kota Adm. Jakarta Selatan,-6.27961,106.84521,https://udara.jakarta.go.id/
+ce16cdce-c176-4c48-b244-89fdcf30c2d7,LCS-05 Kota Tua,Kota Adm. Jakarta Barat,-6.13488,106.81286,https://udara.jakarta.go.id/
+cf30c73e-7b48-4bff-a7d9-70b738a4d607,LCS-26 SDN 5 Marunda,Kota Adm. Jakarta Utara,-6.096033,106.960159,https://udara.jakarta.go.id/
+d0d713ca-1e2d-430c-980a-7c288f7f5210,BAM02 SDN 07 Kramat Pela,Kota Adm. Jakarta Selatan,-6.244491,106.790577,https://udara.jakarta.go.id/
+d1e88427-b908-4d72-b4cf-90901731d1be,DKI_PM25_45 SDN 11 Kalibata,Kota Adm. Jakarta Selatan,-6.2615869,106.8421225,https://udara.jakarta.go.id/
+d24e6893-5831-4b42-ba0d-0c29d817b46b,DKI_PM25_28 SDN 10 Pondok Bambu,Kota Adm. Jakarta Timur,-6.232204,106.908,https://udara.jakarta.go.id/
+d805f864-70e7-4f19-bfd1-6e42786d1ad7,DKI_PM25_69 Taman Maju Bersama (TMB) Tanjung Duren,Kota Adm. Jakarta Barat,-6.166959,106.786776,https://udara.jakarta.go.id/
+ddac0d7d-5b55-4371-b1c5-3d7b64473d0f,DKI_PM25_31 Puskesmas Kecamatan Duren Sawit,Kota Adm. Jakarta Timur,-6.242139,106.910975,https://udara.jakarta.go.id/
+dee5c8b6-14bc-4f55-ab96-1c64737aa5cd,DKI_PM25_65 RPTRA Amir Hamzah,Kota Adm. Jakarta Pusat,-6.2033,106.850242,https://udara.jakarta.go.id/
+e0aa6e66-90b9-478b-b7e4-bc4a35646b32,DKI5 Kebun Jeruk,Kota Adm. Jakarta Barat,-6.207255,106.75256,https://udara.jakarta.go.id/
+e0bfb6af-c9d6-40bb-94c4-68589b7a44bf,DKI_PM25_32 Waduk Jagakarsa,Kota Adm. Jakarta Selatan,-6.330155,106.830191,https://udara.jakarta.go.id/
+e755fa68-840c-4542-abf7-46eefb3d059b,DKI_CIRACAS GOR Ciracas,Kota Adm. Jakarta Timur,-6.324783,106.86687,https://udara.jakarta.go.id/
+e88dcdc2-4211-4229-8a46-1e7b193f3d42,DKI_PM25_12 SDN 05 Wijaya Kusuma Pagi (ROOFTOP),Kota Adm. Jakarta Barat,-6.160188,106.775834,https://udara.jakarta.go.id/
+eab670ce-1319-45ee-aea0-4d11ee0de227,DKI_PM25_66 Kantor SUDIN Jakarta Selatan (ROOFTOP),Kota Adm. Jakarta Selatan,-6.272876,106.831279,https://udara.jakarta.go.id/
+eb16436e-2f5a-4ffb-bac7-2e3d8d38e611,DKI_PM25_19 SDN 18 Pekayon,Kota Adm. Jakarta Timur,-6.345559,106.869082,https://udara.jakarta.go.id/
+ec0361ad-1f30-4934-8fd5-1ddfb52605c7,DKI_PM25_86 Kantor Kecamatan Jatinegara (ROOFTOP),Kota Adm. Jakarta Timur,-6.227984,106.874547,https://udara.jakarta.go.id/
+ec5ae1ac-e61a-4598-9c34-55d31b7c6961,DKI_CILANGKAP Kebon Bibit Cilangkap,Kota Adm. Jakarta Timur,-6.341642335615187,106.90156825233481,https://udara.jakarta.go.id/
+edb97c37-f43f-4964-a762-903fe8df3044,DKI_PM25_51 RPTRA Udara Segar,Kota Adm. Jakarta Timur,-6.282609,106.863509,https://udara.jakarta.go.id/
+f0017a6c-d3e9-435c-bdaa-435305325d3f,LCS-03 Hutan Kota Srengseng,Kota Adm. Jakarta Barat,-6.21177,106.76376,https://udara.jakarta.go.id/
+f0fb0579-7606-494e-9265-7b61255df34d,DKI_PM25_26 Asrama Universitas Indonesia,Kota Adm. Jakarta Selatan,-6.348009,106.829808,https://udara.jakarta.go.id/
+f54ebf4f-77fd-4690-88ac-3d14a256d8dc,DKI_PM25_43 RPTRA Kebon Melati,Kota Adm. Jakarta Pusat,-6.200209,106.814043,https://udara.jakarta.go.id/
+fa0f58e6-5243-4d6f-acc5-03bb9ffdf698,DKI_PM25_53 SDN 02 Petukangan Selatan,Kota Adm. Jakarta Selatan,-6.243553,106.760206,https://udara.jakarta.go.id/
+fb382107-366e-4c3e-9693-5d8b2d5e54e5,DKI_PM25_39 RPTRA Rawajaya,Kota Adm. Jakarta Timur,-6.233693,106.943486,https://udara.jakarta.go.id/
+fe9918dc-4492-4a43-b28e-b57a53b79bc2,DKI_PM25_75 RPTRA Jaya Molek,Kota Adm. Jakarta Pusat,-6.159806,106.830183,https://udara.jakarta.go.id/

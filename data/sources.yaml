@@ -1,0 +1,481 @@
+- id: udara-jakarta
+  title: Udara Jakarta official monitoring portal
+  url: https://udara.jakarta.go.id/
+  role: current observations, stations, ISPU explanations, and recommendations
+  author: Dinas Lingkungan Hidup Provinsi DKI Jakarta
+  jurisdiction: DKI Jakarta
+  document_type: official_portal
+  language: Indonesian
+  status_as_of: 2026-09-07
+  legal_status: informational
+  geographic_scope: Jakarta
+  evidence_strength: primary
+  publisher: Dinas Lingkungan Hidup Provinsi DKI Jakarta
+  retrieved_at: 2026-09-07
+  checksum: sha256:8d17e65ca12c025ab0fe53d4a60a73104e43271c5ab2b3d7b9d6f691b997b90f
+- id: satu-data-ispu-2023
+  title: Satu Data Jakarta ISPU 2023
+  url: https://satudata.jakarta.go.id/open-data/detail/data-indeks-standar-pencemar-udara-ispu-di-provinsi-dki-jakarta-2023
+  role: historical structured measurements
+  author: Pemerintah Provinsi DKI Jakarta
+  jurisdiction: DKI Jakarta
+  document_type: open_dataset
+  language: Indonesian
+  publication_date: 2023-12-31
+  status_as_of: 2026-09-07
+  legal_status: informational
+  geographic_scope: Jakarta
+  evidence_strength: primary
+  publisher: Pemerintah Provinsi DKI Jakarta
+  retrieved_at: 2026-09-07
+  checksum: sha256:8d17e65ca12c025ab0fe53d4a60a73104e43271c5ab2b3d7b9d6f691b997b90f
+- id: permen-lhk-14-2020
+  title: Permen LHK No. 14 Tahun 2020
+  url: https://peraturan.bpk.go.id/Details/163466/permen-lhk-no-14-tahun-2020
+  role: Indonesian ISPU methodology and categories
+  author: Kementerian Lingkungan Hidup dan Kehutanan
+  jurisdiction: Indonesia
+  document_type: ministerial_regulation
+  language: Indonesian
+  publication_date: 2020-07-10
+  effective_date: 2020-07-10
+  status_as_of: 2026-09-07
+  legal_status: in_force
+  geographic_scope: Indonesia
+  evidence_strength: primary
+  publisher: Kementerian Lingkungan Hidup dan Kehutanan
+  retrieved_at: 2026-09-07
+  checksum: sha256:0ea09f407253b728121e05baef9ab74b1925f62b9764b55dc7ee74ba01693e72
+- id: who-aqg-2021
+  title: WHO Global Air Quality Guidelines
+  url: https://www.who.int/publications/i/item/9789240034228
+  role: health-based guideline context; not Indonesian law
+  author: World Health Organization
+  jurisdiction: international
+  document_type: health_guideline
+  language: English
+  publication_date: 2021-09-22
+  status_as_of: 2026-09-07
+  legal_status: recommendation_not_law
+  geographic_scope: global
+  evidence_strength: primary
+  publisher: World Health Organization
+  retrieved_at: 2026-09-07
+  checksum: sha256:31b976ee0947cebd596bd0d91d7ddb82f65142466797690d3d9ecca4df4f5909
+- id: jakarta-causes
+  title: Jakarta emissions inventory and source apportionment
+  url: https://rendahemisi.jakarta.go.id/learn
+  role: pollution sources, methods, seasonal and geographic limitations
+  author: Jakarta Rendah Emisi and study partners
+  jurisdiction: Greater Jakarta
+  document_type: technical_brief
+  language: Indonesian
+  status_as_of: 2026-09-07
+  legal_status: evidence_not_law
+  geographic_scope: Greater Jakarta
+  evidence_strength: secondary
+  publisher: Jakarta Rendah Emisi and study partners
+  retrieved_at: 2026-09-07
+  checksum: sha256:d46da6ae6f07f22f4bf65316a4c25cf1fe449a77e93fcdd03bebd8b8630cd28f
+- id: jakarta-regulations
+  title: Jakarta and Indonesian air-quality regulations
+  url: https://udara.jakarta.go.id/regulasi
+  role: legal instruments, standards, ISPU, and authority distinctions
+  author: Dinas Lingkungan Hidup Provinsi DKI Jakarta
+  jurisdiction: Indonesia and DKI Jakarta
+  document_type: legal_reference
+  language: Indonesian
+  status_as_of: 2026-09-07
+  legal_status: mixed; verify instrument-level status
+  geographic_scope: Indonesia and Jakarta
+  evidence_strength: primary
+  publisher: Dinas Lingkungan Hidup Provinsi DKI Jakarta
+  retrieved_at: 2026-09-07
+  checksum: sha256:15c98c1bc81d7bbd4776e6be55e5a31ac4ab6befc824b51d0fed06d27aab6972
+- id: jakarta-policy-status
+  title: Jakarta policy proposals and implementation status
+  url: https://www.jakarta.go.id/siaran-pers/3850-SP-HMS-01-2023
+  role: ERP legislative history, draft status, and documented procedural reasons
+  author: Pemerintah Provinsi DKI Jakarta
+  jurisdiction: DKI Jakarta
+  document_type: official_statement
+  language: Indonesian
+  publication_date: 2023-01-01
+  status_as_of: 2025-11-28
+  legal_status: policy_history
+  geographic_scope: Jakarta
+  evidence_strength: primary
+  publisher: Pemerintah Provinsi DKI Jakarta
+  retrieved_at: 2026-09-07
+  checksum: sha256:4d710d4cf960ac2c2a3080c8e334bbab164ab2876ef332ab4eca8bfcd7a95e67
+- id: jakarta-improvements
+  title: Jakarta air-quality improvement strategies
+  url: https://www.jakarta.go.id/page/upaya-bersama-jaga-kualitas-udara-jakarta
+  role: mobile/stationary source interventions and public participation
+  author: Pemerintah Provinsi DKI Jakarta
+  jurisdiction: DKI Jakarta
+  document_type: public_guidance
+  language: Indonesian
+  status_as_of: 2026-09-07
+  legal_status: recommendation_and_programmes
+  geographic_scope: Jakarta
+  evidence_strength: primary
+  publisher: Pemerintah Provinsi DKI Jakarta
+  retrieved_at: 2026-09-07
+  checksum: sha256:db63e65eef3b45ab86809fd05b1f0f24bc369ab22e76b2d3369df931e32f334b
+- id: exposure-protection
+  title: WHO personal interventions and risk communication
+  url: https://www.who.int/publications/i/item/9789240000278
+  role: personal exposure reduction, respirators, filtration, and safety boundaries
+  author: World Health Organization
+  jurisdiction: international
+  document_type: health_guidance
+  language: English
+  publication_date: 2020-01-01
+  status_as_of: 2026-09-07
+  legal_status: recommendation_not_law
+  geographic_scope: global
+  evidence_strength: primary
+  publisher: World Health Organization
+  retrieved_at: 2026-09-07
+  checksum: sha256:7fca000ba9977c843f1ab1dfe56da2dfe9319de411581b23eea84c229f0f7d74
+- id: vertical-exposure
+  title: Vertical particulate exposure evidence
+  url: https://www.mdpi.com/1999-4907/15/8/1319
+  role: high-rise versus ground-level evidence with non-Jakarta limitations
+  author: Peer-reviewed study authors
+  jurisdiction: non-Jakarta study site
+  document_type: peer_reviewed_research
+  language: English
+  publication_date: 2024-08-01
+  status_as_of: 2026-09-07
+  legal_status: evidence_not_law
+  geographic_scope: study city only
+  evidence_strength: primary_research
+  retrieved_at: 2026-09-07
+  checksum: sha256:31b976ee0947cebd596bd0d91d7ddb82f65142466797690d3d9ecca4df4f5909
+- id: jakarta-historical-city-series
+  title: Air Quality Dataset for Jakarta (2022-08-01 to 2026-02-18)
+  url: https://zenodo.org/records/18673885
+  refresh_url: https://air-quality-api.open-meteo.com/v1/air-quality
+  role: long-range city-level trend context; not station observations
+  author: Nitiraj Kulkarni and Jagadish Tawade
+  publisher: Zenodo
+  jurisdiction: Jakarta city aggregate
+  document_type: derived_open_dataset
+  language: English
+  publication_date: 2026-02-17
+  retrieved_at: 2026-09-07
+  checksum: sha256:d0131ee0cec656e0406c8abe3946e0bddd7dbee264ad111176dcb105314013ab
+  status_as_of: 2026-09-07
+  legal_status: informational; derived from Open-Meteo CAMS
+  geographic_scope: Jakarta city aggregate
+  evidence_strength: secondary
+  upstream_source: Open-Meteo Air Quality API, cams_global domain
+  upstream_variables: pm2_5 and pm10
+  upstream_units: µg/m³
+  upstream_spatial_resolution: 0.4° (~45 km) CAMS global grid
+  upstream_temporal_resolution: 3-hourly model output
+  stored_temporal_resolution: daily rows; recent refresh is a local-date arithmetic mean of available upstream values
+  coordinates: latitude -6.2088, longitude 106.8456
+  continuity_note: Zenodo rows and 2026-06-07 onward refresh are separately labelled; upstream method/version continuity is not established
+- id: bad-air-day-protection
+  title: "Air pollution: Personal interventions and risk communication"
+  url: https://www.who.int/news-room/questions-and-answers/item/air-pollution-personal-interventions-and-risk-communication
+  role: actionable bad-air-day exposure reduction, respirator and filtration limits, vulnerable groups
+  author: World Health Organization
+  jurisdiction: international; local applicability requires context
+  document_type: health_guidance
+  language: English
+  publication_date: 2024-10-04
+  status_as_of: 2026-09-07
+  legal_status: recommendation_not_law
+  geographic_scope: global evidence with WHO European review context
+  evidence_strength: primary
+  publisher: World Health Organization
+  retrieved_at: 2026-09-07
+  checksum: sha256:5dbff5fb1371a028a0e4c0c40acca10455c7111010225433a362697c74007f25
+- id: clean-air-room
+  title: Guide to Air Cleaners in the Home (2nd edition)
+  url: https://www.epa.gov/indoor-air-quality-iaq/guide-air-cleaners-home
+  role: portable cleaner CADR, HVAC MERV 13, indoor sources and limits
+  author: United States Environmental Protection Agency
+  jurisdiction: United States technical guidance
+  document_type: indoor_air_guidance
+  language: English
+  publication_date: 2026-02-17
+  last_updated_date: 2026-02-17
+  status_as_of: 2026-09-07
+  legal_status: technical_guidance_not_law
+  geographic_scope: household indoor air; engineering principles general
+  evidence_strength: primary
+  publisher: United States Environmental Protection Agency
+  retrieved_at: 2026-09-07
+  checksum: sha256:213e47aed8bcb67ba1cec21ffdb8eebdfd26fc7c12fb5e6cdf29b4d2fd685698
+- id: jakarta-seasonal-exposure
+  title: DKI warning on dry-season air-quality decline
+  url: https://lingkunganhidup.jakarta.go.id/detail-artikel/masuki-musim-kemarau-pemprov-dki-minta-masyarakat-waspadai-penurunan-kualitas-udara
+  role: Jakarta dry-season accumulation, day-night patterns, local and regional sources
+  author: Dinas Lingkungan Hidup DKI Jakarta
+  jurisdiction: DKI Jakarta
+  document_type: official_public_guidance
+  language: Indonesian
+  publication_date: 2024-04-06
+  status_as_of: 2026-09-07
+  legal_status: informational_guidance
+  geographic_scope: DKI Jakarta
+  evidence_strength: primary
+  publisher: Dinas Lingkungan Hidup DKI Jakarta
+  retrieved_at: 2026-09-07
+  checksum: sha256:092421561072dca9a4f7432d627db00960423feede406bc43d6a18cfb5fa976b
+- id: jakarta-policy-implementation
+  title: Jakarta policy implementation evidence and documented gaps
+  url: https://www.jakarta.go.id/siaran-pers/4802-SP-HMS-06-2024
+  role: SPPU implementation status, emissions inventory, regional coordination, CEMS and court-status boundaries
+  author: Pemerintah Provinsi DKI Jakarta; Dinas Lingkungan Hidup DKI Jakarta; Mahkamah Agung
+  jurisdiction: DKI Jakarta, Jabodetabek, Indonesia
+  document_type: implementation_evidence
+  language: Indonesian and English summaries
+  publication_date: 2024-06-19
+  status_as_of: 2026-09-07
+  legal_status: mixed; dated implementation evidence
+  geographic_scope: Jakarta and Greater Jakarta airshed
+  evidence_strength: primary
+  publisher: Pemerintah Provinsi DKI Jakarta and official institutions
+  retrieved_at: 2026-09-07
+  checksum: sha256:67bf44cd21c9d8eb4e408da982b66c4880c22f57dcd4ced86564815d7ae800f6
+- id: individual-emission-actions
+  title: Personal actions, emissions reduction, and public accountability
+  url: https://www.who.int/europe/publications/m/item/personal-level-actions-to-reduce-air-pollution-exposure
+  role: transport, maintenance, household combustion, reporting and participation; individual versus structural action
+  author: World Health Organization; Pemerintah Provinsi DKI Jakarta
+  jurisdiction: international evidence adapted to DKI Jakarta
+  document_type: civic_and_emissions_guidance
+  language: English and Indonesian summaries
+  publication_date: 2024-11-15
+  status_as_of: 2026-09-07
+  legal_status: recommendation_and_programmes
+  geographic_scope: Jakarta household and civic action
+  evidence_strength: primary
+  publisher: World Health Organization and DKI Jakarta
+  retrieved_at: 2026-09-07
+  checksum: sha256:0dbf7a8292a4796a8bf2b311f816ac77e4092d5f6937c1841962d3ce1d43f4da
+- id: policy-improvements-evidence
+  title: Evidence-based policy improvement priorities for Jakarta
+  url: https://www.jakarta.go.id/siaran-pers/4802-SP-HMS-06-2024
+  role: enforcement, transport, industry/power, airshed coordination, monitoring, and health-protection priorities
+  author: Dinas Lingkungan Hidup DKI Jakarta; World Health Organization
+  jurisdiction: Jakarta and Greater Jakarta airshed
+  document_type: policy_options
+  language: English summary
+  publication_date: 2024-06-19
+  status_as_of: 2026-09-07
+  legal_status: options_not_law
+  geographic_scope: Jakarta and Greater Jakarta airshed
+  evidence_strength: primary_and_synthesized
+  publisher: DKI Jakarta and World Health Organization
+  retrieved_at: 2026-09-07
+  checksum: sha256:8930ae79db2f0dd6fa7d7fad6f44f8413e1e5b40d9650abbd365342d44d1d46d
+- id: jakarta-emission-testing
+  title: Jakarta vehicle-emissions testing obligation
+  url: https://lingkunganhidup.jakarta.go.id/faq/ujiemisi
+  role: testing obligation, ticket consequence, and compliance-data gaps
+  author: Dinas Lingkungan Hidup DKI Jakarta
+  jurisdiction: DKI Jakarta
+  document_type: official_faq
+  language: Indonesian
+  status_as_of: 2026-09-07
+  legal_status: guidance_about_in_force_rule
+  geographic_scope: DKI Jakarta
+  evidence_strength: primary
+  publisher: Dinas Lingkungan Hidup DKI Jakarta
+  retrieved_at: 2026-09-07
+  checksum: sha256:1dba18870011aaded3504ed7444ed5524b39ec721cfa69908d4e84b92a2fe517
+- id: jakarta-cems-monitoring
+  title: Stationary-source emissions monitoring (CEMS)
+  url: https://lingkunganhidup.jakarta.go.id/publikasi/monitoring_emisi
+  role: stationary-source monitoring programme and coverage/follow-up evidence gaps
+  author: Dinas Lingkungan Hidup DKI Jakarta
+  jurisdiction: DKI Jakarta
+  document_type: official_monitoring_programme
+  language: Indonesian
+  status_as_of: 2026-09-07
+  legal_status: programme_evidence
+  geographic_scope: DKI Jakarta
+  evidence_strength: primary
+  publisher: Dinas Lingkungan Hidup DKI Jakarta
+  retrieved_at: 2026-09-07
+  checksum: sha256:92aac48bfb1948e0ce90917797353079e11c822b906757076de6b4e76f19b388
+- id: jakarta-court-air-quality
+  title: Jakarta air-pollution citizen lawsuit court record
+  url: https://putusan3.mahkamahagung.go.id/pengadilan/profil/pengadilan/pn-jakarta-pusat.html
+  role: dated court record, public duties, regional coordination, and execution-status boundary
+  author: Mahkamah Agung Republik Indonesia
+  jurisdiction: Indonesia, DKI Jakarta, Banten, and West Java
+  document_type: court_record
+  language: Indonesian
+  publication_date: 2021-09-16
+  status_as_of: 2026-09-07
+  legal_status: court_record; execution requires separate verification
+  geographic_scope: Jakarta and surrounding provinces
+  evidence_strength: primary
+  publisher: Mahkamah Agung Republik Indonesia
+  retrieved_at: 2026-09-07
+  checksum: sha256:c16e7ca9016b896f512f65a72c2555784c96429b36248796e82d979d8a919ce7
+- id: pp-22-2021-air-quality
+  title: PP No. 22 Tahun 2021 — environmental protection and ambient air quality
+  url: https://peraturan.bpk.go.id/Details/161852/pp-no-22tahun-2021
+  role: national ambient-air quality, supervision and administrative-sanctions framework
+  author: Pemerintah Republik Indonesia
+  jurisdiction: Indonesia
+  document_type: government_regulation
+  language: Indonesian
+  publication_date: 2021-02-02
+  effective_date: 2021-02-02
+  status_as_of: 2026-09-07
+  legal_status: in_force_record; verify amendments/consolidation
+  geographic_scope: Indonesia
+  evidence_strength: primary
+  publisher: Database Peraturan BPK
+  retrieved_at: 2026-09-07
+  access_note: official HTML metadata/abstract; PDF fetch recipe recorded
+  checksum: sha256:117f30f631bb99d8c75b62ffef3e63b4aabe4220db8491949ea6bb2d6948934e
+- id: permen-lhk-8-2023-vehicle-emissions
+  title: Permen LHK No. 8 Tahun 2023 — vehicle emission standards and testing
+  url: https://peraturan.bpk.go.id/Details/262504/permen-lhk-no-8-tahun-2023
+  role: vehicle categories M/N/O/L, emission standards and testing
+  author: Kementerian Lingkungan Hidup dan Kehutanan
+  jurisdiction: Indonesia
+  document_type: ministerial_regulation
+  language: Indonesian
+  publication_date: 2023-08-04
+  effective_date: 2023-08-14
+  status_as_of: 2026-09-07
+  legal_status: in_force
+  geographic_scope: Indonesia
+  evidence_strength: primary
+  publisher: Database Peraturan BPK
+  retrieved_at: 2026-09-07
+  access_note: official HTML metadata/abstract; PDF not mirrored
+  checksum: sha256:7b500500fb22aed176a881be115c90850fb05f993f9675182567ed3a94f2f999
+- id: pergub-66-2020-vehicle-testing
+  title: Pergub DKI Jakarta No. 66 Tahun 2020 — motor-vehicle emission testing
+  url: https://peraturan.bpk.go.id/Details/153923/pergub-prov-dki-jakarta-no-66-tahun-2020
+  role: Jakarta vehicle emission testing, inspection and control
+  author: Pemerintah Provinsi DKI Jakarta
+  jurisdiction: DKI Jakarta
+  document_type: governor_regulation
+  language: Indonesian
+  publication_date: 2020-07-22
+  effective_date: 2020-12-24
+  status_as_of: 2026-09-07
+  legal_status: in_force_record
+  geographic_scope: DKI Jakarta
+  evidence_strength: primary
+  publisher: Database Peraturan BPK
+  retrieved_at: 2026-09-07
+  access_note: official HTML metadata/abstract; PDF not mirrored
+  checksum: sha256:9e053ebf15133cedcd0bf71bc219a309879e060d82b66ec5f81ea8ff35744e74
+- id: who-aqg-2021-extract
+  title: WHO Global Air Quality Guidelines (2021) — particulate matter targets
+  url: https://www.who.int/publications/i/item/9789240034228
+  role: health-based PM2.5/PM10 guideline levels and interim-target context
+  author: World Health Organization
+  jurisdiction: international
+  document_type: health_guideline
+  language: English
+  publication_date: 2021-09-22
+  status_as_of: 2026-09-07
+  legal_status: recommendation_not_law
+  geographic_scope: global
+  evidence_strength: primary
+  publisher: World Health Organization
+  retrieved_at: 2026-09-07
+  access_note: official publication page/table extract; CC BY-NC-SA PDF available
+  checksum: sha256:f3e8e9b5f50bf9a018b002fd37db0fe4f6071c086e2312ad5eb3f25391d61ab2
+- id: who-personal-interventions-2024
+  title: WHO personal interventions and risk communication (2024)
+  url: https://www.who.int/news-room/questions-and-answers/item/air-pollution-personal-interventions-and-risk-communication
+  role: exposure reduction, respirator/filtration limits and risk communication
+  author: World Health Organization
+  jurisdiction: international
+  document_type: health_guidance
+  language: English
+  publication_date: 2024-10-04
+  status_as_of: 2026-09-07
+  legal_status: recommendation_not_law
+  geographic_scope: global; local applicability requires context
+  evidence_strength: primary
+  publisher: World Health Organization
+  retrieved_at: 2026-09-07
+  access_note: official HTML Q&A
+  checksum: sha256:909c02d6c43802ef2dad243f158cd69315040d1a2cb6287ad45db7b74d417555
+- id: epa-air-cleaners-home-2026
+  title: US EPA Guide to Air Cleaners in the Home (2nd edition)
+  url: https://www.epa.gov/indoor-air-quality-iaq/guide-air-cleaners-home
+  role: portable cleaner CADR, HVAC filtration and indoor-source limits
+  author: United States Environmental Protection Agency
+  jurisdiction: United States technical guidance
+  document_type: indoor_air_guidance
+  language: English
+  publication_date: 2026-02-17
+  effective_date: 2026-02-17
+  status_as_of: 2026-09-07
+  legal_status: technical_guidance_not_law
+  geographic_scope: household indoor air
+  evidence_strength: primary
+  publisher: United States Environmental Protection Agency
+  retrieved_at: 2026-09-07
+  access_note: official HTML guide
+  checksum: sha256:99a89675c290b3b991a5ec391cc3ec6410d19b76ae43a413655c64da2d4a5687
+- id: permen-lhk-13-2021-cems
+  title: Permen LHK No. 13 Tahun 2021 — CEMS connectivity and emission monitoring
+  url: https://peraturan.bpk.go.id/Download/288590/Permen%20LHK%20Nomor%2013%20Tahun%202021.pdf
+  role: CEMS connectivity, stack/source fields and monitoring coverage boundaries
+  author: Kementerian Lingkungan Hidup dan Kehutanan
+  jurisdiction: Indonesia
+  document_type: ministerial_regulation
+  language: Indonesian
+  publication_date: 2021
+  status_as_of: 2026-09-07
+  legal_status: official_record; consolidated status pending fetch
+  geographic_scope: Indonesia
+  evidence_strength: primary
+  publisher: Database Peraturan BPK
+  retrieved_at: 2026-09-07
+  access_note: official PDF URL; inaccessible during this run
+  checksum: sha256:fb97796867c754a92651047d50f37e601de59c87da1fb1a98e9806814dcadee1
+- id: ma-jakarta-air-lawsuit-record
+  title: Mahkamah Agung record — Jakarta air-pollution citizen lawsuit
+  url: https://putusan3.mahkamahagung.go.id/pengadilan/profil/pengadilan/pn-jakarta-pusat.html
+  role: court-record locator and judgment-versus-execution boundary
+  author: Mahkamah Agung Republik Indonesia
+  jurisdiction: Indonesia, DKI Jakarta, Banten and West Java
+  document_type: court_record
+  language: Indonesian
+  publication_date: 2021-09-16
+  status_as_of: 2026-09-07
+  legal_status: court_record; execution requires separate verification
+  geographic_scope: Jakarta and surrounding provinces
+  evidence_strength: primary
+  publisher: Mahkamah Agung Republik Indonesia
+  retrieved_at: 2026-09-07
+  access_note: official court portal; case-specific judgment pending fetch
+  checksum: sha256:bd176766cf1a14812ade8b119f099270e795b32a42f04a826fab411a7aa5349f
+- id: jakarta-sppu-official-status-2024
+  title: Jakarta SPPU and air-quality implementation status (official statement, 2024)
+  url: https://www.jakarta.go.id/siaran-pers/4802-SP-HMS-06-2024
+  role: dated official workstreams, emissions inventory, oversight and airshed coordination
+  author: Pemerintah Provinsi DKI Jakarta; Dinas Lingkungan Hidup DKI Jakarta
+  jurisdiction: DKI Jakarta and Greater Jakarta airshed
+  document_type: implementation_evidence
+  language: Indonesian
+  publication_date: 2024-06-19
+  status_as_of: 2026-09-07
+  legal_status: dated_implementation_evidence_not_law
+  geographic_scope: Jakarta and Greater Jakarta airshed
+  evidence_strength: primary
+  publisher: Pemerintah Provinsi DKI Jakarta
+  retrieved_at: 2026-09-07
+  access_note: official statement page
+  checksum: sha256:308a3e30d43360d483c06ed51e0f803364cb0b27604c4cdb57c07202127b437c

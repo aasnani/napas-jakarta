@@ -1,0 +1,23 @@
+[
+  {
+    "chunker": "fixed",
+    "retrieval": "dense",
+    "hit_rate_at_5": 0.66,
+    "mrr_at_5": 0.508,
+    "chunks": 32
+  },
+  {
+    "chunker": "structure",
+    "retrieval": "dense",
+    "hit_rate_at_5": 0.5067,
+    "mrr_at_5": 0.3098,
+    "chunks": 113
+  },
+  {
+    "chunker": "semantic",
+    "retrieval": "dense",
+    "hit_rate_at_5": 0.6333,
+    "mrr_at_5": 0.4583,
+    "chunks": 73
+  }
+]

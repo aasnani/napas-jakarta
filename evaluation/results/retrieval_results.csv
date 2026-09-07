@@ -1,0 +1,5 @@
+mode,hit_rate_at_5,mrr_at_5,ndcg_at_5,p50_latency_ms,questions,language_hit_rate_at_5,multi_source_recall_at_5
+bm25,0.6133,0.4133,0.4552,6.2744,150,"{""English"": 0.72, ""Bahasa Indonesia"": 0.5067}",0.0
+dense,0.66,0.513,0.5378,6.2497,150,"{""English"": 0.88, ""Bahasa Indonesia"": 0.44}",0.7
+hybrid,0.7067,0.5274,0.563,6.2717,150,"{""English"": 0.8133, ""Bahasa Indonesia"": 0.6}",0.3
+hybrid_rerank,0.6933,0.4789,0.5268,6.8546,150,"{""English"": 0.7867, ""Bahasa Indonesia"": 0.6}",0.3

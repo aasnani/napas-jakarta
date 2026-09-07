@@ -1,0 +1,368 @@
+{
+  "cases": 50,
+  "route_accuracy": 0.9,
+  "latest_tool_rows": 1,
+  "historical_observations": 5,
+  "argument_accuracy": 1.0,
+  "numeric_consistency": 1.0,
+  "metadata_completeness": 1.0,
+  "staleness_detection": 1.0,
+  "missing_data_not_zero": 1.0,
+  "unsupported_calculation_rejected": true,
+  "route_latency_ms_p50": 0.0092,
+  "route_latency_ms_p95": 0.0145,
+  "latest_tool_latency_ms_p50": 0.0038,
+  "rows": [
+    {
+      "case_id": "route-1-01",
+      "question": "What is the current air quality in Jakarta Pusat?",
+      "expected_route": "latest_measurements",
+      "actual_route": "latest_measurements",
+      "correct": true
+    },
+    {
+      "case_id": "route-1-02",
+      "question": "Kualitas udara terbaru di Jakarta Selatan bagaimana?",
+      "expected_route": "latest_measurements",
+      "actual_route": "latest_measurements",
+      "correct": true
+    },
+    {
+      "case_id": "route-1-03",
+      "question": "Compare Jakarta Timur and Jakarta Barat",
+      "expected_route": "historical_tool",
+      "actual_route": "historical_tool",
+      "correct": true
+    },
+    {
+      "case_id": "route-1-04",
+      "question": "What does ISPU 125 mean?",
+      "expected_route": "document_rag",
+      "actual_route": "document_rag",
+      "correct": true
+    },
+    {
+      "case_id": "route-1-05",
+      "question": "Can you diagnose my cough?",
+      "expected_route": "safety_abstention",
+      "actual_route": "safety_abstention",
+      "correct": true
+    },
+    {
+      "case_id": "route-1-06",
+      "question": "Is WHO guidance Indonesian law?",
+      "expected_route": "document_rag",
+      "actual_route": "regulation_current",
+      "correct": false
+    },
+    {
+      "case_id": "route-1-07",
+      "question": "Show today's latest station readings",
+      "expected_route": "latest_measurements",
+      "actual_route": "latest_measurements",
+      "correct": true
+    },
+    {
+      "case_id": "route-1-08",
+      "question": "Bandingkan rata-rata PM2.5",
+      "expected_route": "historical_tool",
+      "actual_route": "historical_tool",
+      "correct": true
+    },
+    {
+      "case_id": "route-1-09",
+      "question": "Apa arti PM2.5?",
+      "expected_route": "document_rag",
+      "actual_route": "document_rag",
+      "correct": true
+    },
+    {
+      "case_id": "route-1-10",
+      "question": "Can pollution diagnose my disease?",
+      "expected_route": "safety_abstention",
+      "actual_route": "safety_abstention",
+      "correct": true
+    },
+    {
+      "case_id": "route-2-01",
+      "question": "Please answer briefly: What is the current air quality in Jakarta Pusat?",
+      "expected_route": "latest_measurements",
+      "actual_route": "latest_measurements",
+      "correct": true
+    },
+    {
+      "case_id": "route-2-02",
+      "question": "Please answer briefly: Kualitas udara terbaru di Jakarta Selatan bagaimana?",
+      "expected_route": "latest_measurements",
+      "actual_route": "latest_measurements",
+      "correct": true
+    },
+    {
+      "case_id": "route-2-03",
+      "question": "Please answer briefly: Compare Jakarta Timur and Jakarta Barat",
+      "expected_route": "historical_tool",
+      "actual_route": "historical_tool",
+      "correct": true
+    },
+    {
+      "case_id": "route-2-04",
+      "question": "Please answer briefly: What does ISPU 125 mean?",
+      "expected_route": "document_rag",
+      "actual_route": "document_rag",
+      "correct": true
+    },
+    {
+      "case_id": "route-2-05",
+      "question": "Please answer briefly: Can you diagnose my cough?",
+      "expected_route": "safety_abstention",
+      "actual_route": "safety_abstention",
+      "correct": true
+    },
+    {
+      "case_id": "route-2-06",
+      "question": "Please answer briefly: Is WHO guidance Indonesian law?",
+      "expected_route": "document_rag",
+      "actual_route": "regulation_current",
+      "correct": false
+    },
+    {
+      "case_id": "route-2-07",
+      "question": "Please answer briefly: Show today's latest station readings",
+      "expected_route": "latest_measurements",
+      "actual_route": "latest_measurements",
+      "correct": true
+    },
+    {
+      "case_id": "route-2-08",
+      "question": "Please answer briefly: Bandingkan rata-rata PM2.5",
+      "expected_route": "historical_tool",
+      "actual_route": "historical_tool",
+      "correct": true
+    },
+    {
+      "case_id": "route-2-09",
+      "question": "Please answer briefly: Apa arti PM2.5?",
+      "expected_route": "document_rag",
+      "actual_route": "document_rag",
+      "correct": true
+    },
+    {
+      "case_id": "route-2-10",
+      "question": "Please answer briefly: Can pollution diagnose my disease?",
+      "expected_route": "safety_abstention",
+      "actual_route": "safety_abstention",
+      "correct": true
+    },
+    {
+      "case_id": "route-3-01",
+      "question": "For a Jakarta resident, What is the current air quality in Jakarta Pusat?",
+      "expected_route": "latest_measurements",
+      "actual_route": "latest_measurements",
+      "correct": true
+    },
+    {
+      "case_id": "route-3-02",
+      "question": "For a Jakarta resident, Kualitas udara terbaru di Jakarta Selatan bagaimana?",
+      "expected_route": "latest_measurements",
+      "actual_route": "latest_measurements",
+      "correct": true
+    },
+    {
+      "case_id": "route-3-03",
+      "question": "For a Jakarta resident, Compare Jakarta Timur and Jakarta Barat",
+      "expected_route": "historical_tool",
+      "actual_route": "historical_tool",
+      "correct": true
+    },
+    {
+      "case_id": "route-3-04",
+      "question": "For a Jakarta resident, What does ISPU 125 mean?",
+      "expected_route": "document_rag",
+      "actual_route": "document_rag",
+      "correct": true
+    },
+    {
+      "case_id": "route-3-05",
+      "question": "For a Jakarta resident, Can you diagnose my cough?",
+      "expected_route": "safety_abstention",
+      "actual_route": "safety_abstention",
+      "correct": true
+    },
+    {
+      "case_id": "route-3-06",
+      "question": "For a Jakarta resident, Is WHO guidance Indonesian law?",
+      "expected_route": "document_rag",
+      "actual_route": "regulation_current",
+      "correct": false
+    },
+    {
+      "case_id": "route-3-07",
+      "question": "For a Jakarta resident, Show today's latest station readings",
+      "expected_route": "latest_measurements",
+      "actual_route": "latest_measurements",
+      "correct": true
+    },
+    {
+      "case_id": "route-3-08",
+      "question": "For a Jakarta resident, Bandingkan rata-rata PM2.5",
+      "expected_route": "historical_tool",
+      "actual_route": "historical_tool",
+      "correct": true
+    },
+    {
+      "case_id": "route-3-09",
+      "question": "For a Jakarta resident, Apa arti PM2.5?",
+      "expected_route": "document_rag",
+      "actual_route": "document_rag",
+      "correct": true
+    },
+    {
+      "case_id": "route-3-10",
+      "question": "For a Jakarta resident, Can pollution diagnose my disease?",
+      "expected_route": "safety_abstention",
+      "actual_route": "safety_abstention",
+      "correct": true
+    },
+    {
+      "case_id": "route-4-01",
+      "question": "Using the available official evidence, What is the current air quality in Jakarta Pusat?",
+      "expected_route": "latest_measurements",
+      "actual_route": "latest_measurements",
+      "correct": true
+    },
+    {
+      "case_id": "route-4-02",
+      "question": "Using the available official evidence, Kualitas udara terbaru di Jakarta Selatan bagaimana?",
+      "expected_route": "latest_measurements",
+      "actual_route": "latest_measurements",
+      "correct": true
+    },
+    {
+      "case_id": "route-4-03",
+      "question": "Using the available official evidence, Compare Jakarta Timur and Jakarta Barat",
+      "expected_route": "historical_tool",
+      "actual_route": "historical_tool",
+      "correct": true
+    },
+    {
+      "case_id": "route-4-04",
+      "question": "Using the available official evidence, What does ISPU 125 mean?",
+      "expected_route": "document_rag",
+      "actual_route": "document_rag",
+      "correct": true
+    },
+    {
+      "case_id": "route-4-05",
+      "question": "Using the available official evidence, Can you diagnose my cough?",
+      "expected_route": "safety_abstention",
+      "actual_route": "safety_abstention",
+      "correct": true
+    },
+    {
+      "case_id": "route-4-06",
+      "question": "Using the available official evidence, Is WHO guidance Indonesian law?",
+      "expected_route": "document_rag",
+      "actual_route": "regulation_current",
+      "correct": false
+    },
+    {
+      "case_id": "route-4-07",
+      "question": "Using the available official evidence, Show today's latest station readings",
+      "expected_route": "latest_measurements",
+      "actual_route": "latest_measurements",
+      "correct": true
+    },
+    {
+      "case_id": "route-4-08",
+      "question": "Using the available official evidence, Bandingkan rata-rata PM2.5",
+      "expected_route": "historical_tool",
+      "actual_route": "historical_tool",
+      "correct": true
+    },
+    {
+      "case_id": "route-4-09",
+      "question": "Using the available official evidence, Apa arti PM2.5?",
+      "expected_route": "document_rag",
+      "actual_route": "document_rag",
+      "correct": true
+    },
+    {
+      "case_id": "route-4-10",
+      "question": "Using the available official evidence, Can pollution diagnose my disease?",
+      "expected_route": "safety_abstention",
+      "actual_route": "safety_abstention",
+      "correct": true
+    },
+    {
+      "case_id": "route-5-01",
+      "question": "In one clear sentence, What is the current air quality in Jakarta Pusat?",
+      "expected_route": "latest_measurements",
+      "actual_route": "latest_measurements",
+      "correct": true
+    },
+    {
+      "case_id": "route-5-02",
+      "question": "In one clear sentence, Kualitas udara terbaru di Jakarta Selatan bagaimana?",
+      "expected_route": "latest_measurements",
+      "actual_route": "latest_measurements",
+      "correct": true
+    },
+    {
+      "case_id": "route-5-03",
+      "question": "In one clear sentence, Compare Jakarta Timur and Jakarta Barat",
+      "expected_route": "historical_tool",
+      "actual_route": "historical_tool",
+      "correct": true
+    },
+    {
+      "case_id": "route-5-04",
+      "question": "In one clear sentence, What does ISPU 125 mean?",
+      "expected_route": "document_rag",
+      "actual_route": "document_rag",
+      "correct": true
+    },
+    {
+      "case_id": "route-5-05",
+      "question": "In one clear sentence, Can you diagnose my cough?",
+      "expected_route": "safety_abstention",
+      "actual_route": "safety_abstention",
+      "correct": true
+    },
+    {
+      "case_id": "route-5-06",
+      "question": "In one clear sentence, Is WHO guidance Indonesian law?",
+      "expected_route": "document_rag",
+      "actual_route": "regulation_current",
+      "correct": false
+    },
+    {
+      "case_id": "route-5-07",
+      "question": "In one clear sentence, Show today's latest station readings",
+      "expected_route": "latest_measurements",
+      "actual_route": "latest_measurements",
+      "correct": true
+    },
+    {
+      "case_id": "route-5-08",
+      "question": "In one clear sentence, Bandingkan rata-rata PM2.5",
+      "expected_route": "historical_tool",
+      "actual_route": "historical_tool",
+      "correct": true
+    },
+    {
+      "case_id": "route-5-09",
+      "question": "In one clear sentence, Apa arti PM2.5?",
+      "expected_route": "document_rag",
+      "actual_route": "document_rag",
+      "correct": true
+    },
+    {
+      "case_id": "route-5-10",
+      "question": "In one clear sentence, Can pollution diagnose my disease?",
+      "expected_route": "safety_abstention",
+      "actual_route": "safety_abstention",
+      "correct": true
+    }
+  ],
+  "status": "offline deterministic tool evaluation"
+}

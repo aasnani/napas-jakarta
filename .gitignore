@@ -1,0 +1,47 @@
+# Local environments, credentials, and secret-bearing configuration.
+.venv/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Python/build/test caches and local tooling state.
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.hypothesis/
+
+# Runtime logs, local databases, sockets, and process files.
+*.log
+*.sqlite
+*.sqlite3
+*.db
+*.pid
+*.sock
+monitoring/*.jsonl
+
+# Large live snapshots are kept out of Git.  The small authoritative fetch
+# recipe and deterministic corpus artifacts remain reviewable and retained.
+data/raw/*
+!data/raw/authoritative/
+!data/raw/authoritative/**
+
+# Evaluation scratch output; checked-in evaluation evidence remains included.
+evaluation/tmp/
+evaluation/.cache/
+evaluation/results/*.tmp
+evaluation/results/*.bak
+evaluation/ground_truth_reviewed.jsonl
+
+# Local/editor/OS artifacts.
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
