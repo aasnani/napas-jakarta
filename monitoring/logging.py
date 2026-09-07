@@ -23,6 +23,33 @@ def log_interaction(payload: dict[str, Any]) -> str:
             import psycopg
 
             with psycopg.connect(dsn) as connection:
+                # Railway Postgres is not initialized from docker-compose's
+                # schema mount. Create the base table here, then migrate
+                # older volumes safely before the first insert.
+                connection.execute(
+                    """CREATE TABLE IF NOT EXISTS interactions (
+                      id TEXT PRIMARY KEY,
+                      interaction_id TEXT,
+                      session_id TEXT,
+                      created_at TEXT NOT NULL,
+                      event TEXT NOT NULL DEFAULT 'answer',
+                      question TEXT NOT NULL,
+                      rewritten_query TEXT,
+                      route TEXT,
+                      retrieval_mode TEXT,
+                      citation_grounded BOOLEAN,
+                      prompt_version TEXT,
+                      latency_ms DOUBLE PRECISION,
+                      token_usage INTEGER,
+                      estimated_cost DOUBLE PRECISION,
+                      data_age_seconds DOUBLE PRECISION,
+                      error_type TEXT,
+                      abstention_type TEXT,
+                      feedback TEXT,
+                      feedback_comment TEXT,
+                      source TEXT NOT NULL DEFAULT 'live'
+                    )"""
+                )
                 # Existing Compose volumes may predate these observability
                 # columns; migrate them safely before the first insert.
                 connection.execute("ALTER TABLE interactions ADD COLUMN IF NOT EXISTS session_id TEXT")
