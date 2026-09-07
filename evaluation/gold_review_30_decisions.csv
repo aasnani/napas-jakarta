@@ -1,0 +1,31 @@
+question_id,status,human_relevant_chunk_ids,reviewer,reviewed_at,correction_notes
+gold30-001,Approved,jakarta-monitoring:structure:0,Armand,2026-09-07,
+gold30-002,Approved,"jakarta-monitoring:structure:0,ispu:structure:0",Armand,2026-09-07,
+gold30-003,Approved,ispu:structure:0,Armand,2026-09-07,
+gold30-004,Approved,jakarta-monitoring:structure:0,Armand,2026-09-07,
+gold30-005,Corrected,"ispu:structure:0,ispu:structure:1",Armand,2026-09-07,Added structure:0 because structure:1 distinguishes the index from concentration but does not establish that ISPU 45 is Baik.
+gold30-006,Corrected,"who-aqg-2021-extract:structure:1,who-aqg-2021-extract:structure:2,jakarta-regulations:structure:0",Armand,2026-09-07,Added the WHO legal-status chunk; the numeric WHO values and Indonesian instruments alone do not establish that the WHO guideline is not Indonesian law.
+gold30-007,Corrected,jakarta-historical-city-series:structure:1,Armand,2026-09-07,"Replaced structure:2 with structure:1, which explicitly identifies CAMS/Open-Meteo model concentrations and excludes DKI station measurements."
+gold30-008,Corrected,"jakarta-historical-city-series:structure:1,jakarta-historical-city-series:structure:2",Armand,2026-09-07,Added structure:1 to establish that PM10 and PM2.5 are distinct variables; structure:2 supports separate aggregation and missing-data handling.
+gold30-009,Approved,"ispu:structure:0,who-aqg-2021-extract:structure:2",Armand,2026-09-07,
+gold30-010,Corrected,"jakarta-causes:structure:0,jakarta-causes:structure:2",Armand,2026-09-07,Added structure:2 because it directly states that likely contributors do not prove the cause of one station reading.
+gold30-011,Corrected,"jakarta-causes:structure:0,jakarta-causes:structure:1",Armand,2026-09-07,Added structure:0 for the emissions-inventory context; structure:1 supplies the receptor-apportionment evidence and method boundary.
+gold30-012,Corrected,"jakarta-causes:structure:0,jakarta-causes:structure:2",Armand,2026-09-07,Added the direct single-reading causal boundary; the source-share discussion alone cannot prove a factory caused a street-level observation.
+gold30-013,Approved,"jakarta-causes:structure:0,jakarta-policy-implementation:structure:2",Armand,2026-09-07,
+gold30-014,Corrected,"jakarta-emission-testing:structure:0,jakarta-emission-testing:structure:1",Armand,2026-09-07,Used the FAQ status and enforcement-boundary chunks; regulation dates alone do not show testing or repair coverage or actual sanctions.
+gold30-015,Corrected,permen-lhk-8-2023-vehicle-emissions:structure:2,Armand,2026-09-07,Replaced structure:0 because it gives the categories but not the age condition; structure:2 covers both categories M/N/O/L and more than three years in service.
+gold30-016,Corrected,"permen-lhk-13-2021-cems:structure:1,jakarta-cems-monitoring:structure:2",Armand,2026-09-07,"Replaced descriptive CEMS chunks with the passages that directly separate connectivity, coverage and monitoring activity from emissions compliance."
+gold30-017,Approved,"jakarta-court-air-quality:structure:1,ma-jakarta-air-lawsuit-record:structure:1",Armand,2026-09-07,
+gold30-018,Corrected,"jakarta-regulations:structure:0,jakarta-policy-implementation:structure:2,jakarta-court-air-quality:structure:1",Armand,2026-09-07,Replaced the metadata-only implementation chunk with substantive evidence that implementation was ongoing and programme activity did not prove full compliance or outcomes.
+gold30-019,Corrected,"bad-air-day-protection:structure:1,bad-air-day-protection:structure:3,exposure-protection:structure:1",Armand,2026-09-07,Added the action chunk; the original pair covered mask limits and the policy boundary but not the requested bad-air-day steps.
+gold30-020,Corrected,"clean-air-room:structure:1,clean-air-room:structure:4",Armand,2026-09-07,Replaced metadata with the room/CADR sizing guidance and the explicit limitations on cleaner effectiveness.
+gold30-021,Approved,"who-personal-interventions-2024:structure:3,exposure-protection:structure:1",Armand,2026-09-07,
+gold30-022,Corrected,"individual-emission-actions:structure:1,individual-emission-actions:structure:2",Armand,2026-09-07,"Replaced metadata with the passages covering lower-emission choices, vehicle maintenance and evidence-preserving reports of smoky vehicles."
+gold30-023,Corrected,"exposure-protection:structure:0,clean-air-room:structure:3",Armand,2026-09-07,"Removed the metadata-only bad-air-day chunk; the retained chunks directly cover infiltration, ventilation, filtration and indoor sources."
+gold30-024,Approved,"jakarta-regulations:structure:0,who-aqg-2021-extract:structure:1",Armand,2026-09-07,
+gold30-025,Approved,"jakarta-monitoring:structure:0,ispu:structure:0,health-disclaimer:structure:0",Armand,2026-09-07,
+gold30-026,Approved,"jakarta-monitoring:structure:0,who-aqg-2021-extract:structure:2",Armand,2026-09-07,
+gold30-027,Approved,"jakarta-causes:structure:2,jakarta-monitoring:structure:0",Armand,2026-09-07,
+gold30-028,Approved,health-disclaimer:structure:0,Armand,2026-09-07,
+gold30-029,Approved,jakarta-monitoring:structure:0,Armand,2026-09-07,
+gold30-030,Corrected,"ma-jakarta-air-lawsuit-record:structure:1,jakarta-policy-implementation:structure:2",Armand,2026-09-07,Replaced record-identity and metadata chunks with the direct judgment-versus-implementation boundary and dated evidence that implementation was still ongoing.
