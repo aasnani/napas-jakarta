@@ -1,96 +1,4455 @@
 {
-  "status": "provisional_machine_suggested",
-  "review_status": "pending_human",
-  "packet": "evaluation/gold_review_30_candidates.jsonl",
+  "status": "human_reviewed",
+  "review_status": "human_reviewed",
+  "packet": "evaluation/gold_review_30_final.jsonl",
   "questions": 30,
+  "human_reviewed_rows": 30,
+  "relevance_unit": "human_relevant_chunk_ids; rank is parent document rank",
+  "top_k": 5,
+  "ranking_criteria": [
+    "chunk_recall_at_5",
+    "question_hit_rate_at_5",
+    "mrr_at_5",
+    "ndcg_at_5",
+    "lower_p50_latency_ms"
+  ],
+  "selected_mode": "hybrid",
   "modes": [
     {
       "mode": "bm25",
+      "scope": "overall",
+      "group": "all",
       "questions": 30,
       "hit_rate_at_5": 0.6,
+      "question_hit_rate_at_5": 0.6,
+      "chunk_recall_at_5": 0.4912,
       "mrr_at_5": 0.4594,
-      "ndcg_at_5": 0.419,
-      "p50_latency_ms": 6.6153,
+      "ndcg_at_5": 0.4945,
+      "p50_latency_ms": 6.2763,
+      "p95_latency_ms": 6.4762,
+      "multi_source_questions": 15,
+      "multi_source_recall_at_5": 0.2,
+      "multi_source_chunk_recall_at_5": 0.4556,
       "language_hit_rate_at_5": {
-        "English": 0.7333,
-        "Bahasa Indonesia": 0.4667
+        "Bahasa Indonesia": 0.4667,
+        "English": 0.7333
       },
       "topic_hit_rate_at_5": {
+        "causes": 0.75,
         "current_measurements": 0.25,
         "historical_category_threshold": 0.8,
-        "causes": 0.75,
-        "regulations_implementation": 0.8,
-        "protection_individual_action": 0.8,
+        "missing_data_safety_abstention": 0.0,
         "multi_turn_followups": 0.5,
-        "missing_data_safety_abstention": 0.0
-      },
-      "multi_source_recall_at_5": 0.25
+        "protection_individual_action": 0.8,
+        "regulations_implementation": 0.8
+      }
     },
     {
       "mode": "dense",
+      "scope": "overall",
+      "group": "all",
       "questions": 30,
       "hit_rate_at_5": 0.6333,
-      "mrr_at_5": 0.5056,
-      "ndcg_at_5": 0.4775,
-      "p50_latency_ms": 6.6403,
+      "question_hit_rate_at_5": 0.6333,
+      "chunk_recall_at_5": 0.4912,
+      "mrr_at_5": 0.4833,
+      "ndcg_at_5": 0.5171,
+      "p50_latency_ms": 6.19,
+      "p95_latency_ms": 6.4612,
+      "multi_source_questions": 15,
+      "multi_source_recall_at_5": 0.2667,
+      "multi_source_chunk_recall_at_5": 0.4667,
       "language_hit_rate_at_5": {
-        "English": 0.8,
-        "Bahasa Indonesia": 0.4667
+        "Bahasa Indonesia": 0.4667,
+        "English": 0.8
       },
       "topic_hit_rate_at_5": {
+        "causes": 0.5,
         "current_measurements": 0.75,
         "historical_category_threshold": 0.8,
-        "causes": 0.5,
-        "regulations_implementation": 0.8,
-        "protection_individual_action": 0.6,
+        "missing_data_safety_abstention": 0.6667,
         "multi_turn_followups": 0.25,
-        "missing_data_safety_abstention": 0.6667
-      },
-      "multi_source_recall_at_5": 0.3125
+        "protection_individual_action": 0.6,
+        "regulations_implementation": 0.8
+      }
     },
     {
       "mode": "hybrid",
+      "scope": "overall",
+      "group": "all",
       "questions": 30,
       "hit_rate_at_5": 0.6667,
-      "mrr_at_5": 0.4861,
-      "ndcg_at_5": 0.4981,
-      "p50_latency_ms": 6.6465,
+      "question_hit_rate_at_5": 0.6667,
+      "chunk_recall_at_5": 0.5789,
+      "mrr_at_5": 0.4694,
+      "ndcg_at_5": 0.5104,
+      "p50_latency_ms": 6.2821,
+      "p95_latency_ms": 6.6795,
+      "multi_source_questions": 15,
+      "multi_source_recall_at_5": 0.4667,
+      "multi_source_chunk_recall_at_5": 0.5667,
       "language_hit_rate_at_5": {
-        "English": 0.8667,
-        "Bahasa Indonesia": 0.4667
+        "Bahasa Indonesia": 0.4667,
+        "English": 0.8667
       },
       "topic_hit_rate_at_5": {
+        "causes": 0.75,
         "current_measurements": 0.5,
         "historical_category_threshold": 1.0,
-        "causes": 0.75,
-        "regulations_implementation": 0.8,
-        "protection_individual_action": 0.6,
+        "missing_data_safety_abstention": 0.6667,
         "multi_turn_followups": 0.25,
-        "missing_data_safety_abstention": 0.6667
-      },
-      "multi_source_recall_at_5": 0.5
+        "protection_individual_action": 0.6,
+        "regulations_implementation": 0.8
+      }
     },
     {
       "mode": "hybrid_rerank",
+      "scope": "overall",
+      "group": "all",
       "questions": 30,
       "hit_rate_at_5": 0.6333,
-      "mrr_at_5": 0.5122,
-      "ndcg_at_5": 0.486,
-      "p50_latency_ms": 7.2744,
+      "question_hit_rate_at_5": 0.6333,
+      "chunk_recall_at_5": 0.5439,
+      "mrr_at_5": 0.4956,
+      "ndcg_at_5": 0.5208,
+      "p50_latency_ms": 6.8269,
+      "p95_latency_ms": 7.0578,
+      "multi_source_questions": 15,
+      "multi_source_recall_at_5": 0.4,
+      "multi_source_chunk_recall_at_5": 0.5444,
       "language_hit_rate_at_5": {
-        "English": 0.8,
-        "Bahasa Indonesia": 0.4667
+        "Bahasa Indonesia": 0.4667,
+        "English": 0.8
       },
       "topic_hit_rate_at_5": {
+        "causes": 0.75,
         "current_measurements": 0.25,
         "historical_category_threshold": 0.8,
-        "causes": 0.75,
-        "regulations_implementation": 0.8,
-        "protection_individual_action": 0.6,
+        "missing_data_safety_abstention": 0.6667,
         "multi_turn_followups": 0.5,
-        "missing_data_safety_abstention": 0.6667
-      },
-      "multi_source_recall_at_5": 0.4375
+        "protection_individual_action": 0.6,
+        "regulations_implementation": 0.8
+      }
     }
-  ]
+  ],
+  "segments": [
+    {
+      "mode": "bm25",
+      "scope": "language",
+      "group": "Bahasa Indonesia",
+      "questions": 15,
+      "hit_rate_at_5": 0.4667,
+      "question_hit_rate_at_5": 0.4667,
+      "chunk_recall_at_5": 0.4,
+      "mrr_at_5": 0.3467,
+      "ndcg_at_5": 0.3766,
+      "p50_latency_ms": 6.2868,
+      "p95_latency_ms": 6.4762,
+      "multi_source_questions": 7,
+      "multi_source_recall_at_5": 0.0,
+      "multi_source_chunk_recall_at_5": 0.2381
+    },
+    {
+      "mode": "bm25",
+      "scope": "language",
+      "group": "English",
+      "questions": 15,
+      "hit_rate_at_5": 0.7333,
+      "question_hit_rate_at_5": 0.7333,
+      "chunk_recall_at_5": 0.5926,
+      "mrr_at_5": 0.5722,
+      "ndcg_at_5": 0.6124,
+      "p50_latency_ms": 6.2763,
+      "p95_latency_ms": 6.6698,
+      "multi_source_questions": 8,
+      "multi_source_recall_at_5": 0.375,
+      "multi_source_chunk_recall_at_5": 0.6458
+    },
+    {
+      "mode": "bm25",
+      "scope": "topic",
+      "group": "causes",
+      "questions": 4,
+      "hit_rate_at_5": 0.75,
+      "question_hit_rate_at_5": 0.75,
+      "chunk_recall_at_5": 0.625,
+      "mrr_at_5": 0.625,
+      "ndcg_at_5": 0.6577,
+      "p50_latency_ms": 6.2305,
+      "p95_latency_ms": 6.4762,
+      "multi_source_questions": 1,
+      "multi_source_recall_at_5": 0.0,
+      "multi_source_chunk_recall_at_5": 0.5
+    },
+    {
+      "mode": "bm25",
+      "scope": "topic",
+      "group": "current_measurements",
+      "questions": 4,
+      "hit_rate_at_5": 0.25,
+      "question_hit_rate_at_5": 0.25,
+      "chunk_recall_at_5": 0.2,
+      "mrr_at_5": 0.125,
+      "ndcg_at_5": 0.1577,
+      "p50_latency_ms": 6.3187,
+      "p95_latency_ms": 6.4496,
+      "multi_source_questions": 1,
+      "multi_source_recall_at_5": 0.0,
+      "multi_source_chunk_recall_at_5": 0.0
+    },
+    {
+      "mode": "bm25",
+      "scope": "topic",
+      "group": "historical_category_threshold",
+      "questions": 5,
+      "hit_rate_at_5": 0.8,
+      "question_hit_rate_at_5": 0.8,
+      "chunk_recall_at_5": 0.6,
+      "mrr_at_5": 0.6667,
+      "ndcg_at_5": 0.7,
+      "p50_latency_ms": 6.2856,
+      "p95_latency_ms": 6.3125,
+      "multi_source_questions": 2,
+      "multi_source_recall_at_5": 0.0,
+      "multi_source_chunk_recall_at_5": 0.5833
+    },
+    {
+      "mode": "bm25",
+      "scope": "topic",
+      "group": "missing_data_safety_abstention",
+      "questions": 3,
+      "hit_rate_at_5": 0.0,
+      "question_hit_rate_at_5": 0.0,
+      "chunk_recall_at_5": 0.0,
+      "mrr_at_5": 0.0,
+      "ndcg_at_5": 0.0,
+      "p50_latency_ms": 6.2751,
+      "p95_latency_ms": 6.4568,
+      "multi_source_questions": 1,
+      "multi_source_recall_at_5": 0.0,
+      "multi_source_chunk_recall_at_5": 0.0
+    },
+    {
+      "mode": "bm25",
+      "scope": "topic",
+      "group": "multi_turn_followups",
+      "questions": 4,
+      "hit_rate_at_5": 0.5,
+      "question_hit_rate_at_5": 0.5,
+      "chunk_recall_at_5": 0.2222,
+      "mrr_at_5": 0.3125,
+      "ndcg_at_5": 0.3577,
+      "p50_latency_ms": 6.2627,
+      "p95_latency_ms": 6.6698,
+      "multi_source_questions": 4,
+      "multi_source_recall_at_5": 0.0,
+      "multi_source_chunk_recall_at_5": 0.25
+    },
+    {
+      "mode": "bm25",
+      "scope": "topic",
+      "group": "protection_individual_action",
+      "questions": 5,
+      "hit_rate_at_5": 0.8,
+      "question_hit_rate_at_5": 0.8,
+      "chunk_recall_at_5": 0.7273,
+      "mrr_at_5": 0.54,
+      "ndcg_at_5": 0.6022,
+      "p50_latency_ms": 6.1982,
+      "p95_latency_ms": 6.3168,
+      "multi_source_questions": 3,
+      "multi_source_recall_at_5": 0.6667,
+      "multi_source_chunk_recall_at_5": 0.8889
+    },
+    {
+      "mode": "bm25",
+      "scope": "topic",
+      "group": "regulations_implementation",
+      "questions": 5,
+      "hit_rate_at_5": 0.8,
+      "question_hit_rate_at_5": 0.8,
+      "chunk_recall_at_5": 0.6,
+      "mrr_at_5": 0.7,
+      "ndcg_at_5": 0.7262,
+      "p50_latency_ms": 6.3653,
+      "p95_latency_ms": 6.4023,
+      "multi_source_questions": 3,
+      "multi_source_recall_at_5": 0.3333,
+      "multi_source_chunk_recall_at_5": 0.5
+    },
+    {
+      "mode": "dense",
+      "scope": "language",
+      "group": "Bahasa Indonesia",
+      "questions": 15,
+      "hit_rate_at_5": 0.4667,
+      "question_hit_rate_at_5": 0.4667,
+      "chunk_recall_at_5": 0.3333,
+      "mrr_at_5": 0.3111,
+      "ndcg_at_5": 0.3426,
+      "p50_latency_ms": 6.2044,
+      "p95_latency_ms": 6.7109,
+      "multi_source_questions": 7,
+      "multi_source_recall_at_5": 0.1429,
+      "multi_source_chunk_recall_at_5": 0.3333
+    },
+    {
+      "mode": "dense",
+      "scope": "language",
+      "group": "English",
+      "questions": 15,
+      "hit_rate_at_5": 0.8,
+      "question_hit_rate_at_5": 0.8,
+      "chunk_recall_at_5": 0.6667,
+      "mrr_at_5": 0.6556,
+      "ndcg_at_5": 0.6917,
+      "p50_latency_ms": 6.1705,
+      "p95_latency_ms": 6.4296,
+      "multi_source_questions": 8,
+      "multi_source_recall_at_5": 0.375,
+      "multi_source_chunk_recall_at_5": 0.5833
+    },
+    {
+      "mode": "dense",
+      "scope": "topic",
+      "group": "causes",
+      "questions": 4,
+      "hit_rate_at_5": 0.5,
+      "question_hit_rate_at_5": 0.5,
+      "chunk_recall_at_5": 0.375,
+      "mrr_at_5": 0.375,
+      "ndcg_at_5": 0.4077,
+      "p50_latency_ms": 6.1452,
+      "p95_latency_ms": 6.3815,
+      "multi_source_questions": 1,
+      "multi_source_recall_at_5": 0.0,
+      "multi_source_chunk_recall_at_5": 0.5
+    },
+    {
+      "mode": "dense",
+      "scope": "topic",
+      "group": "current_measurements",
+      "questions": 4,
+      "hit_rate_at_5": 0.75,
+      "question_hit_rate_at_5": 0.75,
+      "chunk_recall_at_5": 0.6,
+      "mrr_at_5": 0.75,
+      "ndcg_at_5": 0.75,
+      "p50_latency_ms": 6.1571,
+      "p95_latency_ms": 6.2075,
+      "multi_source_questions": 1,
+      "multi_source_recall_at_5": 0.0,
+      "multi_source_chunk_recall_at_5": 0.5
+    },
+    {
+      "mode": "dense",
+      "scope": "topic",
+      "group": "historical_category_threshold",
+      "questions": 5,
+      "hit_rate_at_5": 0.8,
+      "question_hit_rate_at_5": 0.8,
+      "chunk_recall_at_5": 0.7,
+      "mrr_at_5": 0.5667,
+      "ndcg_at_5": 0.6101,
+      "p50_latency_ms": 6.1705,
+      "p95_latency_ms": 6.1978,
+      "multi_source_questions": 2,
+      "multi_source_recall_at_5": 0.5,
+      "multi_source_chunk_recall_at_5": 0.6667
+    },
+    {
+      "mode": "dense",
+      "scope": "topic",
+      "group": "missing_data_safety_abstention",
+      "questions": 3,
+      "hit_rate_at_5": 0.6667,
+      "question_hit_rate_at_5": 0.6667,
+      "chunk_recall_at_5": 0.5,
+      "mrr_at_5": 0.5,
+      "ndcg_at_5": 0.5436,
+      "p50_latency_ms": 6.4296,
+      "p95_latency_ms": 6.7109,
+      "multi_source_questions": 1,
+      "multi_source_recall_at_5": 0.0,
+      "multi_source_chunk_recall_at_5": 0.0
+    },
+    {
+      "mode": "dense",
+      "scope": "topic",
+      "group": "multi_turn_followups",
+      "questions": 4,
+      "hit_rate_at_5": 0.25,
+      "question_hit_rate_at_5": 0.25,
+      "chunk_recall_at_5": 0.1111,
+      "mrr_at_5": 0.0833,
+      "ndcg_at_5": 0.125,
+      "p50_latency_ms": 6.2478,
+      "p95_latency_ms": 6.4612,
+      "multi_source_questions": 4,
+      "multi_source_recall_at_5": 0.0,
+      "multi_source_chunk_recall_at_5": 0.125
+    },
+    {
+      "mode": "dense",
+      "scope": "topic",
+      "group": "protection_individual_action",
+      "questions": 5,
+      "hit_rate_at_5": 0.6,
+      "question_hit_rate_at_5": 0.6,
+      "chunk_recall_at_5": 0.4545,
+      "mrr_at_5": 0.4,
+      "ndcg_at_5": 0.4649,
+      "p50_latency_ms": 6.163,
+      "p95_latency_ms": 6.2122,
+      "multi_source_questions": 3,
+      "multi_source_recall_at_5": 0.3333,
+      "multi_source_chunk_recall_at_5": 0.7222
+    },
+    {
+      "mode": "dense",
+      "scope": "topic",
+      "group": "regulations_implementation",
+      "questions": 5,
+      "hit_rate_at_5": 0.8,
+      "question_hit_rate_at_5": 0.8,
+      "chunk_recall_at_5": 0.7,
+      "mrr_at_5": 0.6667,
+      "ndcg_at_5": 0.6754,
+      "p50_latency_ms": 6.2182,
+      "p95_latency_ms": 6.2833,
+      "multi_source_questions": 3,
+      "multi_source_recall_at_5": 0.6667,
+      "multi_source_chunk_recall_at_5": 0.6667
+    },
+    {
+      "mode": "hybrid",
+      "scope": "language",
+      "group": "Bahasa Indonesia",
+      "questions": 15,
+      "hit_rate_at_5": 0.4667,
+      "question_hit_rate_at_5": 0.4667,
+      "chunk_recall_at_5": 0.3667,
+      "mrr_at_5": 0.2778,
+      "ndcg_at_5": 0.3262,
+      "p50_latency_ms": 6.2821,
+      "p95_latency_ms": 6.6795,
+      "multi_source_questions": 7,
+      "multi_source_recall_at_5": 0.1429,
+      "multi_source_chunk_recall_at_5": 0.2619
+    },
+    {
+      "mode": "hybrid",
+      "scope": "language",
+      "group": "English",
+      "questions": 15,
+      "hit_rate_at_5": 0.8667,
+      "question_hit_rate_at_5": 0.8667,
+      "chunk_recall_at_5": 0.8148,
+      "mrr_at_5": 0.6611,
+      "ndcg_at_5": 0.6946,
+      "p50_latency_ms": 6.2856,
+      "p95_latency_ms": 6.9566,
+      "multi_source_questions": 8,
+      "multi_source_recall_at_5": 0.75,
+      "multi_source_chunk_recall_at_5": 0.8333
+    },
+    {
+      "mode": "hybrid",
+      "scope": "topic",
+      "group": "causes",
+      "questions": 4,
+      "hit_rate_at_5": 0.75,
+      "question_hit_rate_at_5": 0.75,
+      "chunk_recall_at_5": 0.75,
+      "mrr_at_5": 0.625,
+      "ndcg_at_5": 0.6203,
+      "p50_latency_ms": 6.3677,
+      "p95_latency_ms": 6.6115,
+      "multi_source_questions": 1,
+      "multi_source_recall_at_5": 1.0,
+      "multi_source_chunk_recall_at_5": 1.0
+    },
+    {
+      "mode": "hybrid",
+      "scope": "topic",
+      "group": "current_measurements",
+      "questions": 4,
+      "hit_rate_at_5": 0.5,
+      "question_hit_rate_at_5": 0.5,
+      "chunk_recall_at_5": 0.4,
+      "mrr_at_5": 0.3333,
+      "ndcg_at_5": 0.375,
+      "p50_latency_ms": 6.2048,
+      "p95_latency_ms": 6.2821,
+      "multi_source_questions": 1,
+      "multi_source_recall_at_5": 0.0,
+      "multi_source_chunk_recall_at_5": 0.5
+    },
+    {
+      "mode": "hybrid",
+      "scope": "topic",
+      "group": "historical_category_threshold",
+      "questions": 5,
+      "hit_rate_at_5": 1.0,
+      "question_hit_rate_at_5": 1.0,
+      "chunk_recall_at_5": 0.8,
+      "mrr_at_5": 0.5833,
+      "ndcg_at_5": 0.6701,
+      "p50_latency_ms": 6.2856,
+      "p95_latency_ms": 6.439,
+      "multi_source_questions": 2,
+      "multi_source_recall_at_5": 0.5,
+      "multi_source_chunk_recall_at_5": 0.6667
+    },
+    {
+      "mode": "hybrid",
+      "scope": "topic",
+      "group": "missing_data_safety_abstention",
+      "questions": 3,
+      "hit_rate_at_5": 0.6667,
+      "question_hit_rate_at_5": 0.6667,
+      "chunk_recall_at_5": 0.5,
+      "mrr_at_5": 0.3333,
+      "ndcg_at_5": 0.4206,
+      "p50_latency_ms": 6.298,
+      "p95_latency_ms": 6.4449,
+      "multi_source_questions": 1,
+      "multi_source_recall_at_5": 0.0,
+      "multi_source_chunk_recall_at_5": 0.0
+    },
+    {
+      "mode": "hybrid",
+      "scope": "topic",
+      "group": "multi_turn_followups",
+      "questions": 4,
+      "hit_rate_at_5": 0.25,
+      "question_hit_rate_at_5": 0.25,
+      "chunk_recall_at_5": 0.2222,
+      "mrr_at_5": 0.0833,
+      "ndcg_at_5": 0.1359,
+      "p50_latency_ms": 6.4949,
+      "p95_latency_ms": 6.9566,
+      "multi_source_questions": 4,
+      "multi_source_recall_at_5": 0.25,
+      "multi_source_chunk_recall_at_5": 0.25
+    },
+    {
+      "mode": "hybrid",
+      "scope": "topic",
+      "group": "protection_individual_action",
+      "questions": 5,
+      "hit_rate_at_5": 0.6,
+      "question_hit_rate_at_5": 0.6,
+      "chunk_recall_at_5": 0.5455,
+      "mrr_at_5": 0.5,
+      "ndcg_at_5": 0.5088,
+      "p50_latency_ms": 6.2466,
+      "p95_latency_ms": 6.5033,
+      "multi_source_questions": 3,
+      "multi_source_recall_at_5": 0.6667,
+      "multi_source_chunk_recall_at_5": 0.8889
+    },
+    {
+      "mode": "hybrid",
+      "scope": "topic",
+      "group": "regulations_implementation",
+      "questions": 5,
+      "hit_rate_at_5": 0.8,
+      "question_hit_rate_at_5": 0.8,
+      "chunk_recall_at_5": 0.7,
+      "mrr_at_5": 0.7,
+      "ndcg_at_5": 0.7262,
+      "p50_latency_ms": 6.2742,
+      "p95_latency_ms": 6.3459,
+      "multi_source_questions": 3,
+      "multi_source_recall_at_5": 0.6667,
+      "multi_source_chunk_recall_at_5": 0.6667
+    },
+    {
+      "mode": "hybrid_rerank",
+      "scope": "language",
+      "group": "Bahasa Indonesia",
+      "questions": 15,
+      "hit_rate_at_5": 0.4667,
+      "question_hit_rate_at_5": 0.4667,
+      "chunk_recall_at_5": 0.4333,
+      "mrr_at_5": 0.3556,
+      "ndcg_at_5": 0.379,
+      "p50_latency_ms": 6.8367,
+      "p95_latency_ms": 7.0578,
+      "multi_source_questions": 7,
+      "multi_source_recall_at_5": 0.2857,
+      "multi_source_chunk_recall_at_5": 0.3571
+    },
+    {
+      "mode": "hybrid_rerank",
+      "scope": "language",
+      "group": "English",
+      "questions": 15,
+      "hit_rate_at_5": 0.8,
+      "question_hit_rate_at_5": 0.8,
+      "chunk_recall_at_5": 0.6667,
+      "mrr_at_5": 0.6356,
+      "ndcg_at_5": 0.6626,
+      "p50_latency_ms": 6.8269,
+      "p95_latency_ms": 7.0921,
+      "multi_source_questions": 8,
+      "multi_source_recall_at_5": 0.5,
+      "multi_source_chunk_recall_at_5": 0.7083
+    },
+    {
+      "mode": "hybrid_rerank",
+      "scope": "topic",
+      "group": "causes",
+      "questions": 4,
+      "hit_rate_at_5": 0.75,
+      "question_hit_rate_at_5": 0.75,
+      "chunk_recall_at_5": 0.625,
+      "mrr_at_5": 0.625,
+      "ndcg_at_5": 0.6577,
+      "p50_latency_ms": 6.7836,
+      "p95_latency_ms": 6.9763,
+      "multi_source_questions": 1,
+      "multi_source_recall_at_5": 0.0,
+      "multi_source_chunk_recall_at_5": 0.5
+    },
+    {
+      "mode": "hybrid_rerank",
+      "scope": "topic",
+      "group": "current_measurements",
+      "questions": 4,
+      "hit_rate_at_5": 0.25,
+      "question_hit_rate_at_5": 0.25,
+      "chunk_recall_at_5": 0.2,
+      "mrr_at_5": 0.125,
+      "ndcg_at_5": 0.1577,
+      "p50_latency_ms": 6.766,
+      "p95_latency_ms": 6.9337,
+      "multi_source_questions": 1,
+      "multi_source_recall_at_5": 0.0,
+      "multi_source_chunk_recall_at_5": 0.0
+    },
+    {
+      "mode": "hybrid_rerank",
+      "scope": "topic",
+      "group": "historical_category_threshold",
+      "questions": 5,
+      "hit_rate_at_5": 0.8,
+      "question_hit_rate_at_5": 0.8,
+      "chunk_recall_at_5": 0.8,
+      "mrr_at_5": 0.8,
+      "ndcg_at_5": 0.7548,
+      "p50_latency_ms": 6.8671,
+      "p95_latency_ms": 6.8861,
+      "multi_source_questions": 2,
+      "multi_source_recall_at_5": 1.0,
+      "multi_source_chunk_recall_at_5": 1.0
+    },
+    {
+      "mode": "hybrid_rerank",
+      "scope": "topic",
+      "group": "missing_data_safety_abstention",
+      "questions": 3,
+      "hit_rate_at_5": 0.6667,
+      "question_hit_rate_at_5": 0.6667,
+      "chunk_recall_at_5": 0.5,
+      "mrr_at_5": 0.1778,
+      "ndcg_at_5": 0.2956,
+      "p50_latency_ms": 6.8294,
+      "p95_latency_ms": 6.9335,
+      "multi_source_questions": 1,
+      "multi_source_recall_at_5": 0.0,
+      "multi_source_chunk_recall_at_5": 0.0
+    },
+    {
+      "mode": "hybrid_rerank",
+      "scope": "topic",
+      "group": "multi_turn_followups",
+      "questions": 4,
+      "hit_rate_at_5": 0.5,
+      "question_hit_rate_at_5": 0.5,
+      "chunk_recall_at_5": 0.2222,
+      "mrr_at_5": 0.3333,
+      "ndcg_at_5": 0.375,
+      "p50_latency_ms": 6.826,
+      "p95_latency_ms": 7.0921,
+      "multi_source_questions": 4,
+      "multi_source_recall_at_5": 0.0,
+      "multi_source_chunk_recall_at_5": 0.25
+    },
+    {
+      "mode": "hybrid_rerank",
+      "scope": "topic",
+      "group": "protection_individual_action",
+      "questions": 5,
+      "hit_rate_at_5": 0.6,
+      "question_hit_rate_at_5": 0.6,
+      "chunk_recall_at_5": 0.5455,
+      "mrr_at_5": 0.5,
+      "ndcg_at_5": 0.5141,
+      "p50_latency_ms": 6.8035,
+      "p95_latency_ms": 6.8616,
+      "multi_source_questions": 3,
+      "multi_source_recall_at_5": 0.6667,
+      "multi_source_chunk_recall_at_5": 0.8889
+    },
+    {
+      "mode": "hybrid_rerank",
+      "scope": "topic",
+      "group": "regulations_implementation",
+      "questions": 5,
+      "hit_rate_at_5": 0.8,
+      "question_hit_rate_at_5": 0.8,
+      "chunk_recall_at_5": 0.7,
+      "mrr_at_5": 0.7,
+      "ndcg_at_5": 0.7262,
+      "p50_latency_ms": 6.8269,
+      "p95_latency_ms": 6.9117,
+      "multi_source_questions": 3,
+      "multi_source_recall_at_5": 0.6667,
+      "multi_source_chunk_recall_at_5": 0.6667
+    }
+  ],
+  "per_question": {
+    "bm25": [
+      {
+        "question_id": "gold30-001",
+        "language": "English",
+        "topic": "current_measurements",
+        "human_relevant_chunk_ids": [
+          "jakarta-monitoring:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-monitoring"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-causes",
+          "bad-air-day-protection",
+          "jakarta-court-air-quality",
+          "jakarta-seasonal-exposure",
+          "jakarta-cems-monitoring"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 1,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-002",
+        "language": "Bahasa Indonesia",
+        "topic": "current_measurements",
+        "human_relevant_chunk_ids": [
+          "jakarta-monitoring:structure:0",
+          "ispu:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "ispu",
+          "jakarta-monitoring"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-historical-city-series",
+          "jakarta-policy-implementation",
+          "jakarta-regulations",
+          "policy-improvements-evidence",
+          "pp-22-2021-air-quality"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-003",
+        "language": "English",
+        "topic": "current_measurements",
+        "human_relevant_chunk_ids": [
+          "ispu:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "ispu"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-historical-city-series",
+          "ispu",
+          "policy-improvements-evidence",
+          "pp-22-2021-air-quality",
+          "jakarta-policy-implementation"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "ispu:structure:0"
+        ],
+        "covered_chunk_count_at_5": 1,
+        "human_relevant_chunk_count": 1,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 2,
+        "reciprocal_rank_at_5": 0.5,
+        "ndcg_at_5": 0.6309297535714575,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-004",
+        "language": "Bahasa Indonesia",
+        "topic": "current_measurements",
+        "human_relevant_chunk_ids": [
+          "jakarta-monitoring:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-monitoring"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-improvements",
+          "jakarta-seasonal-exposure",
+          "individual-emission-actions",
+          "jakarta-historical-city-series",
+          "jakarta-policy-implementation"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 1,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-005",
+        "language": "English",
+        "topic": "historical_category_threshold",
+        "human_relevant_chunk_ids": [
+          "ispu:structure:0",
+          "ispu:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "ispu"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-historical-city-series",
+          "policy-improvements-evidence",
+          "who-aqg-2021-extract",
+          "bad-air-day-protection",
+          "individual-emission-actions"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-006",
+        "language": "Bahasa Indonesia",
+        "topic": "historical_category_threshold",
+        "human_relevant_chunk_ids": [
+          "who-aqg-2021-extract:structure:1",
+          "who-aqg-2021-extract:structure:2",
+          "jakarta-regulations:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-regulations",
+          "who-aqg-2021-extract"
+        ],
+        "retrieved_document_ids_at_5": [
+          "who-aqg-2021-extract",
+          "bad-air-day-protection",
+          "exposure-protection",
+          "ispu",
+          "jakarta-causes"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "who-aqg-2021-extract:structure:1",
+          "who-aqg-2021-extract:structure:2"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 3,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 0.6666666666666666,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-007",
+        "language": "English",
+        "topic": "historical_category_threshold",
+        "human_relevant_chunk_ids": [
+          "jakarta-historical-city-series:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-historical-city-series"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-historical-city-series",
+          "individual-emission-actions",
+          "jakarta-causes",
+          "policy-improvements-evidence",
+          "bad-air-day-protection"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-historical-city-series:structure:1"
+        ],
+        "covered_chunk_count_at_5": 1,
+        "human_relevant_chunk_count": 1,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-008",
+        "language": "Bahasa Indonesia",
+        "topic": "historical_category_threshold",
+        "human_relevant_chunk_ids": [
+          "jakarta-historical-city-series:structure:1",
+          "jakarta-historical-city-series:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-historical-city-series"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-historical-city-series",
+          "who-aqg-2021-extract",
+          "jakarta-causes",
+          "policy-improvements-evidence",
+          "who-guidance"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-historical-city-series:structure:1",
+          "jakarta-historical-city-series:structure:2"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-009",
+        "language": "English",
+        "topic": "historical_category_threshold",
+        "human_relevant_chunk_ids": [
+          "ispu:structure:0",
+          "who-aqg-2021-extract:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "ispu",
+          "who-aqg-2021-extract"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-policy-implementation",
+          "pp-22-2021-air-quality",
+          "who-aqg-2021-extract",
+          "jakarta-regulations",
+          "ma-jakarta-air-lawsuit-record"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "who-aqg-2021-extract:structure:2"
+        ],
+        "covered_chunk_count_at_5": 1,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 0.5,
+        "first_relevant_rank_at_5": 3,
+        "reciprocal_rank_at_5": 0.3333333333333333,
+        "ndcg_at_5": 0.5,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-010",
+        "language": "Bahasa Indonesia",
+        "topic": "causes",
+        "human_relevant_chunk_ids": [
+          "jakarta-causes:structure:0",
+          "jakarta-causes:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-causes"
+        ],
+        "retrieved_document_ids_at_5": [
+          "bad-air-day-protection",
+          "jakarta-causes",
+          "jakarta-historical-city-series",
+          "jakarta-seasonal-exposure",
+          "policy-improvements-evidence"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-causes:structure:0",
+          "jakarta-causes:structure:2"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 2,
+        "reciprocal_rank_at_5": 0.5,
+        "ndcg_at_5": 0.6309297535714575,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-011",
+        "language": "English",
+        "topic": "causes",
+        "human_relevant_chunk_ids": [
+          "jakarta-causes:structure:0",
+          "jakarta-causes:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-causes"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-causes",
+          "jakarta-sppu-official-status-2024",
+          "policy-improvements-evidence",
+          "jakarta-historical-city-series",
+          "jakarta-policy-implementation"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-causes:structure:0",
+          "jakarta-causes:structure:1"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-012",
+        "language": "Bahasa Indonesia",
+        "topic": "causes",
+        "human_relevant_chunk_ids": [
+          "jakarta-causes:structure:0",
+          "jakarta-causes:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-causes"
+        ],
+        "retrieved_document_ids_at_5": [
+          "bad-air-day-protection",
+          "clean-air-room",
+          "epa-air-cleaners-home-2026",
+          "exposure-protection",
+          "health-disclaimer"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-013",
+        "language": "English",
+        "topic": "causes",
+        "human_relevant_chunk_ids": [
+          "jakarta-causes:structure:0",
+          "jakarta-policy-implementation:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-causes",
+          "jakarta-policy-implementation"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-policy-implementation",
+          "bad-air-day-protection",
+          "individual-emission-actions",
+          "jakarta-improvements",
+          "clean-air-room"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-policy-implementation:structure:2"
+        ],
+        "covered_chunk_count_at_5": 1,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 0.5,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-014",
+        "language": "Bahasa Indonesia",
+        "topic": "regulations_implementation",
+        "human_relevant_chunk_ids": [
+          "jakarta-emission-testing:structure:0",
+          "jakarta-emission-testing:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-emission-testing"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-emission-testing",
+          "jakarta-policy-implementation",
+          "pergub-66-2020-vehicle-testing",
+          "jakarta-regulations",
+          "ispu"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-emission-testing:structure:0",
+          "jakarta-emission-testing:structure:1"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-015",
+        "language": "English",
+        "topic": "regulations_implementation",
+        "human_relevant_chunk_ids": [
+          "permen-lhk-8-2023-vehicle-emissions:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "permen-lhk-8-2023-vehicle-emissions"
+        ],
+        "retrieved_document_ids_at_5": [
+          "permen-lhk-8-2023-vehicle-emissions",
+          "jakarta-regulations",
+          "ispu",
+          "jakarta-policy-implementation",
+          "jakarta-cems-monitoring"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "permen-lhk-8-2023-vehicle-emissions:structure:2"
+        ],
+        "covered_chunk_count_at_5": 1,
+        "human_relevant_chunk_count": 1,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-016",
+        "language": "Bahasa Indonesia",
+        "topic": "regulations_implementation",
+        "human_relevant_chunk_ids": [
+          "permen-lhk-13-2021-cems:structure:1",
+          "jakarta-cems-monitoring:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-cems-monitoring",
+          "permen-lhk-13-2021-cems"
+        ],
+        "retrieved_document_ids_at_5": [
+          "individual-emission-actions",
+          "jakarta-cems-monitoring",
+          "jakarta-policy-implementation",
+          "jakarta-sppu-official-status-2024",
+          "pergub-66-2020-vehicle-testing"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-cems-monitoring:structure:2"
+        ],
+        "covered_chunk_count_at_5": 1,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 0.5,
+        "first_relevant_rank_at_5": 2,
+        "reciprocal_rank_at_5": 0.5,
+        "ndcg_at_5": 0.6309297535714575,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-017",
+        "language": "English",
+        "topic": "regulations_implementation",
+        "human_relevant_chunk_ids": [
+          "jakarta-court-air-quality:structure:1",
+          "ma-jakarta-air-lawsuit-record:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-court-air-quality",
+          "ma-jakarta-air-lawsuit-record"
+        ],
+        "retrieved_document_ids_at_5": [
+          "ma-jakarta-air-lawsuit-record",
+          "jakarta-court-air-quality",
+          "jakarta-policy-implementation",
+          "pp-22-2021-air-quality",
+          "jakarta-policy-status"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-court-air-quality:structure:1",
+          "ma-jakarta-air-lawsuit-record:structure:1"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-018",
+        "language": "Bahasa Indonesia",
+        "topic": "regulations_implementation",
+        "human_relevant_chunk_ids": [
+          "jakarta-regulations:structure:0",
+          "jakarta-policy-implementation:structure:2",
+          "jakarta-court-air-quality:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-court-air-quality",
+          "jakarta-policy-implementation",
+          "jakarta-regulations"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-improvements",
+          "jakarta-seasonal-exposure",
+          "bad-air-day-protection",
+          "clean-air-room",
+          "epa-air-cleaners-home-2026"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 3,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-019",
+        "language": "English",
+        "topic": "protection_individual_action",
+        "human_relevant_chunk_ids": [
+          "bad-air-day-protection:structure:1",
+          "bad-air-day-protection:structure:3",
+          "exposure-protection:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "bad-air-day-protection",
+          "exposure-protection"
+        ],
+        "retrieved_document_ids_at_5": [
+          "bad-air-day-protection",
+          "who-personal-interventions-2024",
+          "clean-air-room",
+          "epa-air-cleaners-home-2026",
+          "individual-emission-actions"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "bad-air-day-protection:structure:1",
+          "bad-air-day-protection:structure:3"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 3,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 0.6666666666666666,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-020",
+        "language": "Bahasa Indonesia",
+        "topic": "protection_individual_action",
+        "human_relevant_chunk_ids": [
+          "clean-air-room:structure:1",
+          "clean-air-room:structure:4"
+        ],
+        "human_relevant_parent_document_ids": [
+          "clean-air-room"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-historical-city-series",
+          "jakarta-improvements",
+          "jakarta-seasonal-exposure",
+          "bad-air-day-protection",
+          "clean-air-room"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "clean-air-room:structure:1",
+          "clean-air-room:structure:4"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 5,
+        "reciprocal_rank_at_5": 0.2,
+        "ndcg_at_5": 0.38685280723454163,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-021",
+        "language": "English",
+        "topic": "protection_individual_action",
+        "human_relevant_chunk_ids": [
+          "who-personal-interventions-2024:structure:3",
+          "exposure-protection:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "exposure-protection",
+          "who-personal-interventions-2024"
+        ],
+        "retrieved_document_ids_at_5": [
+          "bad-air-day-protection",
+          "who-personal-interventions-2024",
+          "clean-air-room",
+          "epa-air-cleaners-home-2026",
+          "exposure-protection"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "who-personal-interventions-2024:structure:3",
+          "exposure-protection:structure:1"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 2,
+        "reciprocal_rank_at_5": 0.5,
+        "ndcg_at_5": 0.6240505200038379,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-022",
+        "language": "Bahasa Indonesia",
+        "topic": "protection_individual_action",
+        "human_relevant_chunk_ids": [
+          "individual-emission-actions:structure:1",
+          "individual-emission-actions:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "individual-emission-actions"
+        ],
+        "retrieved_document_ids_at_5": [
+          "pergub-66-2020-vehicle-testing",
+          "bad-air-day-protection",
+          "clean-air-room",
+          "epa-air-cleaners-home-2026",
+          "exposure-protection"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-023",
+        "language": "English",
+        "topic": "protection_individual_action",
+        "human_relevant_chunk_ids": [
+          "exposure-protection:structure:0",
+          "clean-air-room:structure:3"
+        ],
+        "human_relevant_parent_document_ids": [
+          "clean-air-room",
+          "exposure-protection"
+        ],
+        "retrieved_document_ids_at_5": [
+          "exposure-protection",
+          "clean-air-room",
+          "who-personal-interventions-2024",
+          "bad-air-day-protection",
+          "individual-emission-actions"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "exposure-protection:structure:0",
+          "clean-air-room:structure:3"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-024",
+        "language": "Bahasa Indonesia",
+        "topic": "multi_turn_followups",
+        "human_relevant_chunk_ids": [
+          "jakarta-regulations:structure:0",
+          "who-aqg-2021-extract:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-regulations",
+          "who-aqg-2021-extract"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-improvements",
+          "jakarta-seasonal-exposure",
+          "jakarta-emission-testing",
+          "jakarta-policy-implementation",
+          "pergub-66-2020-vehicle-testing"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-025",
+        "language": "English",
+        "topic": "multi_turn_followups",
+        "human_relevant_chunk_ids": [
+          "jakarta-monitoring:structure:0",
+          "ispu:structure:0",
+          "health-disclaimer:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "health-disclaimer",
+          "ispu",
+          "jakarta-monitoring"
+        ],
+        "retrieved_document_ids_at_5": [
+          "clean-air-room",
+          "jakarta-policy-implementation",
+          "jakarta-historical-city-series",
+          "bad-air-day-protection",
+          "individual-emission-actions"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 3,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-026",
+        "language": "Bahasa Indonesia",
+        "topic": "multi_turn_followups",
+        "human_relevant_chunk_ids": [
+          "jakarta-monitoring:structure:0",
+          "who-aqg-2021-extract:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-monitoring",
+          "who-aqg-2021-extract"
+        ],
+        "retrieved_document_ids_at_5": [
+          "who-aqg-2021-extract",
+          "bad-air-day-protection",
+          "jakarta-causes",
+          "jakarta-court-air-quality",
+          "jakarta-historical-city-series"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "who-aqg-2021-extract:structure:2"
+        ],
+        "covered_chunk_count_at_5": 1,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 0.5,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-027",
+        "language": "English",
+        "topic": "multi_turn_followups",
+        "human_relevant_chunk_ids": [
+          "jakarta-causes:structure:2",
+          "jakarta-monitoring:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-causes",
+          "jakarta-monitoring"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-policy-implementation",
+          "policy-improvements-evidence",
+          "individual-emission-actions",
+          "jakarta-causes",
+          "jakarta-historical-city-series"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-causes:structure:2"
+        ],
+        "covered_chunk_count_at_5": 1,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 0.5,
+        "first_relevant_rank_at_5": 4,
+        "reciprocal_rank_at_5": 0.25,
+        "ndcg_at_5": 0.43067655807339306,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-028",
+        "language": "Bahasa Indonesia",
+        "topic": "missing_data_safety_abstention",
+        "human_relevant_chunk_ids": [
+          "health-disclaimer:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "health-disclaimer"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-improvements",
+          "jakarta-seasonal-exposure",
+          "bad-air-day-protection",
+          "clean-air-room",
+          "epa-air-cleaners-home-2026"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 1,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-029",
+        "language": "English",
+        "topic": "missing_data_safety_abstention",
+        "human_relevant_chunk_ids": [
+          "jakarta-monitoring:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-monitoring"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-causes",
+          "jakarta-historical-city-series",
+          "bad-air-day-protection",
+          "individual-emission-actions",
+          "policy-improvements-evidence"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 1,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-030",
+        "language": "Bahasa Indonesia",
+        "topic": "missing_data_safety_abstention",
+        "human_relevant_chunk_ids": [
+          "ma-jakarta-air-lawsuit-record:structure:1",
+          "jakarta-policy-implementation:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-policy-implementation",
+          "ma-jakarta-air-lawsuit-record"
+        ],
+        "retrieved_document_ids_at_5": [
+          "bad-air-day-protection",
+          "clean-air-room",
+          "epa-air-cleaners-home-2026",
+          "exposure-protection",
+          "health-disclaimer"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      }
+    ],
+    "dense": [
+      {
+        "question_id": "gold30-001",
+        "language": "English",
+        "topic": "current_measurements",
+        "human_relevant_chunk_ids": [
+          "jakarta-monitoring:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-monitoring"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-monitoring",
+          "jakarta-seasonal-exposure",
+          "jakarta-court-air-quality",
+          "jakarta-causes",
+          "ma-jakarta-air-lawsuit-record"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-monitoring:structure:0"
+        ],
+        "covered_chunk_count_at_5": 1,
+        "human_relevant_chunk_count": 1,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-002",
+        "language": "Bahasa Indonesia",
+        "topic": "current_measurements",
+        "human_relevant_chunk_ids": [
+          "jakarta-monitoring:structure:0",
+          "ispu:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "ispu",
+          "jakarta-monitoring"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-monitoring",
+          "jakarta-seasonal-exposure",
+          "jakarta-improvements",
+          "jakarta-court-air-quality",
+          "jakarta-regulations"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-monitoring:structure:0"
+        ],
+        "covered_chunk_count_at_5": 1,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 0.5,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-003",
+        "language": "English",
+        "topic": "current_measurements",
+        "human_relevant_chunk_ids": [
+          "ispu:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "ispu"
+        ],
+        "retrieved_document_ids_at_5": [
+          "ispu",
+          "jakarta-historical-city-series",
+          "policy-improvements-evidence",
+          "jakarta-policy-implementation",
+          "pp-22-2021-air-quality"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "ispu:structure:0"
+        ],
+        "covered_chunk_count_at_5": 1,
+        "human_relevant_chunk_count": 1,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-004",
+        "language": "Bahasa Indonesia",
+        "topic": "current_measurements",
+        "human_relevant_chunk_ids": [
+          "jakarta-monitoring:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-monitoring"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-historical-city-series",
+          "pp-22-2021-air-quality",
+          "jakarta-improvements",
+          "pergub-66-2020-vehicle-testing",
+          "jakarta-seasonal-exposure"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 1,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-005",
+        "language": "English",
+        "topic": "historical_category_threshold",
+        "human_relevant_chunk_ids": [
+          "ispu:structure:0",
+          "ispu:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "ispu"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-historical-city-series",
+          "jakarta-seasonal-exposure",
+          "ispu",
+          "jakarta-causes",
+          "pp-22-2021-air-quality"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "ispu:structure:0",
+          "ispu:structure:1"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 3,
+        "reciprocal_rank_at_5": 0.3333333333333333,
+        "ndcg_at_5": 0.5,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-006",
+        "language": "Bahasa Indonesia",
+        "topic": "historical_category_threshold",
+        "human_relevant_chunk_ids": [
+          "who-aqg-2021-extract:structure:1",
+          "who-aqg-2021-extract:structure:2",
+          "jakarta-regulations:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-regulations",
+          "who-aqg-2021-extract"
+        ],
+        "retrieved_document_ids_at_5": [
+          "ispu",
+          "jakarta-regulations",
+          "pp-22-2021-air-quality",
+          "exposure-protection",
+          "clean-air-room"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-regulations:structure:0"
+        ],
+        "covered_chunk_count_at_5": 1,
+        "human_relevant_chunk_count": 3,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 0.3333333333333333,
+        "first_relevant_rank_at_5": 2,
+        "reciprocal_rank_at_5": 0.5,
+        "ndcg_at_5": 0.6309297535714575,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-007",
+        "language": "English",
+        "topic": "historical_category_threshold",
+        "human_relevant_chunk_ids": [
+          "jakarta-historical-city-series:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-historical-city-series"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-monitoring",
+          "jakarta-causes",
+          "jakarta-sppu-official-status-2024",
+          "jakarta-policy-implementation",
+          "jakarta-improvements"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 1,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-008",
+        "language": "Bahasa Indonesia",
+        "topic": "historical_category_threshold",
+        "human_relevant_chunk_ids": [
+          "jakarta-historical-city-series:structure:1",
+          "jakarta-historical-city-series:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-historical-city-series"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-historical-city-series",
+          "jakarta-causes",
+          "who-guidance",
+          "jakarta-sppu-official-status-2024",
+          "pergub-66-2020-vehicle-testing"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-historical-city-series:structure:1",
+          "jakarta-historical-city-series:structure:2"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-009",
+        "language": "English",
+        "topic": "historical_category_threshold",
+        "human_relevant_chunk_ids": [
+          "ispu:structure:0",
+          "who-aqg-2021-extract:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "ispu",
+          "who-aqg-2021-extract"
+        ],
+        "retrieved_document_ids_at_5": [
+          "who-aqg-2021-extract",
+          "who-guidance",
+          "ispu",
+          "epa-air-cleaners-home-2026",
+          "jakarta-historical-city-series"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "ispu:structure:0",
+          "who-aqg-2021-extract:structure:2"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 0.9197207891481876,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-010",
+        "language": "Bahasa Indonesia",
+        "topic": "causes",
+        "human_relevant_chunk_ids": [
+          "jakarta-causes:structure:0",
+          "jakarta-causes:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-causes"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-seasonal-exposure",
+          "jakarta-court-air-quality",
+          "jakarta-policy-status",
+          "jakarta-monitoring",
+          "jakarta-sppu-official-status-2024"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-011",
+        "language": "English",
+        "topic": "causes",
+        "human_relevant_chunk_ids": [
+          "jakarta-causes:structure:0",
+          "jakarta-causes:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-causes"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-causes",
+          "policy-improvements-evidence",
+          "individual-emission-actions",
+          "jakarta-policy-implementation",
+          "jakarta-improvements"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-causes:structure:0",
+          "jakarta-causes:structure:1"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-012",
+        "language": "Bahasa Indonesia",
+        "topic": "causes",
+        "human_relevant_chunk_ids": [
+          "jakarta-causes:structure:0",
+          "jakarta-causes:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-causes"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-historical-city-series",
+          "permen-lhk-8-2023-vehicle-emissions",
+          "pp-22-2021-air-quality",
+          "pergub-66-2020-vehicle-testing",
+          "jakarta-court-air-quality"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-013",
+        "language": "English",
+        "topic": "causes",
+        "human_relevant_chunk_ids": [
+          "jakarta-causes:structure:0",
+          "jakarta-policy-implementation:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-causes",
+          "jakarta-policy-implementation"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-court-air-quality",
+          "jakarta-policy-implementation",
+          "jakarta-improvements",
+          "ma-jakarta-air-lawsuit-record",
+          "jakarta-monitoring"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-policy-implementation:structure:2"
+        ],
+        "covered_chunk_count_at_5": 1,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 0.5,
+        "first_relevant_rank_at_5": 2,
+        "reciprocal_rank_at_5": 0.5,
+        "ndcg_at_5": 0.6309297535714575,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-014",
+        "language": "Bahasa Indonesia",
+        "topic": "regulations_implementation",
+        "human_relevant_chunk_ids": [
+          "jakarta-emission-testing:structure:0",
+          "jakarta-emission-testing:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-emission-testing"
+        ],
+        "retrieved_document_ids_at_5": [
+          "pergub-66-2020-vehicle-testing",
+          "jakarta-policy-implementation",
+          "jakarta-emission-testing",
+          "pp-22-2021-air-quality",
+          "jakarta-regulations"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-emission-testing:structure:0",
+          "jakarta-emission-testing:structure:1"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 3,
+        "reciprocal_rank_at_5": 0.3333333333333333,
+        "ndcg_at_5": 0.5,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-015",
+        "language": "English",
+        "topic": "regulations_implementation",
+        "human_relevant_chunk_ids": [
+          "permen-lhk-8-2023-vehicle-emissions:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "permen-lhk-8-2023-vehicle-emissions"
+        ],
+        "retrieved_document_ids_at_5": [
+          "permen-lhk-8-2023-vehicle-emissions",
+          "permen-lhk-13-2021-cems",
+          "pergub-66-2020-vehicle-testing",
+          "ispu",
+          "jakarta-policy-implementation"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "permen-lhk-8-2023-vehicle-emissions:structure:2"
+        ],
+        "covered_chunk_count_at_5": 1,
+        "human_relevant_chunk_count": 1,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-016",
+        "language": "Bahasa Indonesia",
+        "topic": "regulations_implementation",
+        "human_relevant_chunk_ids": [
+          "permen-lhk-13-2021-cems:structure:1",
+          "jakarta-cems-monitoring:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-cems-monitoring",
+          "permen-lhk-13-2021-cems"
+        ],
+        "retrieved_document_ids_at_5": [
+          "permen-lhk-13-2021-cems",
+          "permen-lhk-8-2023-vehicle-emissions",
+          "jakarta-sppu-official-status-2024",
+          "jakarta-cems-monitoring",
+          "jakarta-policy-implementation"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "permen-lhk-13-2021-cems:structure:1",
+          "jakarta-cems-monitoring:structure:2"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 0.8772153153380493,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-017",
+        "language": "English",
+        "topic": "regulations_implementation",
+        "human_relevant_chunk_ids": [
+          "jakarta-court-air-quality:structure:1",
+          "ma-jakarta-air-lawsuit-record:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-court-air-quality",
+          "ma-jakarta-air-lawsuit-record"
+        ],
+        "retrieved_document_ids_at_5": [
+          "ma-jakarta-air-lawsuit-record",
+          "jakarta-court-air-quality",
+          "jakarta-policy-implementation",
+          "jakarta-policy-status",
+          "policy-improvements-evidence"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-court-air-quality:structure:1",
+          "ma-jakarta-air-lawsuit-record:structure:1"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-018",
+        "language": "Bahasa Indonesia",
+        "topic": "regulations_implementation",
+        "human_relevant_chunk_ids": [
+          "jakarta-regulations:structure:0",
+          "jakarta-policy-implementation:structure:2",
+          "jakarta-court-air-quality:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-court-air-quality",
+          "jakarta-policy-implementation",
+          "jakarta-regulations"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-sppu-official-status-2024",
+          "jakarta-monitoring",
+          "jakarta-improvements",
+          "jakarta-seasonal-exposure",
+          "pp-22-2021-air-quality"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 3,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-019",
+        "language": "English",
+        "topic": "protection_individual_action",
+        "human_relevant_chunk_ids": [
+          "bad-air-day-protection:structure:1",
+          "bad-air-day-protection:structure:3",
+          "exposure-protection:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "bad-air-day-protection",
+          "exposure-protection"
+        ],
+        "retrieved_document_ids_at_5": [
+          "clean-air-room",
+          "bad-air-day-protection",
+          "epa-air-cleaners-home-2026",
+          "who-personal-interventions-2024",
+          "individual-emission-actions"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "bad-air-day-protection:structure:1",
+          "bad-air-day-protection:structure:3"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 3,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 0.6666666666666666,
+        "first_relevant_rank_at_5": 2,
+        "reciprocal_rank_at_5": 0.5,
+        "ndcg_at_5": 0.6309297535714575,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-020",
+        "language": "Bahasa Indonesia",
+        "topic": "protection_individual_action",
+        "human_relevant_chunk_ids": [
+          "clean-air-room:structure:1",
+          "clean-air-room:structure:4"
+        ],
+        "human_relevant_parent_document_ids": [
+          "clean-air-room"
+        ],
+        "retrieved_document_ids_at_5": [
+          "pergub-66-2020-vehicle-testing",
+          "permen-lhk-13-2021-cems",
+          "jakarta-regulations",
+          "jakarta-policy-implementation",
+          "permen-lhk-8-2023-vehicle-emissions"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-021",
+        "language": "English",
+        "topic": "protection_individual_action",
+        "human_relevant_chunk_ids": [
+          "who-personal-interventions-2024:structure:3",
+          "exposure-protection:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "exposure-protection",
+          "who-personal-interventions-2024"
+        ],
+        "retrieved_document_ids_at_5": [
+          "bad-air-day-protection",
+          "who-personal-interventions-2024",
+          "exposure-protection",
+          "pergub-66-2020-vehicle-testing",
+          "clean-air-room"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "who-personal-interventions-2024:structure:3",
+          "exposure-protection:structure:1"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 2,
+        "reciprocal_rank_at_5": 0.5,
+        "ndcg_at_5": 0.6934264036172708,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-022",
+        "language": "Bahasa Indonesia",
+        "topic": "protection_individual_action",
+        "human_relevant_chunk_ids": [
+          "individual-emission-actions:structure:1",
+          "individual-emission-actions:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "individual-emission-actions"
+        ],
+        "retrieved_document_ids_at_5": [
+          "permen-lhk-8-2023-vehicle-emissions",
+          "jakarta-historical-city-series",
+          "pp-22-2021-air-quality",
+          "pergub-66-2020-vehicle-testing",
+          "permen-lhk-13-2021-cems"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-023",
+        "language": "English",
+        "topic": "protection_individual_action",
+        "human_relevant_chunk_ids": [
+          "exposure-protection:structure:0",
+          "clean-air-room:structure:3"
+        ],
+        "human_relevant_parent_document_ids": [
+          "clean-air-room",
+          "exposure-protection"
+        ],
+        "retrieved_document_ids_at_5": [
+          "exposure-protection",
+          "who-personal-interventions-2024",
+          "bad-air-day-protection",
+          "individual-emission-actions",
+          "epa-air-cleaners-home-2026"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "exposure-protection:structure:0"
+        ],
+        "covered_chunk_count_at_5": 1,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 0.5,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-024",
+        "language": "Bahasa Indonesia",
+        "topic": "multi_turn_followups",
+        "human_relevant_chunk_ids": [
+          "jakarta-regulations:structure:0",
+          "who-aqg-2021-extract:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-regulations",
+          "who-aqg-2021-extract"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-monitoring",
+          "jakarta-improvements",
+          "jakarta-seasonal-exposure",
+          "pergub-66-2020-vehicle-testing",
+          "jakarta-court-air-quality"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-025",
+        "language": "English",
+        "topic": "multi_turn_followups",
+        "human_relevant_chunk_ids": [
+          "jakarta-monitoring:structure:0",
+          "ispu:structure:0",
+          "health-disclaimer:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "health-disclaimer",
+          "ispu",
+          "jakarta-monitoring"
+        ],
+        "retrieved_document_ids_at_5": [
+          "ma-jakarta-air-lawsuit-record",
+          "jakarta-seasonal-exposure",
+          "jakarta-historical-city-series",
+          "jakarta-court-air-quality",
+          "clean-air-room"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 3,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-026",
+        "language": "Bahasa Indonesia",
+        "topic": "multi_turn_followups",
+        "human_relevant_chunk_ids": [
+          "jakarta-monitoring:structure:0",
+          "who-aqg-2021-extract:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-monitoring",
+          "who-aqg-2021-extract"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-seasonal-exposure",
+          "jakarta-court-air-quality",
+          "jakarta-monitoring",
+          "ma-jakarta-air-lawsuit-record",
+          "jakarta-historical-city-series"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-monitoring:structure:0"
+        ],
+        "covered_chunk_count_at_5": 1,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 0.5,
+        "first_relevant_rank_at_5": 3,
+        "reciprocal_rank_at_5": 0.3333333333333333,
+        "ndcg_at_5": 0.5,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-027",
+        "language": "English",
+        "topic": "multi_turn_followups",
+        "human_relevant_chunk_ids": [
+          "jakarta-causes:structure:2",
+          "jakarta-monitoring:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-causes",
+          "jakarta-monitoring"
+        ],
+        "retrieved_document_ids_at_5": [
+          "permen-lhk-8-2023-vehicle-emissions",
+          "jakarta-policy-implementation",
+          "clean-air-room",
+          "jakarta-emission-testing",
+          "epa-air-cleaners-home-2026"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-028",
+        "language": "Bahasa Indonesia",
+        "topic": "missing_data_safety_abstention",
+        "human_relevant_chunk_ids": [
+          "health-disclaimer:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "health-disclaimer"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-historical-city-series",
+          "health-disclaimer",
+          "jakarta-regulations",
+          "exposure-protection",
+          "policy-improvements-evidence"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "health-disclaimer:structure:0"
+        ],
+        "covered_chunk_count_at_5": 1,
+        "human_relevant_chunk_count": 1,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 2,
+        "reciprocal_rank_at_5": 0.5,
+        "ndcg_at_5": 0.6309297535714575,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-029",
+        "language": "English",
+        "topic": "missing_data_safety_abstention",
+        "human_relevant_chunk_ids": [
+          "jakarta-monitoring:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-monitoring"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-monitoring",
+          "jakarta-court-air-quality",
+          "jakarta-sppu-official-status-2024",
+          "jakarta-causes",
+          "jakarta-policy-implementation"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-monitoring:structure:0"
+        ],
+        "covered_chunk_count_at_5": 1,
+        "human_relevant_chunk_count": 1,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-030",
+        "language": "Bahasa Indonesia",
+        "topic": "missing_data_safety_abstention",
+        "human_relevant_chunk_ids": [
+          "ma-jakarta-air-lawsuit-record:structure:1",
+          "jakarta-policy-implementation:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-policy-implementation",
+          "ma-jakarta-air-lawsuit-record"
+        ],
+        "retrieved_document_ids_at_5": [
+          "pp-22-2021-air-quality",
+          "jakarta-court-air-quality",
+          "jakarta-policy-status",
+          "permen-lhk-8-2023-vehicle-emissions",
+          "jakarta-seasonal-exposure"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      }
+    ],
+    "hybrid": [
+      {
+        "question_id": "gold30-001",
+        "language": "English",
+        "topic": "current_measurements",
+        "human_relevant_chunk_ids": [
+          "jakarta-monitoring:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-monitoring"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-causes",
+          "jakarta-seasonal-exposure",
+          "jakarta-court-air-quality",
+          "jakarta-improvements",
+          "ma-jakarta-air-lawsuit-record"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 1,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-002",
+        "language": "Bahasa Indonesia",
+        "topic": "current_measurements",
+        "human_relevant_chunk_ids": [
+          "jakarta-monitoring:structure:0",
+          "ispu:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "ispu",
+          "jakarta-monitoring"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-regulations",
+          "jakarta-policy-implementation",
+          "jakarta-monitoring",
+          "jakarta-seasonal-exposure",
+          "jakarta-historical-city-series"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-monitoring:structure:0"
+        ],
+        "covered_chunk_count_at_5": 1,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 0.5,
+        "first_relevant_rank_at_5": 3,
+        "reciprocal_rank_at_5": 0.3333333333333333,
+        "ndcg_at_5": 0.5,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-003",
+        "language": "English",
+        "topic": "current_measurements",
+        "human_relevant_chunk_ids": [
+          "ispu:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "ispu"
+        ],
+        "retrieved_document_ids_at_5": [
+          "ispu",
+          "jakarta-historical-city-series",
+          "policy-improvements-evidence",
+          "jakarta-policy-implementation",
+          "pp-22-2021-air-quality"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "ispu:structure:0"
+        ],
+        "covered_chunk_count_at_5": 1,
+        "human_relevant_chunk_count": 1,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-004",
+        "language": "Bahasa Indonesia",
+        "topic": "current_measurements",
+        "human_relevant_chunk_ids": [
+          "jakarta-monitoring:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-monitoring"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-improvements",
+          "jakarta-historical-city-series",
+          "jakarta-seasonal-exposure",
+          "pp-22-2021-air-quality",
+          "pergub-66-2020-vehicle-testing"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 1,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-005",
+        "language": "English",
+        "topic": "historical_category_threshold",
+        "human_relevant_chunk_ids": [
+          "ispu:structure:0",
+          "ispu:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "ispu"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-historical-city-series",
+          "jakarta-seasonal-exposure",
+          "jakarta-causes",
+          "ispu",
+          "jakarta-policy-implementation"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "ispu:structure:0",
+          "ispu:structure:1"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 4,
+        "reciprocal_rank_at_5": 0.25,
+        "ndcg_at_5": 0.43067655807339306,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-006",
+        "language": "Bahasa Indonesia",
+        "topic": "historical_category_threshold",
+        "human_relevant_chunk_ids": [
+          "who-aqg-2021-extract:structure:1",
+          "who-aqg-2021-extract:structure:2",
+          "jakarta-regulations:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-regulations",
+          "who-aqg-2021-extract"
+        ],
+        "retrieved_document_ids_at_5": [
+          "ispu",
+          "exposure-protection",
+          "jakarta-regulations",
+          "jakarta-historical-city-series",
+          "jakarta-seasonal-exposure"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-regulations:structure:0"
+        ],
+        "covered_chunk_count_at_5": 1,
+        "human_relevant_chunk_count": 3,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 0.3333333333333333,
+        "first_relevant_rank_at_5": 3,
+        "reciprocal_rank_at_5": 0.3333333333333333,
+        "ndcg_at_5": 0.5,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-007",
+        "language": "English",
+        "topic": "historical_category_threshold",
+        "human_relevant_chunk_ids": [
+          "jakarta-historical-city-series:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-historical-city-series"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-causes",
+          "jakarta-monitoring",
+          "jakarta-historical-city-series",
+          "jakarta-seasonal-exposure",
+          "jakarta-sppu-official-status-2024"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-historical-city-series:structure:1"
+        ],
+        "covered_chunk_count_at_5": 1,
+        "human_relevant_chunk_count": 1,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 3,
+        "reciprocal_rank_at_5": 0.3333333333333333,
+        "ndcg_at_5": 0.5,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-008",
+        "language": "Bahasa Indonesia",
+        "topic": "historical_category_threshold",
+        "human_relevant_chunk_ids": [
+          "jakarta-historical-city-series:structure:1",
+          "jakarta-historical-city-series:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-historical-city-series"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-historical-city-series",
+          "jakarta-causes",
+          "who-guidance",
+          "who-aqg-2021-extract",
+          "jakarta-sppu-official-status-2024"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-historical-city-series:structure:1",
+          "jakarta-historical-city-series:structure:2"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-009",
+        "language": "English",
+        "topic": "historical_category_threshold",
+        "human_relevant_chunk_ids": [
+          "ispu:structure:0",
+          "who-aqg-2021-extract:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "ispu",
+          "who-aqg-2021-extract"
+        ],
+        "retrieved_document_ids_at_5": [
+          "who-aqg-2021-extract",
+          "jakarta-policy-implementation",
+          "ispu",
+          "epa-air-cleaners-home-2026",
+          "jakarta-regulations"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "ispu:structure:0",
+          "who-aqg-2021-extract:structure:2"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 0.9197207891481876,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-010",
+        "language": "Bahasa Indonesia",
+        "topic": "causes",
+        "human_relevant_chunk_ids": [
+          "jakarta-causes:structure:0",
+          "jakarta-causes:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-causes"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-seasonal-exposure",
+          "jakarta-causes",
+          "jakarta-court-air-quality",
+          "bad-air-day-protection",
+          "jakarta-policy-status"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-causes:structure:0",
+          "jakarta-causes:structure:2"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 2,
+        "reciprocal_rank_at_5": 0.5,
+        "ndcg_at_5": 0.6309297535714575,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-011",
+        "language": "English",
+        "topic": "causes",
+        "human_relevant_chunk_ids": [
+          "jakarta-causes:structure:0",
+          "jakarta-causes:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-causes"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-causes",
+          "policy-improvements-evidence",
+          "jakarta-policy-implementation",
+          "individual-emission-actions",
+          "jakarta-improvements"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-causes:structure:0",
+          "jakarta-causes:structure:1"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-012",
+        "language": "Bahasa Indonesia",
+        "topic": "causes",
+        "human_relevant_chunk_ids": [
+          "jakarta-causes:structure:0",
+          "jakarta-causes:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-causes"
+        ],
+        "retrieved_document_ids_at_5": [
+          "clean-air-room",
+          "jakarta-court-air-quality",
+          "jakarta-historical-city-series",
+          "permen-lhk-8-2023-vehicle-emissions",
+          "bad-air-day-protection"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-013",
+        "language": "English",
+        "topic": "causes",
+        "human_relevant_chunk_ids": [
+          "jakarta-causes:structure:0",
+          "jakarta-policy-implementation:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-causes",
+          "jakarta-policy-implementation"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-policy-implementation",
+          "jakarta-improvements",
+          "epa-air-cleaners-home-2026",
+          "ma-jakarta-air-lawsuit-record",
+          "jakarta-causes"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-causes:structure:0",
+          "jakarta-policy-implementation:structure:2"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 0.8503449055347546,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-014",
+        "language": "Bahasa Indonesia",
+        "topic": "regulations_implementation",
+        "human_relevant_chunk_ids": [
+          "jakarta-emission-testing:structure:0",
+          "jakarta-emission-testing:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-emission-testing"
+        ],
+        "retrieved_document_ids_at_5": [
+          "pergub-66-2020-vehicle-testing",
+          "jakarta-emission-testing",
+          "jakarta-policy-implementation",
+          "jakarta-regulations",
+          "pp-22-2021-air-quality"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-emission-testing:structure:0",
+          "jakarta-emission-testing:structure:1"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 2,
+        "reciprocal_rank_at_5": 0.5,
+        "ndcg_at_5": 0.6309297535714575,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-015",
+        "language": "English",
+        "topic": "regulations_implementation",
+        "human_relevant_chunk_ids": [
+          "permen-lhk-8-2023-vehicle-emissions:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "permen-lhk-8-2023-vehicle-emissions"
+        ],
+        "retrieved_document_ids_at_5": [
+          "permen-lhk-8-2023-vehicle-emissions",
+          "ispu",
+          "permen-lhk-13-2021-cems",
+          "jakarta-policy-implementation",
+          "jakarta-regulations"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "permen-lhk-8-2023-vehicle-emissions:structure:2"
+        ],
+        "covered_chunk_count_at_5": 1,
+        "human_relevant_chunk_count": 1,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-016",
+        "language": "Bahasa Indonesia",
+        "topic": "regulations_implementation",
+        "human_relevant_chunk_ids": [
+          "permen-lhk-13-2021-cems:structure:1",
+          "jakarta-cems-monitoring:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-cems-monitoring",
+          "permen-lhk-13-2021-cems"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-cems-monitoring",
+          "permen-lhk-13-2021-cems",
+          "jakarta-sppu-official-status-2024",
+          "jakarta-policy-implementation",
+          "policy-improvements-evidence"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "permen-lhk-13-2021-cems:structure:1",
+          "jakarta-cems-monitoring:structure:2"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-017",
+        "language": "English",
+        "topic": "regulations_implementation",
+        "human_relevant_chunk_ids": [
+          "jakarta-court-air-quality:structure:1",
+          "ma-jakarta-air-lawsuit-record:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-court-air-quality",
+          "ma-jakarta-air-lawsuit-record"
+        ],
+        "retrieved_document_ids_at_5": [
+          "ma-jakarta-air-lawsuit-record",
+          "jakarta-court-air-quality",
+          "jakarta-policy-implementation",
+          "jakarta-policy-status",
+          "pp-22-2021-air-quality"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-court-air-quality:structure:1",
+          "ma-jakarta-air-lawsuit-record:structure:1"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-018",
+        "language": "Bahasa Indonesia",
+        "topic": "regulations_implementation",
+        "human_relevant_chunk_ids": [
+          "jakarta-regulations:structure:0",
+          "jakarta-policy-implementation:structure:2",
+          "jakarta-court-air-quality:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-court-air-quality",
+          "jakarta-policy-implementation",
+          "jakarta-regulations"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-improvements",
+          "jakarta-seasonal-exposure",
+          "jakarta-sppu-official-status-2024",
+          "jakarta-monitoring",
+          "bad-air-day-protection"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 3,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-019",
+        "language": "English",
+        "topic": "protection_individual_action",
+        "human_relevant_chunk_ids": [
+          "bad-air-day-protection:structure:1",
+          "bad-air-day-protection:structure:3",
+          "exposure-protection:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "bad-air-day-protection",
+          "exposure-protection"
+        ],
+        "retrieved_document_ids_at_5": [
+          "bad-air-day-protection",
+          "clean-air-room",
+          "who-personal-interventions-2024",
+          "epa-air-cleaners-home-2026",
+          "individual-emission-actions"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "bad-air-day-protection:structure:1",
+          "bad-air-day-protection:structure:3"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 3,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 0.6666666666666666,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-020",
+        "language": "Bahasa Indonesia",
+        "topic": "protection_individual_action",
+        "human_relevant_chunk_ids": [
+          "clean-air-room:structure:1",
+          "clean-air-room:structure:4"
+        ],
+        "human_relevant_parent_document_ids": [
+          "clean-air-room"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-improvements",
+          "ispu",
+          "pergub-66-2020-vehicle-testing",
+          "permen-lhk-13-2021-cems",
+          "jakarta-historical-city-series"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-021",
+        "language": "English",
+        "topic": "protection_individual_action",
+        "human_relevant_chunk_ids": [
+          "who-personal-interventions-2024:structure:3",
+          "exposure-protection:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "exposure-protection",
+          "who-personal-interventions-2024"
+        ],
+        "retrieved_document_ids_at_5": [
+          "bad-air-day-protection",
+          "who-personal-interventions-2024",
+          "exposure-protection",
+          "clean-air-room",
+          "policy-improvements-evidence"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "who-personal-interventions-2024:structure:3",
+          "exposure-protection:structure:1"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 2,
+        "reciprocal_rank_at_5": 0.5,
+        "ndcg_at_5": 0.6934264036172708,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-022",
+        "language": "Bahasa Indonesia",
+        "topic": "protection_individual_action",
+        "human_relevant_chunk_ids": [
+          "individual-emission-actions:structure:1",
+          "individual-emission-actions:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "individual-emission-actions"
+        ],
+        "retrieved_document_ids_at_5": [
+          "pergub-66-2020-vehicle-testing",
+          "jakarta-causes",
+          "permen-lhk-8-2023-vehicle-emissions",
+          "jakarta-historical-city-series",
+          "pp-22-2021-air-quality"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-023",
+        "language": "English",
+        "topic": "protection_individual_action",
+        "human_relevant_chunk_ids": [
+          "exposure-protection:structure:0",
+          "clean-air-room:structure:3"
+        ],
+        "human_relevant_parent_document_ids": [
+          "clean-air-room",
+          "exposure-protection"
+        ],
+        "retrieved_document_ids_at_5": [
+          "exposure-protection",
+          "who-personal-interventions-2024",
+          "bad-air-day-protection",
+          "individual-emission-actions",
+          "clean-air-room"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "exposure-protection:structure:0",
+          "clean-air-room:structure:3"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 0.8503449055347546,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-024",
+        "language": "Bahasa Indonesia",
+        "topic": "multi_turn_followups",
+        "human_relevant_chunk_ids": [
+          "jakarta-regulations:structure:0",
+          "who-aqg-2021-extract:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-regulations",
+          "who-aqg-2021-extract"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-improvements",
+          "jakarta-seasonal-exposure",
+          "pergub-66-2020-vehicle-testing",
+          "jakarta-emission-testing",
+          "pp-22-2021-air-quality"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-025",
+        "language": "English",
+        "topic": "multi_turn_followups",
+        "human_relevant_chunk_ids": [
+          "jakarta-monitoring:structure:0",
+          "ispu:structure:0",
+          "health-disclaimer:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "health-disclaimer",
+          "ispu",
+          "jakarta-monitoring"
+        ],
+        "retrieved_document_ids_at_5": [
+          "clean-air-room",
+          "jakarta-historical-city-series",
+          "jakarta-policy-implementation",
+          "ma-jakarta-air-lawsuit-record",
+          "jakarta-court-air-quality"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 3,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-026",
+        "language": "Bahasa Indonesia",
+        "topic": "multi_turn_followups",
+        "human_relevant_chunk_ids": [
+          "jakarta-monitoring:structure:0",
+          "who-aqg-2021-extract:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-monitoring",
+          "who-aqg-2021-extract"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-court-air-quality",
+          "jakarta-seasonal-exposure",
+          "jakarta-historical-city-series",
+          "jakarta-causes",
+          "pergub-66-2020-vehicle-testing"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-027",
+        "language": "English",
+        "topic": "multi_turn_followups",
+        "human_relevant_chunk_ids": [
+          "jakarta-causes:structure:2",
+          "jakarta-monitoring:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-causes",
+          "jakarta-monitoring"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-policy-implementation",
+          "jakarta-emission-testing",
+          "jakarta-causes",
+          "individual-emission-actions",
+          "jakarta-monitoring"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-causes:structure:2",
+          "jakarta-monitoring:structure:0"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 3,
+        "reciprocal_rank_at_5": 0.3333333333333333,
+        "ndcg_at_5": 0.5437713091520254,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-028",
+        "language": "Bahasa Indonesia",
+        "topic": "missing_data_safety_abstention",
+        "human_relevant_chunk_ids": [
+          "health-disclaimer:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "health-disclaimer"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-seasonal-exposure",
+          "health-disclaimer",
+          "exposure-protection",
+          "jakarta-improvements",
+          "bad-air-day-protection"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "health-disclaimer:structure:0"
+        ],
+        "covered_chunk_count_at_5": 1,
+        "human_relevant_chunk_count": 1,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 2,
+        "reciprocal_rank_at_5": 0.5,
+        "ndcg_at_5": 0.6309297535714575,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-029",
+        "language": "English",
+        "topic": "missing_data_safety_abstention",
+        "human_relevant_chunk_ids": [
+          "jakarta-monitoring:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-monitoring"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-causes",
+          "jakarta-monitoring",
+          "jakarta-historical-city-series",
+          "jakarta-policy-implementation",
+          "policy-improvements-evidence"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-monitoring:structure:0"
+        ],
+        "covered_chunk_count_at_5": 1,
+        "human_relevant_chunk_count": 1,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 2,
+        "reciprocal_rank_at_5": 0.5,
+        "ndcg_at_5": 0.6309297535714575,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-030",
+        "language": "Bahasa Indonesia",
+        "topic": "missing_data_safety_abstention",
+        "human_relevant_chunk_ids": [
+          "ma-jakarta-air-lawsuit-record:structure:1",
+          "jakarta-policy-implementation:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-policy-implementation",
+          "ma-jakarta-air-lawsuit-record"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-court-air-quality",
+          "pp-22-2021-air-quality",
+          "bad-air-day-protection",
+          "jakarta-policy-status",
+          "clean-air-room"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      }
+    ],
+    "hybrid_rerank": [
+      {
+        "question_id": "gold30-001",
+        "language": "English",
+        "topic": "current_measurements",
+        "human_relevant_chunk_ids": [
+          "jakarta-monitoring:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-monitoring"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-causes",
+          "jakarta-seasonal-exposure",
+          "jakarta-court-air-quality",
+          "bad-air-day-protection",
+          "jakarta-improvements"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 1,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-002",
+        "language": "Bahasa Indonesia",
+        "topic": "current_measurements",
+        "human_relevant_chunk_ids": [
+          "jakarta-monitoring:structure:0",
+          "ispu:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "ispu",
+          "jakarta-monitoring"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-regulations",
+          "jakarta-policy-implementation",
+          "jakarta-historical-city-series",
+          "policy-improvements-evidence",
+          "pp-22-2021-air-quality"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-003",
+        "language": "English",
+        "topic": "current_measurements",
+        "human_relevant_chunk_ids": [
+          "ispu:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "ispu"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-historical-city-series",
+          "ispu",
+          "policy-improvements-evidence",
+          "pp-22-2021-air-quality",
+          "jakarta-policy-implementation"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "ispu:structure:0"
+        ],
+        "covered_chunk_count_at_5": 1,
+        "human_relevant_chunk_count": 1,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 2,
+        "reciprocal_rank_at_5": 0.5,
+        "ndcg_at_5": 0.6309297535714575,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-004",
+        "language": "Bahasa Indonesia",
+        "topic": "current_measurements",
+        "human_relevant_chunk_ids": [
+          "jakarta-monitoring:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-monitoring"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-improvements",
+          "jakarta-seasonal-exposure",
+          "jakarta-historical-city-series",
+          "pp-22-2021-air-quality",
+          "individual-emission-actions"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 1,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-005",
+        "language": "English",
+        "topic": "historical_category_threshold",
+        "human_relevant_chunk_ids": [
+          "ispu:structure:0",
+          "ispu:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "ispu"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-historical-city-series",
+          "policy-improvements-evidence",
+          "who-aqg-2021-extract",
+          "jakarta-seasonal-exposure",
+          "jakarta-causes"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-006",
+        "language": "Bahasa Indonesia",
+        "topic": "historical_category_threshold",
+        "human_relevant_chunk_ids": [
+          "who-aqg-2021-extract:structure:1",
+          "who-aqg-2021-extract:structure:2",
+          "jakarta-regulations:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-regulations",
+          "who-aqg-2021-extract"
+        ],
+        "retrieved_document_ids_at_5": [
+          "who-aqg-2021-extract",
+          "ispu",
+          "exposure-protection",
+          "jakarta-regulations",
+          "jakarta-historical-city-series"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "who-aqg-2021-extract:structure:1",
+          "who-aqg-2021-extract:structure:2",
+          "jakarta-regulations:structure:0"
+        ],
+        "covered_chunk_count_at_5": 3,
+        "human_relevant_chunk_count": 3,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 0.9238850086262381,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-007",
+        "language": "English",
+        "topic": "historical_category_threshold",
+        "human_relevant_chunk_ids": [
+          "jakarta-historical-city-series:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-historical-city-series"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-historical-city-series",
+          "jakarta-causes",
+          "individual-emission-actions",
+          "policy-improvements-evidence",
+          "jakarta-monitoring"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-historical-city-series:structure:1"
+        ],
+        "covered_chunk_count_at_5": 1,
+        "human_relevant_chunk_count": 1,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-008",
+        "language": "Bahasa Indonesia",
+        "topic": "historical_category_threshold",
+        "human_relevant_chunk_ids": [
+          "jakarta-historical-city-series:structure:1",
+          "jakarta-historical-city-series:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-historical-city-series"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-historical-city-series",
+          "who-aqg-2021-extract",
+          "jakarta-causes",
+          "who-guidance",
+          "policy-improvements-evidence"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-historical-city-series:structure:1",
+          "jakarta-historical-city-series:structure:2"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-009",
+        "language": "English",
+        "topic": "historical_category_threshold",
+        "human_relevant_chunk_ids": [
+          "ispu:structure:0",
+          "who-aqg-2021-extract:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "ispu",
+          "who-aqg-2021-extract"
+        ],
+        "retrieved_document_ids_at_5": [
+          "who-aqg-2021-extract",
+          "jakarta-policy-implementation",
+          "pp-22-2021-air-quality",
+          "jakarta-regulations",
+          "ispu"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "ispu:structure:0",
+          "who-aqg-2021-extract:structure:2"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 0.8503449055347546,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-010",
+        "language": "Bahasa Indonesia",
+        "topic": "causes",
+        "human_relevant_chunk_ids": [
+          "jakarta-causes:structure:0",
+          "jakarta-causes:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-causes"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-seasonal-exposure",
+          "jakarta-causes",
+          "bad-air-day-protection",
+          "jakarta-historical-city-series",
+          "policy-improvements-evidence"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-causes:structure:0",
+          "jakarta-causes:structure:2"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 2,
+        "reciprocal_rank_at_5": 0.5,
+        "ndcg_at_5": 0.6309297535714575,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-011",
+        "language": "English",
+        "topic": "causes",
+        "human_relevant_chunk_ids": [
+          "jakarta-causes:structure:0",
+          "jakarta-causes:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-causes"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-causes",
+          "policy-improvements-evidence",
+          "jakarta-sppu-official-status-2024",
+          "jakarta-policy-implementation",
+          "jakarta-historical-city-series"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-causes:structure:0",
+          "jakarta-causes:structure:1"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-012",
+        "language": "Bahasa Indonesia",
+        "topic": "causes",
+        "human_relevant_chunk_ids": [
+          "jakarta-causes:structure:0",
+          "jakarta-causes:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-causes"
+        ],
+        "retrieved_document_ids_at_5": [
+          "clean-air-room",
+          "jakarta-court-air-quality",
+          "jakarta-historical-city-series",
+          "permen-lhk-8-2023-vehicle-emissions",
+          "bad-air-day-protection"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-013",
+        "language": "English",
+        "topic": "causes",
+        "human_relevant_chunk_ids": [
+          "jakarta-causes:structure:0",
+          "jakarta-policy-implementation:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-causes",
+          "jakarta-policy-implementation"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-policy-implementation",
+          "jakarta-improvements",
+          "bad-air-day-protection",
+          "individual-emission-actions",
+          "epa-air-cleaners-home-2026"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-policy-implementation:structure:2"
+        ],
+        "covered_chunk_count_at_5": 1,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 0.5,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-014",
+        "language": "Bahasa Indonesia",
+        "topic": "regulations_implementation",
+        "human_relevant_chunk_ids": [
+          "jakarta-emission-testing:structure:0",
+          "jakarta-emission-testing:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-emission-testing"
+        ],
+        "retrieved_document_ids_at_5": [
+          "pergub-66-2020-vehicle-testing",
+          "jakarta-emission-testing",
+          "jakarta-policy-implementation",
+          "jakarta-regulations",
+          "pp-22-2021-air-quality"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-emission-testing:structure:0",
+          "jakarta-emission-testing:structure:1"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 2,
+        "reciprocal_rank_at_5": 0.5,
+        "ndcg_at_5": 0.6309297535714575,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-015",
+        "language": "English",
+        "topic": "regulations_implementation",
+        "human_relevant_chunk_ids": [
+          "permen-lhk-8-2023-vehicle-emissions:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "permen-lhk-8-2023-vehicle-emissions"
+        ],
+        "retrieved_document_ids_at_5": [
+          "permen-lhk-8-2023-vehicle-emissions",
+          "jakarta-regulations",
+          "ispu",
+          "jakarta-policy-implementation",
+          "permen-lhk-13-2021-cems"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "permen-lhk-8-2023-vehicle-emissions:structure:2"
+        ],
+        "covered_chunk_count_at_5": 1,
+        "human_relevant_chunk_count": 1,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-016",
+        "language": "Bahasa Indonesia",
+        "topic": "regulations_implementation",
+        "human_relevant_chunk_ids": [
+          "permen-lhk-13-2021-cems:structure:1",
+          "jakarta-cems-monitoring:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-cems-monitoring",
+          "permen-lhk-13-2021-cems"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-cems-monitoring",
+          "permen-lhk-13-2021-cems",
+          "jakarta-sppu-official-status-2024",
+          "jakarta-policy-implementation",
+          "policy-improvements-evidence"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "permen-lhk-13-2021-cems:structure:1",
+          "jakarta-cems-monitoring:structure:2"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-017",
+        "language": "English",
+        "topic": "regulations_implementation",
+        "human_relevant_chunk_ids": [
+          "jakarta-court-air-quality:structure:1",
+          "ma-jakarta-air-lawsuit-record:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-court-air-quality",
+          "ma-jakarta-air-lawsuit-record"
+        ],
+        "retrieved_document_ids_at_5": [
+          "ma-jakarta-air-lawsuit-record",
+          "jakarta-court-air-quality",
+          "jakarta-policy-implementation",
+          "pp-22-2021-air-quality",
+          "jakarta-policy-status"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-court-air-quality:structure:1",
+          "ma-jakarta-air-lawsuit-record:structure:1"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-018",
+        "language": "Bahasa Indonesia",
+        "topic": "regulations_implementation",
+        "human_relevant_chunk_ids": [
+          "jakarta-regulations:structure:0",
+          "jakarta-policy-implementation:structure:2",
+          "jakarta-court-air-quality:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-court-air-quality",
+          "jakarta-policy-implementation",
+          "jakarta-regulations"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-improvements",
+          "jakarta-seasonal-exposure",
+          "jakarta-sppu-official-status-2024",
+          "jakarta-monitoring",
+          "bad-air-day-protection"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 3,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-019",
+        "language": "English",
+        "topic": "protection_individual_action",
+        "human_relevant_chunk_ids": [
+          "bad-air-day-protection:structure:1",
+          "bad-air-day-protection:structure:3",
+          "exposure-protection:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "bad-air-day-protection",
+          "exposure-protection"
+        ],
+        "retrieved_document_ids_at_5": [
+          "bad-air-day-protection",
+          "who-personal-interventions-2024",
+          "clean-air-room",
+          "epa-air-cleaners-home-2026",
+          "individual-emission-actions"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "bad-air-day-protection:structure:1",
+          "bad-air-day-protection:structure:3"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 3,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 0.6666666666666666,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-020",
+        "language": "Bahasa Indonesia",
+        "topic": "protection_individual_action",
+        "human_relevant_chunk_ids": [
+          "clean-air-room:structure:1",
+          "clean-air-room:structure:4"
+        ],
+        "human_relevant_parent_document_ids": [
+          "clean-air-room"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-improvements",
+          "jakarta-historical-city-series",
+          "jakarta-seasonal-exposure",
+          "ispu",
+          "pergub-66-2020-vehicle-testing"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-021",
+        "language": "English",
+        "topic": "protection_individual_action",
+        "human_relevant_chunk_ids": [
+          "who-personal-interventions-2024:structure:3",
+          "exposure-protection:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "exposure-protection",
+          "who-personal-interventions-2024"
+        ],
+        "retrieved_document_ids_at_5": [
+          "bad-air-day-protection",
+          "who-personal-interventions-2024",
+          "clean-air-room",
+          "exposure-protection",
+          "pp-22-2021-air-quality"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "who-personal-interventions-2024:structure:3",
+          "exposure-protection:structure:1"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 2,
+        "reciprocal_rank_at_5": 0.5,
+        "ndcg_at_5": 0.6509209298071326,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-022",
+        "language": "Bahasa Indonesia",
+        "topic": "protection_individual_action",
+        "human_relevant_chunk_ids": [
+          "individual-emission-actions:structure:1",
+          "individual-emission-actions:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "individual-emission-actions"
+        ],
+        "retrieved_document_ids_at_5": [
+          "pergub-66-2020-vehicle-testing",
+          "jakarta-causes",
+          "permen-lhk-8-2023-vehicle-emissions",
+          "jakarta-historical-city-series",
+          "pp-22-2021-air-quality"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-023",
+        "language": "English",
+        "topic": "protection_individual_action",
+        "human_relevant_chunk_ids": [
+          "exposure-protection:structure:0",
+          "clean-air-room:structure:3"
+        ],
+        "human_relevant_parent_document_ids": [
+          "clean-air-room",
+          "exposure-protection"
+        ],
+        "retrieved_document_ids_at_5": [
+          "exposure-protection",
+          "who-personal-interventions-2024",
+          "clean-air-room",
+          "bad-air-day-protection",
+          "individual-emission-actions"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "exposure-protection:structure:0",
+          "clean-air-room:structure:3"
+        ],
+        "covered_chunk_count_at_5": 2,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 0.9197207891481876,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-024",
+        "language": "Bahasa Indonesia",
+        "topic": "multi_turn_followups",
+        "human_relevant_chunk_ids": [
+          "jakarta-regulations:structure:0",
+          "who-aqg-2021-extract:structure:1"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-regulations",
+          "who-aqg-2021-extract"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-improvements",
+          "jakarta-seasonal-exposure",
+          "pergub-66-2020-vehicle-testing",
+          "jakarta-emission-testing",
+          "pp-22-2021-air-quality"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-025",
+        "language": "English",
+        "topic": "multi_turn_followups",
+        "human_relevant_chunk_ids": [
+          "jakarta-monitoring:structure:0",
+          "ispu:structure:0",
+          "health-disclaimer:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "health-disclaimer",
+          "ispu",
+          "jakarta-monitoring"
+        ],
+        "retrieved_document_ids_at_5": [
+          "clean-air-room",
+          "jakarta-policy-implementation",
+          "jakarta-historical-city-series",
+          "ma-jakarta-air-lawsuit-record",
+          "jakarta-court-air-quality"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 3,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-026",
+        "language": "Bahasa Indonesia",
+        "topic": "multi_turn_followups",
+        "human_relevant_chunk_ids": [
+          "jakarta-monitoring:structure:0",
+          "who-aqg-2021-extract:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-monitoring",
+          "who-aqg-2021-extract"
+        ],
+        "retrieved_document_ids_at_5": [
+          "who-aqg-2021-extract",
+          "jakarta-court-air-quality",
+          "jakarta-seasonal-exposure",
+          "jakarta-historical-city-series",
+          "jakarta-causes"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "who-aqg-2021-extract:structure:2"
+        ],
+        "covered_chunk_count_at_5": 1,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 0.5,
+        "first_relevant_rank_at_5": 1,
+        "reciprocal_rank_at_5": 1.0,
+        "ndcg_at_5": 1.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-027",
+        "language": "English",
+        "topic": "multi_turn_followups",
+        "human_relevant_chunk_ids": [
+          "jakarta-causes:structure:2",
+          "jakarta-monitoring:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-causes",
+          "jakarta-monitoring"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-policy-implementation",
+          "policy-improvements-evidence",
+          "jakarta-causes",
+          "individual-emission-actions",
+          "jakarta-emission-testing"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-causes:structure:2"
+        ],
+        "covered_chunk_count_at_5": 1,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 0.5,
+        "first_relevant_rank_at_5": 3,
+        "reciprocal_rank_at_5": 0.3333333333333333,
+        "ndcg_at_5": 0.5,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      },
+      {
+        "question_id": "gold30-028",
+        "language": "Bahasa Indonesia",
+        "topic": "missing_data_safety_abstention",
+        "human_relevant_chunk_ids": [
+          "health-disclaimer:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "health-disclaimer"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-seasonal-exposure",
+          "jakarta-improvements",
+          "health-disclaimer",
+          "exposure-protection",
+          "bad-air-day-protection"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "health-disclaimer:structure:0"
+        ],
+        "covered_chunk_count_at_5": 1,
+        "human_relevant_chunk_count": 1,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 3,
+        "reciprocal_rank_at_5": 0.3333333333333333,
+        "ndcg_at_5": 0.5,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-029",
+        "language": "English",
+        "topic": "missing_data_safety_abstention",
+        "human_relevant_chunk_ids": [
+          "jakarta-monitoring:structure:0"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-monitoring"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-causes",
+          "jakarta-historical-city-series",
+          "policy-improvements-evidence",
+          "bad-air-day-protection",
+          "jakarta-monitoring"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [
+          "jakarta-monitoring:structure:0"
+        ],
+        "covered_chunk_count_at_5": 1,
+        "human_relevant_chunk_count": 1,
+        "question_hit_at_5": true,
+        "chunk_recall_at_5": 1.0,
+        "first_relevant_rank_at_5": 5,
+        "reciprocal_rank_at_5": 0.2,
+        "ndcg_at_5": 0.38685280723454163,
+        "multi_source": false,
+        "multi_source_all_parents_at_5": true
+      },
+      {
+        "question_id": "gold30-030",
+        "language": "Bahasa Indonesia",
+        "topic": "missing_data_safety_abstention",
+        "human_relevant_chunk_ids": [
+          "ma-jakarta-air-lawsuit-record:structure:1",
+          "jakarta-policy-implementation:structure:2"
+        ],
+        "human_relevant_parent_document_ids": [
+          "jakarta-policy-implementation",
+          "ma-jakarta-air-lawsuit-record"
+        ],
+        "retrieved_document_ids_at_5": [
+          "jakarta-court-air-quality",
+          "pp-22-2021-air-quality",
+          "bad-air-day-protection",
+          "jakarta-policy-status",
+          "clean-air-room"
+        ],
+        "covered_human_relevant_chunk_ids_at_5": [],
+        "covered_chunk_count_at_5": 0,
+        "human_relevant_chunk_count": 2,
+        "question_hit_at_5": false,
+        "chunk_recall_at_5": 0.0,
+        "first_relevant_rank_at_5": null,
+        "reciprocal_rank_at_5": 0.0,
+        "ndcg_at_5": 0.0,
+        "multi_source": true,
+        "multi_source_all_parents_at_5": false
+      }
+    ]
+  }
 }

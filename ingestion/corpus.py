@@ -70,6 +70,14 @@ def build_corpus(data_dir: str | Path = "data") -> dict[str, Any]:
     duplicate_manifest_checksums = {
         checksum: ids for checksum, ids in checksums.items() if len(ids) > 1
     }
+    # A catalog record may be intentionally retained without a local mirror;
+    # that is different from a broken fetch. Local safety contracts are also
+    # first-class corpus records, but are not claims that an external source
+    # was mirrored verbatim.
+    intentionally_unmirrored = sorted(
+        source_id for source_id in manifest_ids - local_ids
+        if manifest_by_id[source_id].get("materialization_status") == "unmirrored_external"
+    )
     rows = []
     for doc in documents:
         source = manifest_by_id.get(doc.source_id or doc.document_id, {})
@@ -97,8 +105,17 @@ def build_corpus(data_dir: str | Path = "data") -> dict[str, Any]:
         "local_documents": len(documents),
         "local_words": sum(len(doc.text.split()) for doc in documents),
         "chunks": len(chunks),
-        "missing_local_documents_for_manifest": sorted(manifest_ids - local_ids),
+        "missing_local_documents_for_manifest": sorted(
+            (manifest_ids - local_ids) - set(intentionally_unmirrored)
+        ),
         "local_documents_not_in_manifest": sorted(local_ids - manifest_ids),
+        "provenance_exceptions": {
+            "unmirrored_manifest_sources": intentionally_unmirrored,
+            "local_contracts": sorted(
+                source_id for source_id in local_ids
+                if manifest_by_id.get(source_id, {}).get("materialization_status") == "local_contract"
+            ),
+        },
         "duplicate_manifest_checksums": duplicate_manifest_checksums,
         "documents_without_url": sorted(doc.document_id for doc in documents if not doc.source_url),
         "chunk_rejections": [],

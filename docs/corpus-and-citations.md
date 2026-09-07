@@ -17,13 +17,15 @@ stale report at that point said 10 documents/10 chunks; the new report records
 the actual identity rather than inheriting that stale count.
 
 The current freeze has 29 local documents, 6,534 words and 113 structure-aware
-chunks. Four source records are intentionally represented by an alias or
-runtime contract (`ispu`, `who-guidance`, and `jakarta-monitoring` map to their
-authoritative manifest records; `health-disclaimer` is a safety contract),
-while `satu-data-ispu-2023` has no local full-text document. The report retains
-these mismatches for review. It also reports two duplicate manifest checksums
-that existed before expansion; they are not treated as evidence that the
-documents are identical.
+chunks. Three local document IDs are intentional aliases (`ispu`,
+`who-guidance`, and `jakarta-monitoring`) for authoritative source records;
+`health-disclaimer` is an explicit local safety contract derived from linked
+WHO guidance, not a verbatim external mirror. `satu-data-ispu-2023` remains a
+catalog-only record: it is marked `unmirrored_external` and is not used to
+claim that the application has downloaded or indexed that dataset. The corpus
+report separates this intentional exception from a broken manifest/local
+mismatch. Manifest checksums for local snapshots have distinct values and are
+never interpreted as proof that two external publications are identical.
 
 Nine authoritative records were added across BPK national/provincial law,
 WHO health guidance, US EPA indoor-air engineering guidance, an official

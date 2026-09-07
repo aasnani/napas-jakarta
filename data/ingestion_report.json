@@ -1,27 +1,24 @@
 {
-  "fetched_at": "2026-09-07T12:37:23.052607+00:00",
+  "fetched_at": "2026-09-07T17:43:19.599503+00:00",
   "source": "committed-demo-snapshot",
+  "source_status": "committed-demo-snapshot",
+  "source_error": null,
   "documents": 29,
   "chunks": 113,
   "measurements": 5,
-  "manifest_sources": 29,
+  "manifest_sources": 30,
   "corpus_words": 6534,
   "corpus_fingerprint": "972c34481355f45f5b548fe5eca44e18a25f27a2244c471b287ee234691ba15d",
   "corpus_diagnostics": {
-    "missing_local_documents_for_manifest": [
-      "satu-data-ispu-2023"
-    ],
-    "local_documents_not_in_manifest": [
-      "health-disclaimer"
-    ],
-    "duplicate_manifest_checksums": {
-      "sha256:8d17e65ca12c025ab0fe53d4a60a73104e43271c5ab2b3d7b9d6f691b997b90f": [
-        "udara-jakarta",
+    "missing_local_documents_for_manifest": [],
+    "local_documents_not_in_manifest": [],
+    "duplicate_manifest_checksums": {},
+    "provenance_exceptions": {
+      "unmirrored_manifest_sources": [
         "satu-data-ispu-2023"
       ],
-      "sha256:31b976ee0947cebd596bd0d91d7ddb82f65142466797690d3d9ecca4df4f5909": [
-        "who-aqg-2021",
-        "vertical-exposure"
+      "local_contracts": [
+        "health-disclaimer"
       ]
     },
     "chunk_rejections": []

@@ -12,7 +12,8 @@
   evidence_strength: primary
   publisher: Dinas Lingkungan Hidup Provinsi DKI Jakarta
   retrieved_at: 2026-09-07
-  checksum: sha256:8d17e65ca12c025ab0fe53d4a60a73104e43271c5ab2b3d7b9d6f691b997b90f
+  checksum: sha256:996242b70ec70b96313b0eb21723089a5011e5d2e18875cea639dfa81c4ba4d8
+  checksum_scope: local_snapshot
 - id: satu-data-ispu-2023
   title: Satu Data Jakarta ISPU 2023
   url: https://satudata.jakarta.go.id/open-data/detail/data-indeks-standar-pencemar-udara-ispu-di-provinsi-dki-jakarta-2023
@@ -28,7 +29,10 @@
   evidence_strength: primary
   publisher: Pemerintah Provinsi DKI Jakarta
   retrieved_at: 2026-09-07
-  checksum: sha256:8d17e65ca12c025ab0fe53d4a60a73104e43271c5ab2b3d7b9d6f691b997b90f
+  checksum: not_mirrored
+  checksum_scope: none
+  materialization_status: unmirrored_external
+  access_note: Catalog record retained for provenance; no local document or downloaded dataset is claimed.
 - id: permen-lhk-14-2020
   title: Permen LHK No. 14 Tahun 2020
   url: https://peraturan.bpk.go.id/Details/163466/permen-lhk-no-14-tahun-2020
@@ -61,7 +65,8 @@
   evidence_strength: primary
   publisher: World Health Organization
   retrieved_at: 2026-09-07
-  checksum: sha256:31b976ee0947cebd596bd0d91d7ddb82f65142466797690d3d9ecca4df4f5909
+  checksum: sha256:bfa89ebf33b4cd1f984c70a75d168616d5808d2c2a4a42744f65bf14a1e803d1
+  checksum_scope: local_snapshot
 - id: jakarta-causes
   title: Jakarta emissions inventory and source apportionment
   url: https://rendahemisi.jakarta.go.id/learn
@@ -139,6 +144,24 @@
   publisher: World Health Organization
   retrieved_at: 2026-09-07
   checksum: sha256:7fca000ba9977c843f1ab1dfe56da2dfe9319de411581b23eea84c229f0f7d74
+- id: health-disclaimer
+  title: Local health communication safety contract
+  url: https://www.who.int/publications/i/item/9789240000278
+  role: non-diagnostic boundary and escalation guidance for health-related questions
+  author: World Health Organization; Napas Jakarta application contract
+  jurisdiction: international; application safety boundary
+  document_type: safety_contract
+  language: English
+  status_as_of: 2026-09-07
+  legal_status: recommendation_not_law
+  geographic_scope: global guidance applied as a conservative product boundary
+  evidence_strength: primary_guidance_plus_local_contract
+  publisher: World Health Organization; Napas Jakarta
+  retrieved_at: 2026-09-07
+  checksum: sha256:6c533060394c74f1b869c3d5b12c4a880357275d9a7a017974db9d9c8f345242
+  checksum_scope: local_snapshot
+  materialization_status: local_contract
+  access_note: Local safety contract derived from the linked WHO guidance; it is not a verbatim mirror of the external publication.
 - id: vertical-exposure
   title: Vertical particulate exposure evidence
   url: https://www.mdpi.com/1999-4907/15/8/1319
@@ -153,7 +176,8 @@
   geographic_scope: study city only
   evidence_strength: primary_research
   retrieved_at: 2026-09-07
-  checksum: sha256:31b976ee0947cebd596bd0d91d7ddb82f65142466797690d3d9ecca4df4f5909
+  checksum: sha256:24bb9df7a0c537ee39e9bae7f2429c0b1b5aecda21b9d48ef40c8aeaf62af624
+  checksum_scope: local_snapshot
 - id: jakarta-historical-city-series
   title: Air Quality Dataset for Jakarta (2022-08-01 to 2026-02-18)
   url: https://zenodo.org/records/18673885

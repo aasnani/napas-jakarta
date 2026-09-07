@@ -131,6 +131,7 @@ def run_ingestion(data_dir: str | Path = "data") -> dict[str, int]:
             "missing_local_documents_for_manifest": corpus_report["missing_local_documents_for_manifest"],
             "local_documents_not_in_manifest": corpus_report["local_documents_not_in_manifest"],
             "duplicate_manifest_checksums": corpus_report["duplicate_manifest_checksums"],
+            "provenance_exceptions": corpus_report["provenance_exceptions"],
             "chunk_rejections": corpus_report["chunk_rejections"],
         },
         "document_sha256": hashlib.sha256("".join(doc.text for doc in documents).encode()).hexdigest(),

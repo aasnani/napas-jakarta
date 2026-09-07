@@ -5,6 +5,8 @@ from pathlib import Path
 
 import pytest
 
+from evaluation.eval_gold_review_30_retrieval import evaluate as evaluate_gold_retrieval
+from evaluation.eval_gold_review_30_retrieval import load_rows
 from evaluation.finalize_gold_review import (
     _chunk_map,
     finalize,
@@ -107,3 +109,26 @@ def test_finalizer_rejects_unknown_chunk(tmp_path):
     _write_export(export, rows, chunk_ids="does-not-exist:structure:99")
     with pytest.raises(ValueError, match="unknown human chunk"):
         finalize(PACKET, export, tmp_path / "final.jsonl")
+
+
+def test_human_reviewed_retrieval_artifact_uses_chunk_labels_and_selects_shipped_mode():
+    result = evaluate_gold_retrieval()
+    assert result["status"] == "human_reviewed"
+    assert result["human_reviewed_rows"] == 30
+    assert result["relevance_unit"].startswith("human_relevant_chunk_ids")
+    assert result["selected_mode"] == "hybrid"
+    assert {row["mode"] for row in result["modes"]} == {
+        "bm25", "dense", "hybrid", "hybrid_rerank"
+    }
+    assert all(row["questions"] == 30 for row in result["modes"])
+    assert all("language_hit_rate_at_5" in row for row in result["modes"])
+    assert all("topic_hit_rate_at_5" in row for row in result["modes"])
+
+
+def test_human_reviewed_retrieval_fails_closed_for_pending_rows(tmp_path):
+    rows = _rows()
+    rows[0] = {**rows[0], "review_status": "pending_human"}
+    packet = tmp_path / "pending.jsonl"
+    packet.write_text("".join(json.dumps(row) + "\n" for row in rows), encoding="utf-8")
+    with pytest.raises(ValueError, match="not human_reviewed"):
+        load_rows(packet)

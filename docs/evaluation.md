@@ -2,8 +2,9 @@
 
 Run `make eval` to regenerate the committed retrieval and generation artifacts.
 Run `python -m ingestion.corpus` to regenerate the document/chunk inventory and
-`data/index/corpus_report.json`; it records manifest/local identity mismatches,
-duplicate checksums, rejection diagnostics and the corpus fingerprint.
+`data/index/corpus_report.json`; it records intentional provenance exceptions,
+unexplained manifest/local identity mismatches, duplicate checksums, rejection
+diagnostics and the corpus fingerprint.
 The committed retrieval set now contains 150 stratified seed questions. Each
 row is explicitly marked `seeded_pending_human_review`; manually review and
 correct the questions and relevance labels before submission. The benchmark
@@ -33,6 +34,21 @@ Run `make validate-sources` to check that every manifest entry has the required
 provenance, legal-status, geographic-scope, and checksum fields.
 Validate the resulting artifact with `uv run python -m evaluation.validate_ground_truth
 --input evaluation/ground_truth_reviewed.jsonl` before using it in the benchmark.
+
+`evaluation/results/retrieval_gold_review_30.json` is the human-reviewed
+30-question retrieval benchmark. Run it with:
+
+```bash
+PYTHONPATH=. python evaluation/eval_gold_review_30_retrieval.py
+```
+
+It fails closed unless all 30 rows in `gold_review_30_final.jsonl` are marked
+`human_reviewed` and every `human_relevant_chunk_ids` entry resolves in the
+current corpus. Since retrieval returns documents, each reviewed chunk is
+scored at its parent-document rank; the JSON and CSV report exact covered chunk
+IDs plus overall, language, topic and multi-source slices. The documented
+selection order is chunk recall, question hit rate, MRR, nDCG, then lower p50
+latency. The current result selects `hybrid`, matching the shipped default.
 
 `evaluation/results/retrieval_results.json` records the expanded-v1 corpus
 fingerprint and all four retrieval arms, including nDCG@5 and p50 latency. The
