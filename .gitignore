@@ -40,6 +40,10 @@ evaluation/results/*.tmp
 evaluation/results/*.bak
 evaluation/ground_truth_reviewed.jsonl
 
+# Spreadsheet/editor temporary artifacts and generated inspection exports.
+*.inspect.ndjson
+.~lock.*#
+
 # Local/editor/OS artifacts.
 .DS_Store
 Thumbs.db
