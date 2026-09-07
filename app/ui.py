@@ -14,7 +14,9 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from app.citations import linkify_citations
+from app.config import selected_retrieval_mode
 from app.history import load_historical_city
+from app.provider import selected_prompt_version
 from app.rag import answer, load_runtime_state
 from app.stations import display_district_name, display_station_name, load_runtime_stations
 from app.tools import get_latest_measurements, latest_data_age_seconds
@@ -146,7 +148,7 @@ def _render_assistant_details(st, message: dict, language: str) -> None:
                 ],
                 "route": meta.get("route"),
                 "tools": meta.get("tools", []),
-                "prompt_version": "v2",
+                "prompt_version": selected_prompt_version(),
                 "language": language,
                 "conversation_turn": meta.get("conversation_turn"),
             }
@@ -241,7 +243,7 @@ def _stream_pending_question(st, pending: dict, documents, measurements, languag
             question,
             documents,
             measurements,
-            retrieval_mode="hybrid",
+            retrieval_mode=selected_retrieval_mode(),
             language=language,
             history=history,
             on_delta=on_delta,
@@ -266,7 +268,7 @@ def _stream_pending_question(st, pending: dict, documents, measurements, languag
             "retrieval_mode": result["retrieval_mode"],
             "citation_grounded": result["citation_grounded"],
             "citation_complete": result["citation_complete"],
-            "prompt_version": "v2",
+            "prompt_version": selected_prompt_version(),
             "latency_ms": round((perf_counter() - started) * 1000, 2),
             "data_age_seconds": result["data_age_seconds"],
             "abstention_type": (

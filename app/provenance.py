@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import os
 from pathlib import Path
 
 
@@ -22,7 +21,6 @@ def source_manifest(data_dir: str | Path = "data") -> dict:
         import json
 
         report = json.loads(report_path.read_text(encoding="utf-8"))
-    configured = bool(os.getenv("SOURCE_DATA_URL", "").strip())
     structured = {}
     for name in ("policy_instruments.json", "policy_events.json", "study_findings.json"):
         path = root / name
@@ -33,12 +31,18 @@ def source_manifest(data_dir: str | Path = "data") -> dict:
                 structured[name] = len(json.loads(path.read_text(encoding="utf-8")))
             except (OSError, ValueError, TypeError):
                 structured[name] = 0
-    persisted_live = bool(report.get("source") and report["source"] != "committed-demo-snapshot")
     return {
-        "mode": "live" if configured or persisted_live else "demo",
-        "source_data_url_configured": configured,
         "sources": sources,
-        "ingestion_report": report,
+        # This file ships with the image and is intentionally not presented as
+        # a current runtime ingestion result.  The API adds a separate runtime
+        # block sourced from the loaded store.
+        "packaged_fallback": {
+            "source": report.get("source", "committed-demo-snapshot"),
+            "source_status": report.get("source_status", "unknown"),
+            "fetched_at": report.get("fetched_at"),
+            "measurements": report.get("measurements"),
+            "published_to_postgres": report.get("published_to_postgres"),
+        },
         "structured_evidence": structured,
     }
 

@@ -1,7 +1,14 @@
 import sys
 import types
 
-from app.provider import SYSTEM_PROMPT, generate_answer, generation_usage
+from app.provider import (
+    PROMPTS,
+    SYSTEM_PROMPT,
+    generate_answer,
+    generation_usage,
+    selected_prompt_variant,
+    selected_prompt_version,
+)
 
 
 def test_openai_compatible_provider_contract(monkeypatch):
@@ -38,6 +45,32 @@ def test_openai_compatible_provider_contract(monkeypatch):
     assert calls["request"]["model"] == "test-model"
     assert calls["request"]["messages"][0]["content"] == SYSTEM_PROMPT
     assert "Bahasa Indonesia" in calls["request"]["messages"][1]["content"]
+
+
+def test_prompt_variant_is_shared_by_runtime_and_evaluator_contract(monkeypatch):
+    calls = {}
+
+    class FakeCompletions:
+        def create(self, **kwargs):
+            calls["request"] = kwargs
+            return types.SimpleNamespace(
+                choices=[
+                    types.SimpleNamespace(message=types.SimpleNamespace(content="grounded [ispu]"))
+                ]
+            )
+
+    class FakeClient:
+        def __init__(self, **kwargs):
+            self.chat = types.SimpleNamespace(completions=FakeCompletions())
+
+    monkeypatch.setitem(sys.modules, "openai", types.SimpleNamespace(OpenAI=FakeClient))
+    monkeypatch.setenv("OPENAI_API_KEY", "test-key")
+    monkeypatch.setenv("LLM_PROVIDER", "openai")
+    monkeypatch.setenv("PROMPT_VARIANT", "helpful")
+    assert selected_prompt_variant() == "helpful"
+    assert selected_prompt_version() == "helpful-v1"
+    assert generate_answer("What is ISPU?", "[ispu] evidence") == "grounded [ispu]"
+    assert calls["request"]["messages"][0]["content"] == PROMPTS["helpful"]
 
 
 def test_provider_failure_returns_fallback_signal(monkeypatch):
@@ -212,16 +245,12 @@ def test_anthropic_partial_stream_is_retained_without_fallback(monkeypatch):
     assert result == "partial\n\n_(Response interrupted before completion.)_"
 
 
-def test_generation_offline_arms_ignore_configured_provider(monkeypatch):
+def test_generation_prompt_contract_uses_shared_variants(monkeypatch):
     from evaluation import eval_generation
 
-    monkeypatch.setenv("LLM_PROVIDER", "anthropic")
-    monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
-
-    def fail_if_called(*args, **kwargs):
-        raise AssertionError("offline generation arms must not call a provider")
-
-    monkeypatch.setattr("requests.post", fail_if_called)
-    result = eval_generation.evaluate_offline_arms()
-    assert result["arms"]
-    assert result["arms"][0]["model"] == "deterministic-demo-fallback"
+    monkeypatch.setenv("PROMPT_VARIANT", "strict")
+    result = eval_generation.evaluate_prompt_contract()
+    assert result["selected_prompt_variant"] == "strict"
+    assert result["selected_prompt_version"] == "strict-v1"
+    assert {item["prompt"] for item in result["variants"]} == set(PROMPTS)
+    assert all(item["required_fragments_present"] for item in result["variants"])

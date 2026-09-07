@@ -3,9 +3,46 @@ from __future__ import annotations
 import json
 import os
 import uuid
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
+
+
+def interaction_retention_days(value: object | None = None) -> int:
+    """Return a bounded retention window for private interaction content."""
+    raw = value if value is not None else os.getenv("INTERACTION_RETENTION_DAYS", "30")
+    try:
+        days = int(str(raw))
+    except (TypeError, ValueError):
+        days = 30
+    return max(1, min(days, 3650))
+
+
+def cleanup_expired_interactions(dsn: str, retention_days: int | None = None) -> int:
+    """Remove old private interaction and feedback rows from PostgreSQL.
+
+    The deletion is constrained to the interactions table and uses a bounded,
+    explicit retention value. The scheduled ingestion service invokes it rather
+    than a request serving a resident.
+    """
+    configured_dsn = dsn.strip()
+    if not configured_dsn:
+        return 0
+    days = interaction_retention_days(retention_days)
+    cutoff = datetime.now(UTC) - timedelta(days=days)
+    import psycopg
+
+    try:
+        with psycopg.connect(configured_dsn) as connection:
+            # Earlier deployments store ISO-8601 timestamps as text, so parse
+            # before comparing to the explicit UTC cutoff.
+            result = connection.execute(
+                "DELETE FROM interactions WHERE created_at::timestamptz < %s", (cutoff,)
+            )
+            connection.commit()
+            return max(0, int(result.rowcount or 0))
+    except psycopg.Error as exc:
+        raise RuntimeError("could not apply interaction retention cleanup") from exc
 
 
 def log_interaction(payload: dict[str, Any]) -> str:
@@ -52,15 +89,33 @@ def log_interaction(payload: dict[str, Any]) -> str:
                 )
                 # Existing Compose volumes may predate these observability
                 # columns; migrate them safely before the first insert.
-                connection.execute("ALTER TABLE interactions ADD COLUMN IF NOT EXISTS session_id TEXT")
-                connection.execute("ALTER TABLE interactions ADD COLUMN IF NOT EXISTS interaction_id TEXT")
-                connection.execute("ALTER TABLE interactions ADD COLUMN IF NOT EXISTS feedback_comment TEXT")
-                connection.execute("ALTER TABLE interactions ADD COLUMN IF NOT EXISTS conversation_turn INTEGER")
-                connection.execute("ALTER TABLE interactions ADD COLUMN IF NOT EXISTS history_messages INTEGER")
-                connection.execute("ALTER TABLE interactions ADD COLUMN IF NOT EXISTS history_summary_chars INTEGER")
-                connection.execute("ALTER TABLE interactions ADD COLUMN IF NOT EXISTS provider_model TEXT")
-                connection.execute("ALTER TABLE interactions ADD COLUMN IF NOT EXISTS carried_entities TEXT")
-                connection.execute("ALTER TABLE interactions ADD COLUMN IF NOT EXISTS source_count INTEGER")
+                connection.execute(
+                    "ALTER TABLE interactions ADD COLUMN IF NOT EXISTS session_id TEXT"
+                )
+                connection.execute(
+                    "ALTER TABLE interactions ADD COLUMN IF NOT EXISTS interaction_id TEXT"
+                )
+                connection.execute(
+                    "ALTER TABLE interactions ADD COLUMN IF NOT EXISTS feedback_comment TEXT"
+                )
+                connection.execute(
+                    "ALTER TABLE interactions ADD COLUMN IF NOT EXISTS conversation_turn INTEGER"
+                )
+                connection.execute(
+                    "ALTER TABLE interactions ADD COLUMN IF NOT EXISTS history_messages INTEGER"
+                )
+                connection.execute(
+                    "ALTER TABLE interactions ADD COLUMN IF NOT EXISTS history_summary_chars INTEGER"
+                )
+                connection.execute(
+                    "ALTER TABLE interactions ADD COLUMN IF NOT EXISTS provider_model TEXT"
+                )
+                connection.execute(
+                    "ALTER TABLE interactions ADD COLUMN IF NOT EXISTS carried_entities TEXT"
+                )
+                connection.execute(
+                    "ALTER TABLE interactions ADD COLUMN IF NOT EXISTS source_count INTEGER"
+                )
                 connection.execute(
                     """INSERT INTO interactions
                     (id, interaction_id, session_id, created_at, event, question, rewritten_query, route,
@@ -126,7 +181,7 @@ def log_interaction(payload: dict[str, Any]) -> str:
 def log_feedback(interaction_id: str, feedback: str, comment: str = "") -> None:
     log_interaction(
         {
-        "event": "feedback",
+            "event": "feedback",
             "interaction_id": interaction_id,
             "feedback": feedback,
             "comment": comment[:500],

@@ -14,9 +14,11 @@ from pydantic import BaseModel, Field
 from monitoring.analytics import load_dashboard
 from monitoring.logging import log_feedback, log_interaction
 
+from .config import build_metadata, selected_retrieval_mode
 from .evidence import compare_study_findings, get_source_apportionment
 from .policy import get_policy_status, get_policy_timeline
 from .provenance import source_manifest
+from .provider import selected_prompt_variant, selected_prompt_version
 from .rag import answer
 from .runtime_data import RuntimeRepository
 from .tools import (
@@ -32,7 +34,7 @@ ROOT = Path(__file__).parents[1]
 RUNTIME = RuntimeRepository(os.getenv("DATA_DIR", ROOT / "data"), os.getenv("POSTGRES_DSN", ""))
 DOCUMENTS = RUNTIME.documents()
 MEASUREMENTS = RUNTIME.measurements(force=True)
-app = FastAPI(title="Napas Jakarta API", version="0.1.0")
+app = FastAPI(title="Napas Jakarta API", version=build_metadata()["app_version"])
 
 
 def refresh_runtime_measurements(force: bool = False) -> list:
@@ -47,21 +49,58 @@ def refresh_runtime_historical(force: bool = False) -> list[dict]:
     return RUNTIME.historical(force=force)
 
 
-def _source_manifest() -> dict:
+def _runtime_provenance() -> dict[str, Any]:
+    """Describe loaded runtime facts without relabelling packaged fallback data."""
     refresh_runtime_measurements()
-    manifest = source_manifest(os.getenv("DATA_DIR", ROOT / "data"))
     runtime_sources = sorted({item.source for item in MEASUREMENTS})
-    manifest["runtime_measurements"] = len(MEASUREMENTS)
-    manifest["runtime_measurement_sources"] = runtime_sources
-    if any(not item.source.startswith("Udara Jakarta demo") for item in MEASUREMENTS):
-        manifest["mode"] = "live"
-        manifest["source_data_url_configured"] = True
-    return manifest
+    newest = max(MEASUREMENTS, key=lambda item: item.observed_at, default=None)
+    store = RUNTIME.last_measurement_source
+    live_rows = any(not item.source.startswith("Udara Jakarta demo") for item in MEASUREMENTS)
+    fallback_reason = None
+    if store != "postgres":
+        fallback_reason = (
+            "PostgreSQL is not configured; packaged fallback data is loaded."
+            if not RUNTIME.dsn
+            else RUNTIME.last_database_error
+            or "PostgreSQL has no measurement rows; packaged fallback data is loaded."
+        )
+    ingestion = None
+    if RUNTIME.dsn:
+        try:
+            from .db import load_latest_ingestion_run
+
+            ingestion = load_latest_ingestion_run(RUNTIME.dsn)
+        except (ImportError, OSError, RuntimeError, ValueError):
+            ingestion = None
+    return {
+        "mode": "live" if live_rows else "demo",
+        "store": store,
+        "measurement_rows": len(MEASUREMENTS),
+        "measurement_sources": runtime_sources,
+        "newest_observation_at": newest.observed_at.isoformat() if newest else None,
+        "data_age_seconds": latest_data_age_seconds(MEASUREMENTS),
+        "last_successful_ingestion": ingestion,
+        "fallback_reason": fallback_reason,
+    }
+
+
+def _source_manifest() -> dict[str, Any]:
+    manifest = source_manifest(os.getenv("DATA_DIR", ROOT / "data"))
+    runtime = _runtime_provenance()
+    return {
+        "mode": runtime["mode"],
+        "runtime": runtime,
+        "packaged_fallback": manifest["packaged_fallback"],
+        "sources": manifest["sources"],
+        "structured_evidence": manifest["structured_evidence"],
+    }
 
 
 class AskRequest(BaseModel):
     question: str = Field(min_length=3, max_length=1000)
-    retrieval_mode: Literal["bm25", "dense", "hybrid", "hybrid_rerank", "qdrant_hybrid"] = "hybrid"
+    retrieval_mode: Literal["bm25", "dense", "hybrid", "hybrid_rerank", "qdrant_hybrid"] = Field(
+        default_factory=selected_retrieval_mode
+    )
     rewrite_mode: Literal["off", "rules"] = "rules"
     language: Literal["English", "Bahasa Indonesia"] = "English"
     # NiceGUI persists assistant citations/meta alongside string content. Keep
@@ -101,14 +140,27 @@ class StudyCompareRequest(BaseModel):
 @app.get("/health")
 def health() -> dict[str, str | int | float | None]:
     refresh_runtime_measurements()
-    manifest = _source_manifest()
+    runtime = _runtime_provenance()
     return {
         "status": "ok",
         "documents": len(DOCUMENTS),
         "measurements": len(MEASUREMENTS),
-        "source_mode": manifest["mode"],
-        "measurement_store": "postgres" if os.getenv("POSTGRES_DSN", "").strip() else "local",
-        "data_age_seconds": latest_data_age_seconds(MEASUREMENTS),
+        "source_mode": runtime["mode"],
+        "measurement_store": runtime["store"],
+        "data_age_seconds": runtime["data_age_seconds"],
+        "retrieval_mode": selected_retrieval_mode(),
+        "prompt_variant": selected_prompt_variant(),
+    }
+
+
+@app.get("/version")
+def version() -> dict[str, str]:
+    """Return safe deploy metadata, never credentials or environment values."""
+    return {
+        **build_metadata(),
+        "retrieval_mode": selected_retrieval_mode(),
+        "prompt_variant": selected_prompt_variant(),
+        "prompt_version": selected_prompt_version(),
     }
 
 
@@ -233,7 +285,7 @@ def ask(request: AskRequest) -> dict:
             "retrieval_mode": result["retrieval_mode"],
             "citation_grounded": result["citation_grounded"],
             "citation_complete": result["citation_complete"],
-            "prompt_version": "v1",
+            "prompt_version": selected_prompt_version(),
             "latency_ms": round((perf_counter() - started) * 1000, 2),
             "data_age_seconds": result["data_age_seconds"],
             "abstention_type": (

@@ -18,6 +18,7 @@ from app.api import (
     measurement_standard,
     sources,
     unhealthy_days,
+    version,
 )
 from app.data import (
     district_matches,
@@ -188,7 +189,9 @@ def test_provenance_detects_persisted_live_ingestion(tmp_path):
     (tmp_path / "ingestion_report.json").write_text(
         json.dumps({"source": "https://example.test/data.csv"})
     )
-    assert source_manifest(tmp_path)["mode"] == "live"
+    manifest = source_manifest(tmp_path)
+    assert "mode" not in manifest
+    assert manifest["packaged_fallback"]["source"] == "https://example.test/data.csv"
 
 
 def test_retrieval_modes_return_sources():
@@ -270,8 +273,12 @@ def test_api_contracts():
     manifest = sources()
     assert manifest["mode"] == status["source_mode"]
     assert manifest["sources"]
-    assert manifest["runtime_measurements"] == len(API_MEASUREMENTS)
-    assert manifest["runtime_measurement_sources"]
+    assert manifest["runtime"]["measurement_rows"] == len(API_MEASUREMENTS)
+    assert manifest["runtime"]["measurement_sources"]
+    assert manifest["packaged_fallback"]["source"]
+    deployment = version()
+    assert deployment["retrieval_mode"] == "hybrid"
+    assert deployment["prompt_variant"] == "strict"
     latest = latest_measurements("Jakarta Pusat")
     expected_pusat = max(
         item.ispu_value

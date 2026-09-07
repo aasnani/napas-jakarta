@@ -114,6 +114,69 @@ CREATE TABLE IF NOT EXISTS historical_city_air_quality (
 """
 
 
+INGESTION_RUN_SCHEMA = """
+CREATE TABLE IF NOT EXISTS ingestion_runs (
+  id BIGSERIAL PRIMARY KEY,
+  finished_at TIMESTAMPTZ NOT NULL,
+  source_url TEXT,
+  source_status TEXT NOT NULL,
+  measurement_rows INTEGER NOT NULL,
+  source_error TEXT
+);
+CREATE INDEX IF NOT EXISTS ingestion_runs_finished_at_idx ON ingestion_runs (finished_at DESC);
+"""
+
+
+def record_ingestion_run(report: dict, dsn: str) -> None:
+    """Persist a completed station-ingestion fact for runtime provenance."""
+    import psycopg
+
+    try:
+        with psycopg.connect(dsn) as connection:
+            connection.execute(INGESTION_RUN_SCHEMA)
+            connection.execute(
+                """INSERT INTO ingestion_runs
+                (finished_at, source_url, source_status, measurement_rows, source_error)
+                VALUES (%(finished_at)s, %(source_url)s, %(source_status)s,
+                        %(measurement_rows)s, %(source_error)s)""",
+                {
+                    "finished_at": report["fetched_at"],
+                    "source_url": report.get("source"),
+                    "source_status": report["source_status"],
+                    "measurement_rows": report["measurements"],
+                    "source_error": report.get("source_error"),
+                },
+            )
+            connection.commit()
+    except psycopg.Error as exc:
+        raise RuntimeError("could not record ingestion run in PostgreSQL") from exc
+
+
+def load_latest_ingestion_run(dsn: str) -> dict | None:
+    """Load the newest completed ingestion fact without exposing credentials."""
+    import psycopg
+
+    try:
+        with psycopg.connect(dsn) as connection:
+            connection.execute(INGESTION_RUN_SCHEMA)
+            row = connection.execute(
+                """SELECT finished_at, source_url, source_status, measurement_rows, source_error
+                   FROM ingestion_runs ORDER BY finished_at DESC LIMIT 1"""
+            ).fetchone()
+    except psycopg.Error as exc:
+        raise RuntimeError("could not read ingestion provenance from PostgreSQL") from exc
+    if row is None:
+        return None
+    finished_at = row[0].isoformat() if isinstance(row[0], datetime) else str(row[0])
+    return {
+        "finished_at": finished_at,
+        "source_url": row[1],
+        "source_status": row[2],
+        "measurement_rows": int(row[3]),
+        "source_error": row[4],
+    }
+
+
 def publish_historical_city(rows: Iterable[dict], dsn: str) -> int:
     """Upsert the city-level historical series used by the trends page."""
     values = list(rows)

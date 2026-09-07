@@ -8,6 +8,7 @@ from pathlib import Path
 from ingestion.chunking import structure_chunks
 
 from .citations import citation_token, parse_citations
+from .config import selected_retrieval_mode
 from .data import (
     district_matches,
     latest_by_station,
@@ -258,6 +259,7 @@ def _citation_validation(text: str, sources: list[dict], retrieved_ids: set[str]
 def _exactify_citations(text: str, sources: list[dict]) -> str:
     """Upgrade legacy provider/fallback tokens to the retrieved locator."""
     by_id = {str(item.get("id")): item for item in sources}
+
     def replace(match: re.Match[str]) -> str:
         source_id = match.group(1)
         locator = match.group(2)
@@ -265,6 +267,7 @@ def _exactify_citations(text: str, sources: list[dict]) -> str:
         if source is None or locator:
             return match.group(0)
         return citation_token(source_id, str(source.get("locator", "")))
+
     return re.sub(r"\[([A-Za-z0-9_-]+)(?:\s*§\s*([^\[\]]+?))?\]", replace, text)
 
 
@@ -485,8 +488,18 @@ def _select_route_sources(
 ) -> list[SearchResult]:
     """Keep complementary evidence in context instead of one preferred hit."""
     preferred: dict[str, tuple[str, ...]] = {
-        "pollution_causes": ("jakarta-causes", "jakarta-seasonal-exposure", "jakarta-sppu-official-status-2024"),
-        "regulation_current": ("jakarta-regulations", "who-guidance", "pp-22-2021-air-quality", "permen-lhk-8-2023-vehicle-emissions", "pergub-66-2020-vehicle-testing"),
+        "pollution_causes": (
+            "jakarta-causes",
+            "jakarta-seasonal-exposure",
+            "jakarta-sppu-official-status-2024",
+        ),
+        "regulation_current": (
+            "jakarta-regulations",
+            "who-guidance",
+            "pp-22-2021-air-quality",
+            "permen-lhk-8-2023-vehicle-emissions",
+            "pergub-66-2020-vehicle-testing",
+        ),
         "policy_history": ("jakarta-policy-status", "jakarta-regulations"),
         "policy_implementation": (
             "jakarta-policy-implementation",
@@ -497,7 +510,11 @@ def _select_route_sources(
             "pp-22-2021-air-quality",
             "permen-lhk-13-2021-cems",
         ),
-        "improvement_strategies": ("policy-improvements-evidence", "jakarta-improvements", "jakarta-sppu-official-status-2024"),
+        "improvement_strategies": (
+            "policy-improvements-evidence",
+            "jakarta-improvements",
+            "jakarta-sppu-official-status-2024",
+        ),
         "exposure_reduction": (
             "bad-air-day-protection",
             "clean-air-room",
@@ -549,12 +566,13 @@ def answer(
     question: str,
     documents: list[Document],
     measurements: list[Measurement],
-    retrieval_mode: str = "hybrid",
+    retrieval_mode: str | None = None,
     rewrite_mode: str = "rules",
     language: str = "English",
     history: list[dict] | None = None,
     on_delta: Callable[[str], None] | None = None,
 ) -> dict:
+    retrieval_mode = retrieval_mode or selected_retrieval_mode()
     condensed_question = condense_followup(question, history)
     query = rewrite_query(condensed_question, rewrite_mode)
     route = classify(query)
@@ -724,14 +742,18 @@ def answer(
             {
                 "id": item.document.document_id,
                 "source_id": item.document.source_id or item.document.document_id,
-                "chunk_id": best_chunk.chunk_id if best_chunk else f"{item.document.document_id}:structure:0",
+                "chunk_id": best_chunk.chunk_id
+                if best_chunk
+                else f"{item.document.document_id}:structure:0",
                 "title": item.document.title,
                 "publisher": item.document.publisher,
                 "url": item.document.source_url,
                 "score": round(item.score, 4),
                 "excerpt": (best_chunk.text if best_chunk else item.document.text)[:500],
                 "locator": locator,
-                "heading_path": best_chunk.heading_path if best_chunk else item.document.heading_path,
+                "heading_path": best_chunk.heading_path
+                if best_chunk
+                else item.document.heading_path,
                 "page": best_chunk.page if best_chunk else item.document.page,
                 "paragraph": best_chunk.paragraph if best_chunk else item.document.paragraph,
                 "status": item.document.status,
@@ -740,8 +762,7 @@ def answer(
             }
         )
     context = measurement_context + "\n".join(
-        f"[{item['id']} § {item['locator']}] "
-        f"{_EMBEDDED_CITATION_RE.sub('', item['excerpt'])}"
+        f"[{item['id']} § {item['locator']}] {_EMBEDDED_CITATION_RE.sub('', item['excerpt'])}"
         for item in sources
     )
     structured_answer = bool(measurement_context) or category_result is not None
@@ -796,7 +817,9 @@ def answer(
         answer_text = _exactify_citations(answer_text, sources)
     ungrounded_citations = validate_citations(answer_text, {item["id"] for item in sources})
     citation_is_complete = citation_complete(answer_text, {item["id"] for item in sources}, context)
-    citation_validation = _citation_validation(answer_text, sources, {item["id"] for item in sources})
+    citation_validation = _citation_validation(
+        answer_text, sources, {item["id"] for item in sources}
+    )
     citations = []
     for number, reference in enumerate(parse_citations(answer_text), start=1):
         source = next((item for item in sources if item["id"] == reference["source_id"]), None)

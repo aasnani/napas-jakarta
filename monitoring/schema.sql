@@ -60,3 +60,13 @@ CREATE TABLE IF NOT EXISTS historical_city_air_quality (
   source TEXT NOT NULL,
   refreshed_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+CREATE TABLE IF NOT EXISTS ingestion_runs (
+  id BIGSERIAL PRIMARY KEY,
+  finished_at TIMESTAMPTZ NOT NULL,
+  source_url TEXT,
+  source_status TEXT NOT NULL,
+  measurement_rows INTEGER NOT NULL,
+  source_error TEXT
+);
+CREATE INDEX IF NOT EXISTS ingestion_runs_finished_at_idx ON ingestion_runs (finished_at DESC);
