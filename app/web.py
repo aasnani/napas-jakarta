@@ -15,6 +15,7 @@ import os
 import queue
 from datetime import date, datetime, timedelta
 from pathlib import Path
+from time import perf_counter
 from typing import Any
 
 from app.api import (
@@ -25,15 +26,18 @@ from app.api import (
 )
 from app.api import app as api_app
 from app.citations import linkify_citations
+from app.config import is_production, selected_retrieval_mode
 from app.history import (
     historical_series_diagnostics,
     historical_series_metadata,
     load_historical_city,
 )
+from app.provider import selected_prompt_version
 from app.rag import answer
 from app.stations import display_district_name, display_station_name, load_runtime_stations
 from app.tools import get_latest_measurements, latest_data_age_seconds
 from monitoring.analytics import load_dashboard
+from monitoring.logging import log_interaction
 
 ROOT = Path(__file__).resolve().parents[1]
 ICON_PATH = ROOT / "assets" / "napas-jakarta-air-icon.png"
@@ -334,11 +338,28 @@ def _surface(title: str | None = None):
     return card
 
 
-def _metric(label: str, value: str, subtitle: str, icon: str = "analytics") -> None:
-    with ui.card().classes("napas-card napas-metric p-4 flex-1 min-w-[180px]"):
-        with ui.row().classes("items-center gap-3"):
+def _information_button(label: str, message: str) -> None:
+    """Add one keyboard-focusable, plain-language explanation to a data surface."""
+    ui.button(icon="info_outline").props(
+        f'flat round dense aria-label="More information about {label}"'
+    ).classes("shrink-0").tooltip(message)
+
+
+def _metric(
+    label: str,
+    value: str,
+    subtitle: str,
+    icon: str = "analytics",
+    *,
+    information: str | None = None,
+) -> None:
+    with ui.card().classes("napas-card napas-metric w-full min-w-0 p-4"):
+        with ui.row().classes("items-start gap-3 w-full"):
             ui.icon(icon).classes("text-2xl text-primary")
             ui.label(label).classes("text-sm napas-muted")
+            ui.space()
+            if information:
+                _information_button(label, information)
         ui.label(value).classes("text-2xl font-semibold mt-2")
         ui.label(subtitle).classes("text-xs napas-muted")
 
@@ -541,7 +562,7 @@ def _shell2(active: str, content) -> None:
         _navigation_link("/map", "Live map", "map", active)
         _navigation_link("/overview", "Overview", "dashboard", active)
         _navigation_link("/trends", "Trends", "show_chart", active)
-        _navigation_link("/monitoring", "Monitoring", "monitoring", active)
+        _navigation_link("/monitoring", "Monitoring", "analytics", active)
         ui.separator().classes("my-4")
         ui.label("One clear view of Jakarta's air, its causes, and what people can do.").classes(
             "text-sm napas-muted px-3"
@@ -554,11 +575,19 @@ def _shell2(active: str, content) -> None:
         content()
 
 
-def _page_header(title: str, subtitle: str) -> None:
+def _page_header(
+    title: str,
+    subtitle: str,
+    *,
+    show_freshness: bool = True,
+    show_numbers: bool = True,
+) -> None:
     ui.label(title).classes("text-3xl font-semibold")
     ui.label(subtitle).classes("text-base napas-muted")
-    _freshness_strip()
-    _understand_numbers()
+    if show_freshness:
+        _freshness_strip()
+    if show_numbers:
+        _understand_numbers()
 
 
 def _render_sources(sources: list[dict], parent=None) -> None:
@@ -586,9 +615,9 @@ def _render_sources(sources: list[dict], parent=None) -> None:
                 locator = str(source.get("locator", "")).strip()
                 effective_date = str(source.get("effective_date", "")).strip()
                 if locator or effective_date:
-                    ui.label(" · ".join(item for item in (locator, effective_date) if item)).classes(
-                        "text-xs napas-muted"
-                    )
+                    ui.label(
+                        " · ".join(item for item in (locator, effective_date) if item)
+                    ).classes("text-xs napas-muted")
             if source.get("excerpt"):
                 ui.label(str(source["excerpt"])[:220]).classes("text-xs napas-muted pl-7")
 
@@ -766,6 +795,7 @@ def _chat_page() -> None:
         if not text:
             return
         busy = True
+        started = perf_counter()
         composer.value = ""
         if not state["messages"]:
             transcript.clear()
@@ -798,13 +828,14 @@ def _chat_page() -> None:
             # before answering so its structured context is not the snapshot
             # that happened to be loaded when the page was first opened.
             refresh_runtime_measurements()
+            retrieval_mode = selected_retrieval_mode()
             task = asyncio.create_task(
                 asyncio.to_thread(
                     answer,
                     text,
                     DOCUMENTS,
                     MEASUREMENTS,
-                    "hybrid",
+                    retrieval_mode,
                     "rules",
                     state["language"],
                     history,
@@ -824,7 +855,9 @@ def _chat_page() -> None:
             result = await task
         except Exception:  # noqa: BLE001 - provider and connection errors vary
             lifecycle.fail("provider interruption")
-            visible = lifecycle.visible_text or "The answer could not be completed. Please try again."
+            visible = (
+                lifecycle.visible_text or "The answer could not be completed. Please try again."
+            )
             response.set_content(f"{visible}\n\n_(Response interrupted; please retry.)_")
             state["messages"].append(
                 {
@@ -852,8 +885,12 @@ def _chat_page() -> None:
             lifecycle.finish(canonical)
         except RuntimeError:
             lifecycle.fail("provider completion changed visible answer")
-            visible = lifecycle.visible_text or "The answer could not be completed. Please try again."
-            response.set_content(f"{visible}\n\n_(Response changed before completion; please retry.)_")
+            visible = (
+                lifecycle.visible_text or "The answer could not be completed. Please try again."
+            )
+            response.set_content(
+                f"{visible}\n\n_(Response changed before completion; please retry.)_"
+            )
             state["messages"].append(
                 {
                     "role": "assistant",
@@ -866,6 +903,41 @@ def _chat_page() -> None:
             return
         response.set_content(linkify_citations(lifecycle.visible_text, result.get("sources", [])))
         _render_sources(result.get("sources", []), source_slot)
+        interaction_id = log_interaction(
+            {
+                "event": "answer",
+                "session_id": f"nicegui-{client.id}",
+                "question": text,
+                "rewritten_query": result["rewritten_query"],
+                "route": result["route"],
+                "retrieval_mode": result["retrieval_mode"],
+                "citation_grounded": result["citation_grounded"],
+                "citation_complete": result["citation_complete"],
+                "prompt_version": selected_prompt_version(),
+                "latency_ms": round((perf_counter() - started) * 1000, 2),
+                "data_age_seconds": result["data_age_seconds"],
+                "abstention_type": (
+                    "safety"
+                    if result["route"] == "safety_abstention"
+                    else "out_of_domain"
+                    if result["route"] == "out_of_domain"
+                    else None
+                ),
+                "source": _source_mode(),
+                "conversation_turn": 1 + sum(1 for item in history if item.get("role") == "user"),
+                "history_messages": len(history),
+                "history_summary_chars": 0,
+                "provider_model": result.get("generation_usage", {}).get(
+                    "model", os.getenv("LLM_MODEL", "")
+                ),
+                "token_usage": result.get("generation_usage", {}).get("total_tokens"),
+                "estimated_cost": result.get("generation_usage", {}).get("estimated_cost_usd"),
+                "carried_entities": json.dumps(
+                    result.get("conversation_state", {}), ensure_ascii=False
+                ),
+                "source_count": len(result.get("sources", [])),
+            }
+        )
         state["messages"].append(
             {
                 "role": "assistant",
@@ -873,6 +945,7 @@ def _chat_page() -> None:
                 "sources": result.get("sources", []),
                 "meta": {
                     "route": result.get("route"),
+                    "interaction_id": interaction_id,
                     "citation_complete": result.get("citation_complete"),
                     "stream_policy": result.get("stream_policy"),
                     "lifecycle": lifecycle.phase,
@@ -1408,10 +1481,34 @@ def _render_trends_page() -> None:
         ).classes("text-sm napas-muted")
 
 
-def _monitoring_chart(title: str, subtitle: str, options: dict[str, Any], *, empty: bool = False):
+MONITORING_INFO = {
+    "Requests · Permintaan": "This counts completed answers in the selected time window. A higher number means more use, not more people, because one person can ask several questions.",
+    "p50 latency": "This shows how long completed answers take, using a typical time and a slower-case time. Lower times mean the app is responding faster.",
+    "Citation-grounded": "This is the share of answers whose displayed sources passed the app’s evidence check. A lower share means more answers need investigation before they are trusted.",
+    "Feedback · Umpan balik": "This counts helpful and needs-improvement ratings sent by people using the app. A small total is only an early signal, so do not draw broad conclusions from it.",
+    "Tokens / estimated cost": "This shows the text processed to create answers and the estimated provider charge. It helps spot expensive days, but it is only an estimate.",
+    "Requests over time · Permintaan per hari": "This chart shows completed answers grouped by day. Peaks show busier days, not necessarily more individual people.",
+    "Latency · Latensi": "This chart shows the typical and slower response times for each day. Lower lines mean people received answers faster.",
+    "Answer routes · Rute jawaban": "This chart shows the kinds of answer path the app used for each request. A sudden change can mean people are asking different questions or that a path needs checking.",
+    "Retrieval modes · Mode pencarian": "This chart shows how the app looked through its sources before answering. It should normally match the chosen method, so unexpected values should be checked.",
+    "Tokens and estimated cost · Token dan biaya": "This chart shows daily text-processing volume and estimated provider charge. It helps find expensive days, but the charge is an estimate.",
+    "Feedback chart · Umpan balik": "This chart shows helpful and needs-improvement ratings over time. Compare the two only when enough people have provided ratings.",
+}
+
+
+def _monitoring_chart(
+    title: str,
+    subtitle: str,
+    options: dict[str, Any],
+    *,
+    information: str,
+    empty: bool = False,
+) -> None:
     """Render one telemetry chart with a consistent empty state."""
-    with ui.card().classes("napas-card flex-1 min-w-[320px] p-4"):
-        ui.label(title).classes("text-lg font-semibold")
+    with ui.card().classes("napas-card w-full min-w-0 p-4"):
+        with ui.row().classes("items-start justify-between gap-2 w-full"):
+            ui.label(title).classes("text-lg font-semibold")
+            _information_button(title, information)
         ui.label(subtitle).classes("text-xs napas-muted")
         if empty:
             ui.label("No aggregate data in this window yet.").classes("text-sm napas-muted py-12")
@@ -1424,6 +1521,8 @@ def _render_monitoring_page() -> None:
     _page_header(
         "Service monitoring",
         "Aggregate health and usage signals for Napas Jakarta · Pemantauan layanan, tanpa teks pertanyaan.",
+        show_freshness=False,
+        show_numbers=False,
     )
     dashboard = load_dashboard(30)
     summary = dashboard["summary"]
@@ -1431,121 +1530,205 @@ def _render_monitoring_page() -> None:
     ui.label(
         f"Last 30 days · {source_label}. Only counts, rates, timings, and costs are shown; user questions and comments are never displayed."
     ).classes("text-sm napas-muted")
-    with ui.row().classes("w-full gap-3 flex-wrap"):
-        _metric("Requests · Permintaan", f"{summary['requests']:,}", "completed answers", "forum")
+    with ui.element("section").classes(
+        "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 w-full gap-4"
+    ):
+        _metric(
+            "Requests · Permintaan",
+            f"{summary['requests']:,}",
+            "completed answers",
+            "forum",
+            information=MONITORING_INFO["Requests · Permintaan"],
+        )
         p50 = "—" if summary["p50_latency_ms"] is None else f"{summary['p50_latency_ms']:.0f} ms"
         p95 = "—" if summary["p95_latency_ms"] is None else f"{summary['p95_latency_ms']:.0f} ms"
-        _metric("p50 latency", p50, f"p95 {p95}", "speed")
-        citation = "—" if summary["citation_rate"] is None else f"{summary['citation_rate'] * 100:.1f}%"
-        _metric("Citation-grounded", citation, "answers with a grounded citation", "verified")
+        _metric(
+            "p50 latency", p50, f"p95 {p95}", "speed", information=MONITORING_INFO["p50 latency"]
+        )
+        citation = (
+            "—" if summary["citation_rate"] is None else f"{summary['citation_rate'] * 100:.1f}%"
+        )
+        _metric(
+            "Citation-grounded",
+            citation,
+            "answers with a grounded citation",
+            "verified",
+            information=MONITORING_INFO["Citation-grounded"],
+        )
         _metric(
             "Feedback · Umpan balik",
             f"{summary['feedback_total']:,}",
             f"{summary['feedback_positive']:,} helpful · {summary['feedback_negative']:,} needs work",
             "thumbs_up_down",
+            information=MONITORING_INFO["Feedback · Umpan balik"],
         )
         _metric(
             "Tokens / estimated cost",
             f"{summary['tokens']:,}",
             f"US${summary['estimated_cost_usd']:.4f}",
             "payments",
+            information=MONITORING_INFO["Tokens / estimated cost"],
         )
 
     by_day = dashboard["requests_by_day"]
-    _monitoring_chart(
-        "Requests over time · Permintaan per hari",
-        "Completed answer events, grouped by UTC calendar day.",
-        {
-            "tooltip": {"trigger": "axis"},
-            "xAxis": {"type": "category", "data": [row["date"] for row in by_day]},
-            "yAxis": {"type": "value", "minInterval": 1},
-            "series": [{"name": "Requests", "type": "bar", "data": [row["requests"] for row in by_day], "itemStyle": {"color": TOKENS["primary"]}}],
-        },
-        empty=not by_day,
-    )
-
     latency = dashboard["latency_by_day"]
-    _monitoring_chart(
-        "Latency · Latensi",
-        "p50 is the typical response; p95 shows the slower tail. Values are milliseconds.",
-        {
-            "tooltip": {"trigger": "axis"},
-            "legend": {"data": ["p50", "p95"]},
-            "xAxis": {"type": "category", "data": [row["date"] for row in latency]},
-            "yAxis": {"type": "value", "name": "ms"},
-            "series": [
-                {"name": "p50", "type": "line", "connectNulls": True, "data": [row["p50_ms"] for row in latency], "itemStyle": {"color": TOKENS["primary"]}},
-                {"name": "p95", "type": "line", "connectNulls": True, "data": [row["p95_ms"] for row in latency], "itemStyle": {"color": TOKENS["unhealthy"]}},
-            ],
-        },
-        empty=not latency,
-    )
-
     route_rows = dashboard["routes"]
-    _monitoring_chart(
-        "Answer routes · Rute jawaban",
-        "Which deterministic answer path handled each request.",
-        {
-            "tooltip": {"trigger": "item"},
-            "legend": {"type": "scroll", "bottom": 0},
-            "series": [{"type": "pie", "radius": ["38%", "70%"], "data": [{"name": row["name"], "value": row["count"]} for row in route_rows]}],
-        },
-        empty=not route_rows,
-    )
-
     retrieval_rows = dashboard["retrieval_modes"]
-    _monitoring_chart(
-        "Retrieval modes · Mode pencarian",
-        "Search strategy selected for evidence retrieval.",
-        {
-            "tooltip": {"trigger": "item"},
-            "xAxis": {"type": "category", "data": [row["name"] for row in retrieval_rows]},
-            "yAxis": {"type": "value", "minInterval": 1},
-            "series": [{"type": "bar", "data": [row["count"] for row in retrieval_rows], "itemStyle": {"color": "#205C8A"}}],
-        },
-        empty=not retrieval_rows,
-    )
-
     usage = dashboard["usage_by_day"]
-    _monitoring_chart(
-        "Tokens and estimated cost · Token dan biaya",
-        "Provider-reported token totals and estimated USD cost by day.",
-        {
-            "tooltip": {"trigger": "axis"},
-            "legend": {"data": ["Tokens", "Cost (USD)"]},
-            "xAxis": {"type": "category", "data": [row["date"] for row in usage]},
-            "yAxis": [{"type": "value", "name": "tokens"}, {"type": "value", "name": "USD"}],
-            "series": [
-                {"name": "Tokens", "type": "bar", "data": [row["tokens"] for row in usage], "itemStyle": {"color": "#6A1B9A"}},
-                {"name": "Cost (USD)", "type": "line", "yAxisIndex": 1, "data": [row["cost_usd"] for row in usage], "itemStyle": {"color": TOKENS["moderate"]}},
-            ],
-        },
-        empty=not usage,
-    )
-
     feedback_rows = dashboard["feedback"]
-    _monitoring_chart(
-        "Feedback · Umpan balik",
-        "Helpful versus needs-improvement signals; comments remain private.",
-        {
-            "tooltip": {"trigger": "axis"},
-            "legend": {"data": ["Helpful", "Needs improvement"]},
-            "xAxis": {"type": "category", "data": [row["date"] for row in feedback_rows]},
-            "yAxis": {"type": "value", "minInterval": 1},
-            "series": [
-                {"name": "Helpful", "type": "bar", "stack": "feedback", "data": [row.get("positive", 0) for row in feedback_rows], "itemStyle": {"color": TOKENS["good"]}},
-                {"name": "Needs improvement", "type": "bar", "stack": "feedback", "data": [row.get("negative", 0) for row in feedback_rows], "itemStyle": {"color": TOKENS["unhealthy"]}},
-            ],
-        },
-        empty=not feedback_rows,
-    )
-    with ui.expansion("How to read this page · Cara membaca", icon="info").classes("w-full"):
-        ui.label(
-            "Requests count completed answer events, not unique people. p50/p95 describe response-time distribution. Citation-grounded means the answer passed the app's citation validation. Estimated cost depends on provider pricing and may be unavailable for local models. Small samples should not be treated as product benchmarks."
-        ).classes("text-sm leading-6")
+    with ui.element("section").classes(
+        "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 w-full gap-4"
+    ):
+        _monitoring_chart(
+            "Requests over time · Permintaan per hari",
+            "Completed answer events, grouped by UTC calendar day.",
+            {
+                "tooltip": {"trigger": "axis"},
+                "xAxis": {"type": "category", "data": [row["date"] for row in by_day]},
+                "yAxis": {"type": "value", "minInterval": 1},
+                "series": [
+                    {
+                        "name": "Requests",
+                        "type": "bar",
+                        "data": [row["requests"] for row in by_day],
+                        "itemStyle": {"color": TOKENS["primary"]},
+                    }
+                ],
+            },
+            information=MONITORING_INFO["Requests over time · Permintaan per hari"],
+            empty=not by_day,
+        )
+        _monitoring_chart(
+            "Latency · Latensi",
+            "p50 is the typical response; p95 shows the slower tail. Values are milliseconds.",
+            {
+                "tooltip": {"trigger": "axis"},
+                "legend": {"data": ["p50", "p95"]},
+                "xAxis": {"type": "category", "data": [row["date"] for row in latency]},
+                "yAxis": {"type": "value", "name": "ms"},
+                "series": [
+                    {
+                        "name": "p50",
+                        "type": "line",
+                        "connectNulls": True,
+                        "data": [row["p50_ms"] for row in latency],
+                        "itemStyle": {"color": TOKENS["primary"]},
+                    },
+                    {
+                        "name": "p95",
+                        "type": "line",
+                        "connectNulls": True,
+                        "data": [row["p95_ms"] for row in latency],
+                        "itemStyle": {"color": TOKENS["unhealthy"]},
+                    },
+                ],
+            },
+            information=MONITORING_INFO["Latency · Latensi"],
+            empty=not latency,
+        )
+        _monitoring_chart(
+            "Answer routes · Rute jawaban",
+            "Which deterministic answer path handled each request.",
+            {
+                "tooltip": {"trigger": "item"},
+                "legend": {"type": "scroll", "bottom": 0},
+                "series": [
+                    {
+                        "type": "pie",
+                        "radius": ["38%", "70%"],
+                        "data": [
+                            {"name": row["name"], "value": row["count"]} for row in route_rows
+                        ],
+                    }
+                ],
+            },
+            information=MONITORING_INFO["Answer routes · Rute jawaban"],
+            empty=not route_rows,
+        )
+        _monitoring_chart(
+            "Retrieval modes · Mode pencarian",
+            "Search strategy selected for evidence retrieval.",
+            {
+                "tooltip": {"trigger": "item"},
+                "xAxis": {"type": "category", "data": [row["name"] for row in retrieval_rows]},
+                "yAxis": {"type": "value", "minInterval": 1},
+                "series": [
+                    {
+                        "type": "bar",
+                        "data": [row["count"] for row in retrieval_rows],
+                        "itemStyle": {"color": "#205C8A"},
+                    }
+                ],
+            },
+            information=MONITORING_INFO["Retrieval modes · Mode pencarian"],
+            empty=not retrieval_rows,
+        )
+        _monitoring_chart(
+            "Tokens and estimated cost · Token dan biaya",
+            "Provider-reported token totals and estimated USD cost by day.",
+            {
+                "tooltip": {"trigger": "axis"},
+                "legend": {"data": ["Tokens", "Cost (USD)"]},
+                "xAxis": {"type": "category", "data": [row["date"] for row in usage]},
+                "yAxis": [{"type": "value", "name": "tokens"}, {"type": "value", "name": "USD"}],
+                "series": [
+                    {
+                        "name": "Tokens",
+                        "type": "bar",
+                        "data": [row["tokens"] for row in usage],
+                        "itemStyle": {"color": "#6A1B9A"},
+                    },
+                    {
+                        "name": "Cost (USD)",
+                        "type": "line",
+                        "yAxisIndex": 1,
+                        "data": [row["cost_usd"] for row in usage],
+                        "itemStyle": {"color": TOKENS["moderate"]},
+                    },
+                ],
+            },
+            information=MONITORING_INFO["Tokens and estimated cost · Token dan biaya"],
+            empty=not usage,
+        )
+        _monitoring_chart(
+            "Feedback chart · Umpan balik",
+            "Helpful versus needs-improvement signals; comments remain private.",
+            {
+                "tooltip": {"trigger": "axis"},
+                "legend": {"data": ["Helpful", "Needs improvement"]},
+                "xAxis": {"type": "category", "data": [row["date"] for row in feedback_rows]},
+                "yAxis": {"type": "value", "minInterval": 1},
+                "series": [
+                    {
+                        "name": "Helpful",
+                        "type": "bar",
+                        "stack": "feedback",
+                        "data": [row.get("positive", 0) for row in feedback_rows],
+                        "itemStyle": {"color": TOKENS["good"]},
+                    },
+                    {
+                        "name": "Needs improvement",
+                        "type": "bar",
+                        "stack": "feedback",
+                        "data": [row.get("negative", 0) for row in feedback_rows],
+                        "itemStyle": {"color": TOKENS["unhealthy"]},
+                    },
+                ],
+            },
+            information=MONITORING_INFO["Feedback chart · Umpan balik"],
+            empty=not feedback_rows,
+        )
 
 
 if ui is not None:
+
+    def _nicegui_storage_secret() -> str:
+        configured = os.getenv("NICEGUI_STORAGE_SECRET", "").strip()
+        if configured:
+            return configured
+        if is_production():
+            raise RuntimeError("NICEGUI_STORAGE_SECRET must be set in production")
+        return "napas-jakarta-local"
 
     @ui.page("/")
     def ask_page() -> None:
@@ -1574,7 +1757,7 @@ if ui is not None:
         title="Napas Jakarta",
         favicon=ICON_PATH if ICON_PATH.exists() else "🌬️",
         language="en-US",
-        storage_secret=os.getenv("NICEGUI_STORAGE_SECRET", "napas-jakarta-local"),
+        storage_secret=_nicegui_storage_secret(),
     )
 
 

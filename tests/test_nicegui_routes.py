@@ -40,6 +40,12 @@ async def _open_and_check_routes() -> None:
         ]
         assert maps and any(layer.to_dict()["type"] == "circleMarker" for layer in maps[0].layers)
         assert maps[0]._props["zoom"] == 9
+        info_buttons = [
+            element
+            for element in user.client.elements.values()
+            if element._props.get("icon") == "info_outline"
+        ]
+        assert len(info_buttons) == 11
 
 
 def test_nicegui_pages_construct_without_component_api_errors() -> None:
@@ -242,6 +248,35 @@ def test_trends_series_remain_distinct_and_labeled() -> None:
 def test_understand_numbers_is_discoverable_but_closed_by_default() -> None:
     source = Path(web.ROOT / "app" / "web.py").read_text(encoding="utf-8")
     assert 'ui.expansion("Understand the numbers", icon="menu_book", value=False)' in source
+
+
+def test_monitoring_layout_and_plain_language_help_contract() -> None:
+    source = Path(web.ROOT / "app" / "web.py").read_text(encoding="utf-8")
+    monitoring_source = source[
+        source.index("def _render_monitoring_page") : source.index("if ui is not None:")
+    ]
+    expected = {
+        "Requests · Permintaan": "This counts completed answers in the selected time window. A higher number means more use, not more people, because one person can ask several questions.",
+        "p50 latency": "This shows how long completed answers take, using a typical time and a slower-case time. Lower times mean the app is responding faster.",
+        "Citation-grounded": "This is the share of answers whose displayed sources passed the app’s evidence check. A lower share means more answers need investigation before they are trusted.",
+        "Feedback · Umpan balik": "This counts helpful and needs-improvement ratings sent by people using the app. A small total is only an early signal, so do not draw broad conclusions from it.",
+        "Tokens / estimated cost": "This shows the text processed to create answers and the estimated provider charge. It helps spot expensive days, but it is only an estimate.",
+        "Requests over time · Permintaan per hari": "This chart shows completed answers grouped by day. Peaks show busier days, not necessarily more individual people.",
+        "Latency · Latensi": "This chart shows the typical and slower response times for each day. Lower lines mean people received answers faster.",
+        "Answer routes · Rute jawaban": "This chart shows the kinds of answer path the app used for each request. A sudden change can mean people are asking different questions or that a path needs checking.",
+        "Retrieval modes · Mode pencarian": "This chart shows how the app looked through its sources before answering. It should normally match the chosen method, so unexpected values should be checked.",
+        "Tokens and estimated cost · Token dan biaya": "This chart shows daily text-processing volume and estimated provider charge. It helps find expensive days, but the charge is an estimate.",
+        "Feedback chart · Umpan balik": "This chart shows helpful and needs-improvement ratings over time. Compare the two only when enough people have provided ratings.",
+    }
+    assert web.MONITORING_INFO == expected
+    assert source.count('"grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 w-full gap-4"') >= 2
+    assert 'ui.card().classes("napas-card w-full min-w-0 p-4")' in source
+    assert 'ui.button(icon="info_outline")' in source
+    assert 'aria-label="More information about {label}"' in source
+    assert '_navigation_link("/monitoring", "Monitoring", "analytics", active)' in source
+    assert "show_freshness=False" in monitoring_source
+    assert "show_numbers=False" in monitoring_source
+    assert "Understand the numbers" not in monitoring_source
 
 
 def test_chat_tab_handoff_and_new_chat_semantics() -> None:
