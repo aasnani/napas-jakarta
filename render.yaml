@@ -30,22 +30,7 @@ services:
         sync: false
       - key: PREFECT_SERVER_ANALYTICS_ENABLED
         value: "false"
-  - type: cron
-    name: napas-jakarta-ingestion
-    runtime: docker
-    dockerfilePath: ./Dockerfile
-    dockerContext: .
-    dockerCommand: sh -c 'python -m ingestion.flow && python -m ingestion.historical'
-    schedule: "0 * * * *"
-    plan: starter
-    envVars:
-      - key: SOURCE_DATA_URL
-        value: https://udara.jakarta.go.id/
-      - key: POSTGRES_DSN
-        sync: false
-      - key: QDRANT_URL
-        sync: false
-      - key: HISTORICAL_AIR_URL
-        value: https://air-quality-api.open-meteo.com/v1/air-quality
-      - key: PREFECT_SERVER_ANALYTICS_ENABLED
-        value: "false"
+# No Render cron service is declared here. Render's cron service is not part
+# of the free web tier and could create an accidental bill. Use Railway's
+# separate cron service with `python -m ingestion.railway_cron`, or run the
+# same command from an explicitly paid scheduler if Render is selected later.

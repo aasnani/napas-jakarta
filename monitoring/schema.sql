@@ -51,3 +51,12 @@ CREATE TABLE IF NOT EXISTS measurements (
 ALTER TABLE measurements ADD COLUMN IF NOT EXISTS averaging_period TEXT;
 ALTER TABLE measurements ADD COLUMN IF NOT EXISTS quality_flag TEXT;
 ALTER TABLE measurements ADD COLUMN IF NOT EXISTS fetched_at TIMESTAMPTZ;
+
+CREATE TABLE IF NOT EXISTS historical_city_air_quality (
+  observed_date DATE PRIMARY KEY,
+  pm10 DOUBLE PRECISION,
+  pm2_5 DOUBLE PRECISION,
+  us_aqi DOUBLE PRECISION,
+  source TEXT NOT NULL,
+  refreshed_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);

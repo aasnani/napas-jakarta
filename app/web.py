@@ -17,7 +17,12 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
-from app.api import DOCUMENTS, MEASUREMENTS
+from app.api import (
+    DOCUMENTS,
+    MEASUREMENTS,
+    refresh_runtime_historical,
+    refresh_runtime_measurements,
+)
 from app.api import app as api_app
 from app.citations import linkify_citations
 from app.history import (
@@ -126,6 +131,18 @@ def _rows() -> list[dict[str, Any]]:
 
 
 ROWS = _rows()
+
+
+def _refresh_runtime_ui() -> None:
+    """Refresh DB-backed UI globals before each page is built."""
+    refresh_runtime_measurements()
+    global HISTORICAL, HISTORICAL_META, HISTORICAL_DIAGNOSTICS, LATEST, STATIONS, ROWS
+    HISTORICAL = refresh_runtime_historical()
+    HISTORICAL_META = historical_series_metadata(HISTORICAL)
+    HISTORICAL_DIAGNOSTICS = historical_series_diagnostics(HISTORICAL)
+    LATEST = get_latest_measurements(MEASUREMENTS)
+    STATIONS = load_runtime_stations(source_url=os.getenv("SOURCE_DATA_URL", ""))
+    ROWS = _rows()
 
 
 def _status_color(category: str) -> str:
@@ -667,6 +684,7 @@ def _render_chat_turn(parent, message: dict[str, Any]):
 
 
 def _chat_page() -> None:
+    _refresh_runtime_ui()
     client = ui.context.client
     state = client_state()
     _page_header(
@@ -774,6 +792,10 @@ def _chat_page() -> None:
         composer.disable()
         new_chat.disable()
         try:
+            # A chat can remain open across several cron runs. Refresh just
+            # before answering so its structured context is not the snapshot
+            # that happened to be loaded when the page was first opened.
+            refresh_runtime_measurements()
             task = asyncio.create_task(
                 asyncio.to_thread(
                     answer,
@@ -899,6 +921,7 @@ def _chat_page() -> None:
 
 
 def _render_map_page() -> None:
+    _refresh_runtime_ui()
     _page_header(
         "Live map",
         "Explore the latest station snapshot with human-readable categories and freshness filters.",
@@ -1083,6 +1106,7 @@ def _render_map_page() -> None:
 
 
 def _render_overview_page() -> None:
+    _refresh_runtime_ui()
     _page_header(
         "Current overview",
         "A readable network summary with category distribution, district comparison, and every station.",
@@ -1275,6 +1299,7 @@ HISTORICAL_TOOLTIP_FORMATTER = """function (params) {
 
 
 def _render_trends_page() -> None:
+    _refresh_runtime_ui()
     _page_header(
         "Trends",
         "Inspect up to one year of city-level PM2.5 and PM10 context with explicit dates and units.",

@@ -54,6 +54,14 @@ def refresh_city_history(output: str | Path = "data/processed/historical_city_ai
         writer = csv.DictWriter(handle, fieldnames=fields)
         writer.writeheader()
         writer.writerows({field: row.get(field, "") for field in fields} for _, row in sorted(existing.items()))
+    postgres_dsn = os.getenv("POSTGRES_DSN", "").strip()
+    if postgres_dsn:
+        try:
+            from app.db import publish_historical_city
+
+            publish_historical_city(existing.values(), postgres_dsn)
+        except (ImportError, OSError, RuntimeError, ValueError) as exc:
+            raise RuntimeError("PostgreSQL publication failed for historical city series") from exc
     return {"days_fetched": len(grouped), "days_total": len(existing), "latest": max(existing) if existing else ""}
 
 

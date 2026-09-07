@@ -16,7 +16,8 @@ from monitoring.logging import log_feedback, log_interaction
 from .evidence import compare_study_findings, get_source_apportionment
 from .policy import get_policy_status, get_policy_timeline
 from .provenance import source_manifest
-from .rag import answer, load_runtime_state
+from .rag import answer
+from .runtime_data import RuntimeRepository
 from .tools import (
     compare_locations,
     compare_measurement_with_standard,
@@ -27,13 +28,26 @@ from .tools import (
 )
 
 ROOT = Path(__file__).parents[1]
-DOCUMENTS, MEASUREMENTS = load_runtime_state(
-    os.getenv("DATA_DIR", ROOT / "data"), os.getenv("POSTGRES_DSN", "")
-)
+RUNTIME = RuntimeRepository(os.getenv("DATA_DIR", ROOT / "data"), os.getenv("POSTGRES_DSN", ""))
+DOCUMENTS = RUNTIME.documents()
+MEASUREMENTS = RUNTIME.measurements(force=True)
 app = FastAPI(title="Napas Jakarta API", version="0.1.0")
 
 
+def refresh_runtime_measurements(force: bool = False) -> list:
+    """Refresh the shared measurement list when a configured DB cache expires."""
+    if RUNTIME.dsn:
+        MEASUREMENTS[:] = RUNTIME.measurements(force=force)
+    return MEASUREMENTS
+
+
+def refresh_runtime_historical(force: bool = False) -> list[dict]:
+    """Return historical city data, preferring the durable DB when configured."""
+    return RUNTIME.historical(force=force)
+
+
 def _source_manifest() -> dict:
+    refresh_runtime_measurements()
     manifest = source_manifest(os.getenv("DATA_DIR", ROOT / "data"))
     runtime_sources = sorted({item.source for item in MEASUREMENTS})
     manifest["runtime_measurements"] = len(MEASUREMENTS)
@@ -85,6 +99,7 @@ class StudyCompareRequest(BaseModel):
 
 @app.get("/health")
 def health() -> dict[str, str | int | float | None]:
+    refresh_runtime_measurements()
     manifest = _source_manifest()
     return {
         "status": "ok",
@@ -131,6 +146,7 @@ def evidence_compare(request: StudyCompareRequest) -> dict:
 
 @app.get("/measurements/latest")
 def latest_measurements(location: str | None = None, pollutant: str = "PM2.5") -> dict:
+    refresh_runtime_measurements()
     return {
         "measurements": get_latest_measurements(MEASUREMENTS, location, pollutant),
         "source_mode": _source_manifest()["mode"],
@@ -139,6 +155,7 @@ def latest_measurements(location: str | None = None, pollutant: str = "PM2.5") -
 
 @app.post("/measurements/compare")
 def compare_measurements(request: CompareRequest) -> dict:
+    refresh_runtime_measurements()
     return {
         "comparisons": compare_locations(MEASUREMENTS, request.locations, request.pollutant),
         "source_mode": _source_manifest()["mode"],
@@ -147,6 +164,7 @@ def compare_measurements(request: CompareRequest) -> dict:
 
 @app.post("/measurements/history")
 def historical_measurements(request: HistoryRequest) -> dict:
+    refresh_runtime_measurements()
     if request.end < request.start:
         raise HTTPException(status_code=422, detail="end must not be before start")
     try:
@@ -160,6 +178,7 @@ def historical_measurements(request: HistoryRequest) -> dict:
 
 @app.post("/measurements/unhealthy-days")
 def unhealthy_days(request: HistoryRequest) -> dict:
+    refresh_runtime_measurements()
     if request.end < request.start:
         raise HTTPException(status_code=422, detail="end must not be before start")
     return {
@@ -181,6 +200,7 @@ def measurement_standard(request: StandardRequest) -> dict:
 
 @app.post("/ask")
 def ask(request: AskRequest) -> dict:
+    refresh_runtime_measurements()
     started = perf_counter()
     source_mode = _source_manifest()["mode"]
     session_id = request.session_id or f"api-{uuid4()}"

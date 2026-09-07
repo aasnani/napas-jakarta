@@ -160,8 +160,9 @@ Compose runs a one-shot `index` service after ingestion to populate Qdrant's
 dense and sparse collections before the app/API start.
 
 See [docs/architecture.md](docs/architecture.md), [docs/evaluation.md](docs/evaluation.md),
-[docs/ground-truth-review.md](docs/ground-truth-review.md),
- [docs/deployment.md](docs/deployment.md), and [docs/limitations.md](docs/limitations.md)
+ [docs/ground-truth-review.md](docs/ground-truth-review.md),
+ [docs/deployment.md](docs/deployment.md), [docs/deployment-railway.md](docs/deployment-railway.md),
+ and [docs/limitations.md](docs/limitations.md)
 for the implementation evidence, responsible-use boundaries,
 and the remaining production/deployment checklist.
 
