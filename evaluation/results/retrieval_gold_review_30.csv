@@ -1,41 +1,41 @@
 mode,scope,group,questions,hit_rate_at_5,question_hit_rate_at_5,chunk_recall_at_5,mrr_at_5,ndcg_at_5,p50_latency_ms,p95_latency_ms,multi_source_questions,multi_source_recall_at_5,multi_source_chunk_recall_at_5
-bm25,overall,all,30,0.6,0.6,0.4912,0.4594,0.4945,6.2763,6.4762,15,0.2,0.4556
-dense,overall,all,30,0.6333,0.6333,0.4912,0.4833,0.5171,6.19,6.4612,15,0.2667,0.4667
-hybrid,overall,all,30,0.6667,0.6667,0.5789,0.4694,0.5104,6.2821,6.6795,15,0.4667,0.5667
-hybrid_rerank,overall,all,30,0.6333,0.6333,0.5439,0.4956,0.5208,6.8269,7.0578,15,0.4,0.5444
-bm25,language,Bahasa Indonesia,15,0.4667,0.4667,0.4,0.3467,0.3766,6.2868,6.4762,7,0.0,0.2381
-bm25,language,English,15,0.7333,0.7333,0.5926,0.5722,0.6124,6.2763,6.6698,8,0.375,0.6458
-bm25,topic,causes,4,0.75,0.75,0.625,0.625,0.6577,6.2305,6.4762,1,0.0,0.5
-bm25,topic,current_measurements,4,0.25,0.25,0.2,0.125,0.1577,6.3187,6.4496,1,0.0,0.0
-bm25,topic,historical_category_threshold,5,0.8,0.8,0.6,0.6667,0.7,6.2856,6.3125,2,0.0,0.5833
-bm25,topic,missing_data_safety_abstention,3,0.0,0.0,0.0,0.0,0.0,6.2751,6.4568,1,0.0,0.0
-bm25,topic,multi_turn_followups,4,0.5,0.5,0.2222,0.3125,0.3577,6.2627,6.6698,4,0.0,0.25
-bm25,topic,protection_individual_action,5,0.8,0.8,0.7273,0.54,0.6022,6.1982,6.3168,3,0.6667,0.8889
-bm25,topic,regulations_implementation,5,0.8,0.8,0.6,0.7,0.7262,6.3653,6.4023,3,0.3333,0.5
-dense,language,Bahasa Indonesia,15,0.4667,0.4667,0.3333,0.3111,0.3426,6.2044,6.7109,7,0.1429,0.3333
-dense,language,English,15,0.8,0.8,0.6667,0.6556,0.6917,6.1705,6.4296,8,0.375,0.5833
-dense,topic,causes,4,0.5,0.5,0.375,0.375,0.4077,6.1452,6.3815,1,0.0,0.5
-dense,topic,current_measurements,4,0.75,0.75,0.6,0.75,0.75,6.1571,6.2075,1,0.0,0.5
-dense,topic,historical_category_threshold,5,0.8,0.8,0.7,0.5667,0.6101,6.1705,6.1978,2,0.5,0.6667
-dense,topic,missing_data_safety_abstention,3,0.6667,0.6667,0.5,0.5,0.5436,6.4296,6.7109,1,0.0,0.0
-dense,topic,multi_turn_followups,4,0.25,0.25,0.1111,0.0833,0.125,6.2478,6.4612,4,0.0,0.125
-dense,topic,protection_individual_action,5,0.6,0.6,0.4545,0.4,0.4649,6.163,6.2122,3,0.3333,0.7222
-dense,topic,regulations_implementation,5,0.8,0.8,0.7,0.6667,0.6754,6.2182,6.2833,3,0.6667,0.6667
-hybrid,language,Bahasa Indonesia,15,0.4667,0.4667,0.3667,0.2778,0.3262,6.2821,6.6795,7,0.1429,0.2619
-hybrid,language,English,15,0.8667,0.8667,0.8148,0.6611,0.6946,6.2856,6.9566,8,0.75,0.8333
-hybrid,topic,causes,4,0.75,0.75,0.75,0.625,0.6203,6.3677,6.6115,1,1.0,1.0
-hybrid,topic,current_measurements,4,0.5,0.5,0.4,0.3333,0.375,6.2048,6.2821,1,0.0,0.5
-hybrid,topic,historical_category_threshold,5,1.0,1.0,0.8,0.5833,0.6701,6.2856,6.439,2,0.5,0.6667
-hybrid,topic,missing_data_safety_abstention,3,0.6667,0.6667,0.5,0.3333,0.4206,6.298,6.4449,1,0.0,0.0
-hybrid,topic,multi_turn_followups,4,0.25,0.25,0.2222,0.0833,0.1359,6.4949,6.9566,4,0.25,0.25
-hybrid,topic,protection_individual_action,5,0.6,0.6,0.5455,0.5,0.5088,6.2466,6.5033,3,0.6667,0.8889
-hybrid,topic,regulations_implementation,5,0.8,0.8,0.7,0.7,0.7262,6.2742,6.3459,3,0.6667,0.6667
-hybrid_rerank,language,Bahasa Indonesia,15,0.4667,0.4667,0.4333,0.3556,0.379,6.8367,7.0578,7,0.2857,0.3571
-hybrid_rerank,language,English,15,0.8,0.8,0.6667,0.6356,0.6626,6.8269,7.0921,8,0.5,0.7083
-hybrid_rerank,topic,causes,4,0.75,0.75,0.625,0.625,0.6577,6.7836,6.9763,1,0.0,0.5
-hybrid_rerank,topic,current_measurements,4,0.25,0.25,0.2,0.125,0.1577,6.766,6.9337,1,0.0,0.0
-hybrid_rerank,topic,historical_category_threshold,5,0.8,0.8,0.8,0.8,0.7548,6.8671,6.8861,2,1.0,1.0
-hybrid_rerank,topic,missing_data_safety_abstention,3,0.6667,0.6667,0.5,0.1778,0.2956,6.8294,6.9335,1,0.0,0.0
-hybrid_rerank,topic,multi_turn_followups,4,0.5,0.5,0.2222,0.3333,0.375,6.826,7.0921,4,0.0,0.25
-hybrid_rerank,topic,protection_individual_action,5,0.6,0.6,0.5455,0.5,0.5141,6.8035,6.8616,3,0.6667,0.8889
-hybrid_rerank,topic,regulations_implementation,5,0.8,0.8,0.7,0.7,0.7262,6.8269,6.9117,3,0.6667,0.6667
+bm25,overall,all,30,0.6,0.6,0.4912,0.4594,0.4326,6.2206,7.9075,15,0.2,0.4556
+dense,overall,all,30,0.6333,0.6333,0.4912,0.4833,0.4587,6.1378,6.3419,15,0.2667,0.4667
+hybrid,overall,all,30,0.6667,0.6667,0.5789,0.4694,0.4856,6.165,6.3477,15,0.4667,0.5667
+hybrid_rerank,overall,all,30,0.6333,0.6333,0.5439,0.4956,0.4806,6.7447,7.2255,15,0.4,0.5444
+bm25,language,Bahasa Indonesia,15,0.4667,0.4667,0.4,0.3467,0.3185,6.2209,9.8274,7,0.0,0.2381
+bm25,language,English,15,0.7333,0.7333,0.5926,0.5722,0.5466,6.2206,7.9075,8,0.375,0.6458
+bm25,topic,causes,4,0.75,0.75,0.625,0.625,0.561,6.1466,6.4195,1,0.0,0.5
+bm25,topic,current_measurements,4,0.25,0.25,0.2,0.125,0.1577,7.8545,9.8274,1,0.0,0.0
+bm25,topic,historical_category_threshold,5,0.8,0.8,0.6,0.6667,0.6134,6.2322,6.2693,2,0.0,0.5833
+bm25,topic,missing_data_safety_abstention,3,0.0,0.0,0.0,0.0,0.0,6.1867,6.3277,1,0.0,0.0
+bm25,topic,multi_turn_followups,4,0.5,0.5,0.2222,0.3125,0.2193,6.196,6.4203,4,0.0,0.25
+bm25,topic,protection_individual_action,5,0.8,0.8,0.7273,0.54,0.5542,6.1946,6.5846,3,0.6667,0.8889
+bm25,topic,regulations_implementation,5,0.8,0.8,0.6,0.7,0.6774,6.2209,6.4463,3,0.3333,0.5
+dense,language,Bahasa Indonesia,15,0.4667,0.4667,0.3333,0.3111,0.2778,6.1553,6.8292,7,0.1429,0.3333
+dense,language,English,15,0.8,0.8,0.6667,0.6556,0.6395,6.1257,6.2172,8,0.375,0.5833
+dense,topic,causes,4,0.5,0.5,0.375,0.375,0.3467,6.0851,6.3075,1,0.0,0.5
+dense,topic,current_measurements,4,0.75,0.75,0.6,0.75,0.6533,6.1626,6.2165,1,0.0,0.5
+dense,topic,historical_category_threshold,5,0.8,0.8,0.7,0.5667,0.5319,6.1979,6.8292,2,0.5,0.6667
+dense,topic,missing_data_safety_abstention,3,0.6667,0.6667,0.5,0.5,0.5436,6.1421,6.2843,1,0.0,0.0
+dense,topic,multi_turn_followups,4,0.25,0.25,0.1111,0.0833,0.0766,6.1257,6.3419,4,0.0,0.125
+dense,topic,protection_individual_action,5,0.6,0.6,0.4545,0.4,0.3572,6.0913,6.1424,3,0.3333,0.7222
+dense,topic,regulations_implementation,5,0.8,0.8,0.7,0.6667,0.6754,6.147,6.1972,3,0.6667,0.6667
+hybrid,language,Bahasa Indonesia,15,0.4667,0.4667,0.3667,0.2778,0.2926,6.1823,6.4078,7,0.1429,0.2619
+hybrid,language,English,15,0.8667,0.8667,0.8148,0.6611,0.6786,6.1548,6.3477,8,0.75,0.8333
+hybrid,topic,causes,4,0.75,0.75,0.75,0.625,0.6203,6.1363,6.3361,1,1.0,1.0
+hybrid,topic,current_measurements,4,0.5,0.5,0.4,0.3333,0.3266,6.1197,6.1823,1,0.0,0.5
+hybrid,topic,historical_category_threshold,5,1.0,1.0,0.8,0.5833,0.6081,6.1506,6.165,2,0.5,0.6667
+hybrid,topic,missing_data_safety_abstention,3,0.6667,0.6667,0.5,0.3333,0.4206,6.1962,6.2732,1,0.0,0.0
+hybrid,topic,multi_turn_followups,4,0.25,0.25,0.2222,0.0833,0.1359,6.1965,6.4078,4,0.25,0.25
+hybrid,topic,protection_individual_action,5,0.6,0.6,0.5455,0.5,0.4608,6.1568,6.3477,3,0.6667,0.8889
+hybrid,topic,regulations_implementation,5,0.8,0.8,0.7,0.7,0.7262,6.2159,6.2569,3,0.6667,0.6667
+hybrid_rerank,language,Bahasa Indonesia,15,0.4667,0.4667,0.4333,0.3556,0.3533,6.7501,7.2255,7,0.2857,0.3571
+hybrid_rerank,language,English,15,0.8,0.8,0.6667,0.6356,0.6079,6.7447,7.5413,8,0.5,0.7083
+hybrid_rerank,topic,causes,4,0.75,0.75,0.625,0.625,0.561,6.7092,6.8874,1,0.0,0.5
+hybrid_rerank,topic,current_measurements,4,0.25,0.25,0.2,0.125,0.1577,6.6732,6.793,1,0.0,0.0
+hybrid_rerank,topic,historical_category_threshold,5,0.8,0.8,0.8,0.8,0.7548,6.7781,7.1932,2,1.0,1.0
+hybrid_rerank,topic,missing_data_safety_abstention,3,0.6667,0.6667,0.5,0.1778,0.2956,7.2255,7.5413,1,0.0,0.0
+hybrid_rerank,topic,multi_turn_followups,4,0.5,0.5,0.2222,0.3333,0.2299,6.7447,6.9928,4,0.0,0.25
+hybrid_rerank,topic,protection_individual_action,5,0.6,0.6,0.5455,0.5,0.4662,6.7129,6.7884,3,0.6667,0.8889
+hybrid_rerank,topic,regulations_implementation,5,0.8,0.8,0.7,0.7,0.7262,6.733,6.8683,3,0.6667,0.6667

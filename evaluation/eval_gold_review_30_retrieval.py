@@ -112,7 +112,17 @@ def _question_metrics(
         )
         for document_id in found_documents
     ]
-    ideal_gains = sorted(gains + [0] * len(relevant_parents), reverse=True)[:TOP_K]
+    ideal_parent_gains = sorted(
+        (
+            sum(
+                _parent_document_id(chunk_id, chunks) == parent_id
+                for chunk_id in relevant_chunks
+            )
+            for parent_id in relevant_parents
+        ),
+        reverse=True,
+    )
+    ideal_gains = ideal_parent_gains[:TOP_K]
     dcg = sum(gain / math.log2(rank + 1) for rank, gain in enumerate(gains, start=1))
     ideal_dcg = sum(
         gain / math.log2(rank + 1)
