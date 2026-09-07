@@ -22,6 +22,7 @@ def _render_all_pages() -> None:
         ("/map", web._render_map_page),
         ("/overview", web._render_overview_page),
         ("/trends", web._render_trends_page),
+        ("/monitoring", web._render_monitoring_page),
     ):
         web._shell2(active, content)
 

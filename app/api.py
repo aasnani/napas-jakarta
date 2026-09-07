@@ -11,6 +11,7 @@ from uuid import uuid4
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
+from monitoring.analytics import load_dashboard
 from monitoring.logging import log_feedback, log_interaction
 
 from .evidence import compare_study_findings, get_source_apportionment
@@ -109,6 +110,12 @@ def health() -> dict[str, str | int | float | None]:
         "measurement_store": "postgres" if os.getenv("POSTGRES_DSN", "").strip() else "local",
         "data_age_seconds": latest_data_age_seconds(MEASUREMENTS),
     }
+
+
+@app.get("/monitoring/summary")
+def monitoring_summary(days: int = 30) -> dict:
+    """Return aggregate telemetry only; user-entered text is never exposed."""
+    return load_dashboard(days)
 
 
 @app.get("/sources")

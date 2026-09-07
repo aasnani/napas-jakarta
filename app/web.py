@@ -33,6 +33,7 @@ from app.history import (
 from app.rag import answer
 from app.stations import display_district_name, display_station_name, load_runtime_stations
 from app.tools import get_latest_measurements, latest_data_age_seconds
+from monitoring.analytics import load_dashboard
 
 ROOT = Path(__file__).resolve().parents[1]
 ICON_PATH = ROOT / "assets" / "napas-jakarta-air-icon.png"
@@ -540,6 +541,7 @@ def _shell2(active: str, content) -> None:
         _navigation_link("/map", "Live map", "map", active)
         _navigation_link("/overview", "Overview", "dashboard", active)
         _navigation_link("/trends", "Trends", "show_chart", active)
+        _navigation_link("/monitoring", "Monitoring", "monitoring", active)
         ui.separator().classes("my-4")
         ui.label("One clear view of Jakarta's air, its causes, and what people can do.").classes(
             "text-sm napas-muted px-3"
@@ -1406,6 +1408,143 @@ def _render_trends_page() -> None:
         ).classes("text-sm napas-muted")
 
 
+def _monitoring_chart(title: str, subtitle: str, options: dict[str, Any], *, empty: bool = False):
+    """Render one telemetry chart with a consistent empty state."""
+    with ui.card().classes("napas-card flex-1 min-w-[320px] p-4"):
+        ui.label(title).classes("text-lg font-semibold")
+        ui.label(subtitle).classes("text-xs napas-muted")
+        if empty:
+            ui.label("No aggregate data in this window yet.").classes("text-sm napas-muted py-12")
+        else:
+            ui.echart(options).classes("w-full h-72")
+
+
+def _render_monitoring_page() -> None:
+    """Show privacy-preserving operational aggregates for the running service."""
+    _page_header(
+        "Service monitoring",
+        "Aggregate health and usage signals for Napas Jakarta · Pemantauan layanan, tanpa teks pertanyaan.",
+    )
+    dashboard = load_dashboard(30)
+    summary = dashboard["summary"]
+    source_label = dashboard.get("source", "No data")
+    ui.label(
+        f"Last 30 days · {source_label}. Only counts, rates, timings, and costs are shown; user questions and comments are never displayed."
+    ).classes("text-sm napas-muted")
+    with ui.row().classes("w-full gap-3 flex-wrap"):
+        _metric("Requests · Permintaan", f"{summary['requests']:,}", "completed answers", "forum")
+        p50 = "—" if summary["p50_latency_ms"] is None else f"{summary['p50_latency_ms']:.0f} ms"
+        p95 = "—" if summary["p95_latency_ms"] is None else f"{summary['p95_latency_ms']:.0f} ms"
+        _metric("p50 latency", p50, f"p95 {p95}", "speed")
+        citation = "—" if summary["citation_rate"] is None else f"{summary['citation_rate'] * 100:.1f}%"
+        _metric("Citation-grounded", citation, "answers with a grounded citation", "verified")
+        _metric(
+            "Feedback · Umpan balik",
+            f"{summary['feedback_total']:,}",
+            f"{summary['feedback_positive']:,} helpful · {summary['feedback_negative']:,} needs work",
+            "thumbs_up_down",
+        )
+        _metric(
+            "Tokens / estimated cost",
+            f"{summary['tokens']:,}",
+            f"US${summary['estimated_cost_usd']:.4f}",
+            "payments",
+        )
+
+    by_day = dashboard["requests_by_day"]
+    _monitoring_chart(
+        "Requests over time · Permintaan per hari",
+        "Completed answer events, grouped by UTC calendar day.",
+        {
+            "tooltip": {"trigger": "axis"},
+            "xAxis": {"type": "category", "data": [row["date"] for row in by_day]},
+            "yAxis": {"type": "value", "minInterval": 1},
+            "series": [{"name": "Requests", "type": "bar", "data": [row["requests"] for row in by_day], "itemStyle": {"color": TOKENS["primary"]}}],
+        },
+        empty=not by_day,
+    )
+
+    latency = dashboard["latency_by_day"]
+    _monitoring_chart(
+        "Latency · Latensi",
+        "p50 is the typical response; p95 shows the slower tail. Values are milliseconds.",
+        {
+            "tooltip": {"trigger": "axis"},
+            "legend": {"data": ["p50", "p95"]},
+            "xAxis": {"type": "category", "data": [row["date"] for row in latency]},
+            "yAxis": {"type": "value", "name": "ms"},
+            "series": [
+                {"name": "p50", "type": "line", "connectNulls": True, "data": [row["p50_ms"] for row in latency], "itemStyle": {"color": TOKENS["primary"]}},
+                {"name": "p95", "type": "line", "connectNulls": True, "data": [row["p95_ms"] for row in latency], "itemStyle": {"color": TOKENS["unhealthy"]}},
+            ],
+        },
+        empty=not latency,
+    )
+
+    route_rows = dashboard["routes"]
+    _monitoring_chart(
+        "Answer routes · Rute jawaban",
+        "Which deterministic answer path handled each request.",
+        {
+            "tooltip": {"trigger": "item"},
+            "legend": {"type": "scroll", "bottom": 0},
+            "series": [{"type": "pie", "radius": ["38%", "70%"], "data": [{"name": row["name"], "value": row["count"]} for row in route_rows]}],
+        },
+        empty=not route_rows,
+    )
+
+    retrieval_rows = dashboard["retrieval_modes"]
+    _monitoring_chart(
+        "Retrieval modes · Mode pencarian",
+        "Search strategy selected for evidence retrieval.",
+        {
+            "tooltip": {"trigger": "item"},
+            "xAxis": {"type": "category", "data": [row["name"] for row in retrieval_rows]},
+            "yAxis": {"type": "value", "minInterval": 1},
+            "series": [{"type": "bar", "data": [row["count"] for row in retrieval_rows], "itemStyle": {"color": "#205C8A"}}],
+        },
+        empty=not retrieval_rows,
+    )
+
+    usage = dashboard["usage_by_day"]
+    _monitoring_chart(
+        "Tokens and estimated cost · Token dan biaya",
+        "Provider-reported token totals and estimated USD cost by day.",
+        {
+            "tooltip": {"trigger": "axis"},
+            "legend": {"data": ["Tokens", "Cost (USD)"]},
+            "xAxis": {"type": "category", "data": [row["date"] for row in usage]},
+            "yAxis": [{"type": "value", "name": "tokens"}, {"type": "value", "name": "USD"}],
+            "series": [
+                {"name": "Tokens", "type": "bar", "data": [row["tokens"] for row in usage], "itemStyle": {"color": "#6A1B9A"}},
+                {"name": "Cost (USD)", "type": "line", "yAxisIndex": 1, "data": [row["cost_usd"] for row in usage], "itemStyle": {"color": TOKENS["moderate"]}},
+            ],
+        },
+        empty=not usage,
+    )
+
+    feedback_rows = dashboard["feedback"]
+    _monitoring_chart(
+        "Feedback · Umpan balik",
+        "Helpful versus needs-improvement signals; comments remain private.",
+        {
+            "tooltip": {"trigger": "axis"},
+            "legend": {"data": ["Helpful", "Needs improvement"]},
+            "xAxis": {"type": "category", "data": [row["date"] for row in feedback_rows]},
+            "yAxis": {"type": "value", "minInterval": 1},
+            "series": [
+                {"name": "Helpful", "type": "bar", "stack": "feedback", "data": [row.get("positive", 0) for row in feedback_rows], "itemStyle": {"color": TOKENS["good"]}},
+                {"name": "Needs improvement", "type": "bar", "stack": "feedback", "data": [row.get("negative", 0) for row in feedback_rows], "itemStyle": {"color": TOKENS["unhealthy"]}},
+            ],
+        },
+        empty=not feedback_rows,
+    )
+    with ui.expansion("How to read this page · Cara membaca", icon="info").classes("w-full"):
+        ui.label(
+            "Requests count completed answer events, not unique people. p50/p95 describe response-time distribution. Citation-grounded means the answer passed the app's citation validation. Estimated cost depends on provider pricing and may be unavailable for local models. Small samples should not be treated as product benchmarks."
+        ).classes("text-sm leading-6")
+
+
 if ui is not None:
 
     @ui.page("/")
@@ -1423,6 +1562,10 @@ if ui is not None:
     @ui.page("/trends")
     def trends_page() -> None:
         _shell2("/trends", _render_trends_page)
+
+    @ui.page("/monitoring")
+    def monitoring_page() -> None:
+        _shell2("/monitoring", _render_monitoring_page)
 
     # NiceGUI adds its Vue/Quasar app to the existing FastAPI object.
     ui.run_with(
