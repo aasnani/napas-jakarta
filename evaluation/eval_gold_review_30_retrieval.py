@@ -25,6 +25,25 @@ OUT_JSON = ROOT / "evaluation/results/retrieval_gold_review_30.json"
 OUT_CSV = ROOT / "evaluation/results/retrieval_gold_review_30.csv"
 MODES = ("bm25", "dense", "hybrid", "hybrid_rerank")
 TOP_K = 5
+DOCUMENT_RAG_EXPECTED_ROUTES = frozenset(
+    {
+        "guideline_vs_law",
+        "historical_provenance",
+        "guideline_vs_index",
+        "source_apportionment",
+        "causal_inference",
+        "regional_sources",
+        "regulation_current",
+        "regulation_scope",
+        "implementation_evidence",
+        "court_record_status",
+        "policy_implementation",
+        "exposure_reduction",
+        "indoor_filtration",
+        "respirator_limits",
+        "individual_emission_reduction",
+    }
+)
 
 
 def load_rows(path: str | Path = PACKET) -> list[dict[str, Any]]:
@@ -162,12 +181,14 @@ def _aggregate(
         if scope == "overall"
         or (scope == "language" and row["language"] == group)
         or (scope == "topic" and row["topic"] == group)
+        or (scope == "document_rag" and row["expected_route"] in DOCUMENT_RAG_EXPECTED_ROUTES)
     ]
     selected_latencies = latencies if scope == "overall" else [
         latency
         for row, latency in zip(rows, latencies)
         if (scope == "language" and row["language"] == group)
         or (scope == "topic" and row["topic"] == group)
+        or (scope == "document_rag" and row["expected_route"] in DOCUMENT_RAG_EXPECTED_ROUTES)
     ]
     questions = len(selected)
     relevant_chunks = sum(item["human_relevant_chunk_count"] for item in selected)
@@ -275,6 +296,9 @@ def evaluate() -> dict[str, Any]:
             segments.append(_aggregate(mode, rows, details, all_latencies[mode], "language", language))
         for topic in sorted({row["topic"] for row in rows}):
             segments.append(_aggregate(mode, rows, details, all_latencies[mode], "topic", topic))
+        segments.append(
+            _aggregate(mode, rows, details, all_latencies[mode], "document_rag", "document_rag")
+        )
 
     return {
         "status": "human_reviewed",
@@ -292,6 +316,10 @@ def evaluate() -> dict[str, Any]:
             "lower_p50_latency_ms",
         ],
         "selected_mode": winner["mode"],
+        "document_rag_scope": {
+            "description": "Routes expected to answer from documentary evidence; typed measurement, index, and abstention routes are reported separately in the all-system set.",
+            "expected_routes": sorted(DOCUMENT_RAG_EXPECTED_ROUTES),
+        },
         "modes": by_mode,
         "segments": segments,
         "per_question": all_details,
@@ -313,7 +341,7 @@ def main() -> None:
         "multi_source_recall_at_5", "multi_source_chunk_recall_at_5",
     )
     with OUT_CSV.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fields)
+        writer = csv.DictWriter(handle, fieldnames=fields, lineterminator="\n")
         writer.writeheader()
         writer.writerows({key: row.get(key) for key in fields} for row in _csv_rows(payload))
     print(json.dumps(payload, ensure_ascii=False, indent=2))

@@ -8,7 +8,7 @@
       "hit_rate_at_5": 0.6133,
       "mrr_at_5": 0.4133,
       "ndcg_at_5": 0.4552,
-      "p50_latency_ms": 6.2744,
+      "p50_latency_ms": 6.6597,
       "questions": 150,
       "language_hit_rate_at_5": {
         "English": 0.72,
@@ -21,7 +21,7 @@
       "hit_rate_at_5": 0.66,
       "mrr_at_5": 0.513,
       "ndcg_at_5": 0.5378,
-      "p50_latency_ms": 6.2497,
+      "p50_latency_ms": 6.6051,
       "questions": 150,
       "language_hit_rate_at_5": {
         "English": 0.88,
@@ -34,7 +34,7 @@
       "hit_rate_at_5": 0.7067,
       "mrr_at_5": 0.5274,
       "ndcg_at_5": 0.563,
-      "p50_latency_ms": 6.2717,
+      "p50_latency_ms": 6.5513,
       "questions": 150,
       "language_hit_rate_at_5": {
         "English": 0.8133,
@@ -47,7 +47,7 @@
       "hit_rate_at_5": 0.6933,
       "mrr_at_5": 0.4789,
       "ndcg_at_5": 0.5268,
-      "p50_latency_ms": 6.8546,
+      "p50_latency_ms": 7.1141,
       "questions": 150,
       "language_hit_rate_at_5": {
         "English": 0.7867,

@@ -9,9 +9,9 @@
   "staleness_detection": 1.0,
   "missing_data_not_zero": 1.0,
   "unsupported_calculation_rejected": true,
-  "route_latency_ms_p50": 0.0092,
-  "route_latency_ms_p95": 0.0145,
-  "latest_tool_latency_ms_p50": 0.0038,
+  "route_latency_ms_p50": 0.0203,
+  "route_latency_ms_p95": 0.0275,
+  "latest_tool_latency_ms_p50": 0.0059,
   "rows": [
     {
       "case_id": "route-1-01",

@@ -4,10 +4,10 @@ This is an offline benchmark over the expanded corpus. Questions are stratified 
 
 | Mode | Hit rate@5 | MRR@5 | nDCG@5 | p50 latency (ms) |
 |---|---:|---:|---:|---:|
-| bm25 | 0.6133 | 0.4133 | 0.4552 | 6.2744 |
-| dense | 0.6600 | 0.5130 | 0.5378 | 6.2497 |
-| hybrid | 0.7067 | 0.5274 | 0.5630 | 6.2717 |
-| hybrid_rerank | 0.6933 | 0.4789 | 0.5268 | 6.8546 |
+| bm25 | 0.6133 | 0.4133 | 0.4552 | 6.6597 |
+| dense | 0.6600 | 0.5130 | 0.5378 | 6.6051 |
+| hybrid | 0.7067 | 0.5274 | 0.5630 | 6.5513 |
+| hybrid_rerank | 0.6933 | 0.4789 | 0.5268 | 7.1141 |
 
 Language hit@5 and multi-source recall:
 

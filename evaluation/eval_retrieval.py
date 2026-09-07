@@ -74,7 +74,7 @@ def write_artifacts(results: list[dict], output_dir: str | Path = "evaluation/re
         writer = csv.DictWriter(handle, fieldnames=("mode", "hit_rate_at_5", "mrr_at_5",
                                                     "ndcg_at_5", "p50_latency_ms", "questions",
                                                     "language_hit_rate_at_5",
-                                                    "multi_source_recall_at_5"))
+                                                    "multi_source_recall_at_5"), lineterminator="\n")
         writer.writeheader()
         writer.writerows({**row, "language_hit_rate_at_5": json.dumps(
             row["language_hit_rate_at_5"], ensure_ascii=False)} for row in results)
