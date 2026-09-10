@@ -207,3 +207,29 @@ def test_ingestion_uses_retained_snapshot_when_official_source_times_out(tmp_pat
     assert result["measurements"] == len(load_measurements(data_dir / "processed/measurements.csv"))
     assert report["source_status"] == "retained-local-snapshot"
     assert report["source_error"].startswith("ReadTimeout:")
+
+
+def test_ingestion_uses_retained_snapshot_when_official_source_is_not_text(
+    tmp_path, monkeypatch
+):
+    import json
+    import shutil
+
+    from ingestion import flow
+
+    source_root = Path(__file__).parents[1] / "data"
+    data_dir = tmp_path / "data"
+    shutil.copytree(source_root, data_dir)
+    monkeypatch.setenv("SOURCE_DATA_URL", "https://example.test/official")
+
+    def image_response(*args, **kwargs):
+        raise UnicodeDecodeError("utf-8", b"\xff", 0, 1, "invalid start byte")
+
+    monkeypatch.setattr(flow, "fetch_measurements", image_response)
+    monkeypatch.setattr(flow, "fetch_stations", lambda *args, **kwargs: [])
+
+    result = flow.run_ingestion(data_dir)
+    report = json.loads((data_dir / "ingestion_report.json").read_text())
+    assert result["measurements"] == len(load_measurements(data_dir / "processed/measurements.csv"))
+    assert report["source_status"] == "retained-local-snapshot"
+    assert report["source_error"].startswith("UnicodeDecodeError:")
