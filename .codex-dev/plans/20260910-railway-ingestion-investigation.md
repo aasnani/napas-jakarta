@@ -7,7 +7,7 @@ the next run; keep the repository in `~/Documents/Projects` without losing
 pre-existing working changes.
 
 ## Non-goals
-- Do not redeploy, restart, replay, or backfill data in this change.
+- Do not restart, replay, or backfill data in this change.
 - Do not change Railway variables, services, schedules, or persistent data.
 - Do not expose secret values or sensitive payloads.
 
@@ -30,7 +30,8 @@ pre-existing working changes.
 ## Constraints
 - Preserve all pre-existing dirty work; no reset, checkout, or cleanup of user
   files.
-- Railway access is read-only for this investigation.
+- Railway deployment is authorized only for the committed ingestion fix; do
+  not deploy unrelated dirty work.
 - The move is explicitly authorized by the user after investigation.
 - Do not commit or push without a separate verified implementation request.
 
@@ -58,6 +59,9 @@ is in scope.
 4. Implement and test safe source-failure fallback (complete).
 5. Report root cause, behavior, operational impact, and safe deployment next
    action (complete).
+6. Deploy the exact committed fix to the production ingestion service and
+   verify the deployment (deployment passed; scheduled runtime verification
+   pending).
 
 ## Task envelopes
 - Investigation: read-only repository inspection, CodeGraph mapping, Railway
@@ -68,6 +72,10 @@ is in scope.
   at the source boundary; no in-job sleep or retry schedule change (complete).
 - Verification: confirm new path, git branch, diff summary, remote, and no
   unexpected tracked-file changes.
+- Deployment: create a clean archive from commit `b4180b1`, preserve the cron
+  service command/config, deploy only to Railway service `ingestion`, and
+  inspect deployment status and logs (deployment status passed; logs await the
+  next scheduled run).
 
 ## Required evidence and gates
 - Reliability gate: identify failure layer, impact window, retry behavior, and
@@ -112,3 +120,8 @@ is in scope.
 - 2026-09-10: targeted tests (14) and Ruff passed; full suite reached 130
   passing but has 4 unrelated pre-existing UI contract failures in the user's
   dirty `app/web.py`/i18n work.
+- 2026-09-10: user authorized production deployment of the committed fix;
+  deployment must use a clean commit archive rather than the dirty checkout.
+- 2026-09-10: deployed clean commit `b4180b1` to production Railway service
+  `ingestion` as deployment `0bbf3075-d056-49a5-ae66-59d4c2b42881`; Railway
+  reports the cron online with the next scheduled run pending.
