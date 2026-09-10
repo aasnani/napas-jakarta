@@ -60,8 +60,7 @@ is in scope.
 5. Report root cause, behavior, operational impact, and safe deployment next
    action (complete).
 6. Deploy the exact committed fix to the production ingestion service and
-   verify the deployment (deployment passed; scheduled runtime verification
-   pending).
+   verify the deployment (complete).
 
 ## Task envelopes
 - Investigation: read-only repository inspection, CodeGraph mapping, Railway
@@ -74,8 +73,7 @@ is in scope.
   unexpected tracked-file changes.
 - Deployment: create a clean archive from commit `b4180b1`, preserve the cron
   service command/config, deploy only to Railway service `ingestion`, and
-  inspect deployment status and logs (deployment status passed; logs await the
-  next scheduled run).
+  inspect deployment status and logs (passed).
 
 ## Required evidence and gates
 - Reliability gate: identify failure layer, impact window, retry behavior, and
@@ -125,3 +123,6 @@ is in scope.
 - 2026-09-10: deployed clean commit `b4180b1` to production Railway service
   `ingestion` as deployment `0bbf3075-d056-49a5-ae66-59d4c2b42881`; Railway
   reports the cron online with the next scheduled run pending.
+- 2026-09-10: verified the first scheduled post-deploy run completed at
+  `2026-09-10T15:01:18Z`; logs reported 296 measurements and no unhandled
+  exception.
