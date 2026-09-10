@@ -19,7 +19,7 @@ from .historical import refresh_city_history
 
 def main() -> dict[str, object]:
     station_result = run_ingestion(os.getenv("DATA_DIR", "data"))
-    configured_hour = int(os.getenv("HISTORICAL_REFRESH_UTC_HOUR", "17"))
+    configured_hour = int(os.getenv("HISTORICAL_REFRESH_UTC_HOUR", "18"))
     now = datetime.now(UTC)
     run_historical = os.getenv("RUN_HISTORICAL", "").strip().lower() in {"1", "true", "yes"}
     run_historical = run_historical or now.hour == configured_hour

@@ -61,6 +61,9 @@ is in scope.
    action (complete).
 6. Deploy the exact committed fix to the production ingestion service and
    verify the deployment (complete).
+7. Reduce station-ingestion cadence to every six hours while aligning the
+   daily historical refresh to a scheduled UTC hour, then deploy and verify
+   (pending).
 
 ## Task envelopes
 - Investigation: read-only repository inspection, CodeGraph mapping, Railway
@@ -74,6 +77,9 @@ is in scope.
 - Deployment: create a clean archive from commit `b4180b1`, preserve the cron
   service command/config, deploy only to Railway service `ingestion`, and
   inspect deployment status and logs (passed).
+- Cadence change: use `0 */6 * * *`; align
+  `HISTORICAL_REFRESH_UTC_HOUR` from 17 to 18 UTC so the daily historical job
+  remains reachable.
 
 ## Required evidence and gates
 - Reliability gate: identify failure layer, impact window, retry behavior, and
@@ -94,6 +100,8 @@ is in scope.
   preserve it rather than deleting user-visible files.
 - Risk: retrying the cron could duplicate or alter persisted state; preserve the
   existing upsert/idempotency behavior and do not trigger a production replay.
+- Risk: six-hour cadence increases maximum freshness delay and reduces the
+  frequency of retention cleanup; verify the new operational bound.
 
 ## Attempt ledger
 - Attempt 1: local and Railway evidence collection; succeeded in isolating the
@@ -126,3 +134,6 @@ is in scope.
 - 2026-09-10: verified the first scheduled post-deploy run completed at
   `2026-09-10T15:01:18Z`; logs reported 296 measurements and no unhandled
   exception.
+- 2026-09-10: user requested six-hour cadence; identified that the prior 17 UTC
+  historical refresh hour would be skipped, so the safe change aligns it to
+  18 UTC.
