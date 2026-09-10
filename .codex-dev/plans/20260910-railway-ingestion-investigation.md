@@ -63,7 +63,7 @@ is in scope.
    verify the deployment (complete).
 7. Reduce station-ingestion cadence to every six hours while aligning the
    daily historical refresh to a scheduled UTC hour, then deploy and verify
-   (pending).
+   (complete).
 
 ## Task envelopes
 - Investigation: read-only repository inspection, CodeGraph mapping, Railway
@@ -79,7 +79,7 @@ is in scope.
   inspect deployment status and logs (passed).
 - Cadence change: use `0 */6 * * *`; align
   `HISTORICAL_REFRESH_UTC_HOUR` from 17 to 18 UTC so the daily historical job
-  remains reachable.
+  remains reachable (passed).
 
 ## Required evidence and gates
 - Reliability gate: identify failure layer, impact window, retry behavior, and
@@ -137,3 +137,7 @@ is in scope.
 - 2026-09-10: user requested six-hour cadence; identified that the prior 17 UTC
   historical refresh hour would be skipped, so the safe change aligns it to
   18 UTC.
+- 2026-09-10: applied the schedule-only Railway IaC change; deployment
+  `f03fe09b-16ef-4277-a4be-349a50692d4a` succeeded and Railway reports
+  `0 */6 * * *` with the ingestion service online. Production variable
+  `HISTORICAL_REFRESH_UTC_HOUR=18` is aligned.
