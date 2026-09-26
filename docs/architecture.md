@@ -1,5 +1,12 @@
 # Architecture
 
+> Direction update (2026-09-26): the accepted replacement experience is the
+> single-workspace design in [product-design.md](product-design.md). The older
+> NiceGUI multi-page presentation remains the current deployed baseline during
+> migration, but its UI decision is historical and must not guide new frontend
+> work. The new target uses Next.js/React, Eve, and MapLibre; FastAPI and the
+> verified Python data/domain layer remain authoritative initially.
+
 The deployed product is a combined NiceGUI and FastAPI ASGI service. NiceGUI
 provides the resident-facing Ask, map, overview, trends, and Monitoring pages;
 FastAPI exposes the same domain functions at HTTP endpoints. `app/ui.py` is a
