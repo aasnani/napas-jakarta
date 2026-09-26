@@ -1,0 +1,11 @@
+node_modules
+.env*
+.eve
+.vercel
+.next
+public/maplibre
+.output
+.nitro
+dist
+.DS_Store
+*.tsbuildinfo
