@@ -5,8 +5,12 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Napas Jakarta · Air quality, understood",
+  title: "Napas Jakarta | Air Quality Monitor",
   description: "A conversational workspace for understanding Jakarta air quality.",
+  icons: {
+    icon: [{ url: "/napas-jakarta-air-icon.png", type: "image/png", sizes: "1254x1254" }],
+    apple: "/napas-jakarta-air-icon.png",
+  },
 };
 
 export default function RootLayout({ children }: { readonly children: ReactNode }) {
