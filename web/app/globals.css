@@ -490,9 +490,12 @@ textarea {
 }
 
 @media (max-width: 980px) {
-  .topbar { height: 60px; }
+  .topbar { display: flex; height: 60px; gap: 12px; }
   .topbar-side { display: none; }
+  .topbar-left { flex: 1 1 auto; overflow: visible; }
   .topbar-left .topbar-actions { position: static; transform: none; }
+  .brand { position: absolute; left: 50%; transform: translateX(-50%); }
+  .topbar-right { flex: 0 0 auto; }
   .workspace { position: relative; display: block; height: calc(100dvh - 60px); min-height: calc(100dvh - 60px); }
   .chat-panel { display: flex; height: calc(100dvh - 60px); min-height: 0; border-right: 0; }
   .map-panel { display: none; min-height: 0; }
@@ -811,8 +814,8 @@ textarea {
   .topbar-left .topbar-side { flex: 0 0 auto; max-width: none; font-size: 10px; letter-spacing: .04em; }
   .topbar-label-full { display: none; }
   .topbar-label-mobile { display: inline; }
-  .topbar-actions { gap: 10px; }
-  .napas-od-app .topbar-link { font-size: 11px; }
+  .topbar-actions { gap: 6px; }
+  .napas-od-app .topbar-link { font-size: 10px; }
   .napas-od-app .napas-station-trigger { font-size: 10px; }
   .napas-topic-picker { max-width: 124px; }
   .napas-od-app .napas-topic-trigger { font-size: 10px; }
@@ -849,8 +852,12 @@ textarea {
 @media (max-width: 390px) {
   .topbar-left { gap: 0; }
   .topbar-left .topbar-side { flex: 0 0 auto; max-width: none; font-size: 8px; letter-spacing: .01em; }
-  .topbar-actions { gap: 8px; }
+  .topbar-actions { gap: 4px; }
   .napas-od-app .topbar-link { font-size: 10px; }
+}
+
+@media (max-width: 430px) {
+  .brand-title small { display: none; }
 }
 
 /* Desktop surface rhythm. Keep the mobile assistant/map transition full-bleed. */

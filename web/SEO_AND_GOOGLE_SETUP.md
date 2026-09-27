@@ -22,13 +22,16 @@ changes; merging code alone does not prove that production has updated.
    needed. If Search Console shows verification is still pending, follow the
    method shown for that property.
 2. Submit `https://napasjakarta.armasn.dev/sitemap.xml` under **Sitemaps**.
-   Use URL inspection for the homepage, About page, and both guide pages:
+   Use URL inspection for the homepage, About pages, both guide pages, and both
+   Privacy pages:
    - `https://napasjakarta.armasn.dev/`
    - `https://napasjakarta.armasn.dev/about`
    - `https://napasjakarta.armasn.dev/id/tentang`
    - `https://napasjakarta.armasn.dev/air-quality-jakarta`
    - `https://napasjakarta.armasn.dev/id/kualitas-udara-jakarta`
-   The Privacy pages are intentionally marked `noindex`.
+   - `https://napasjakarta.armasn.dev/privacy`
+   - `https://napasjakarta.armasn.dev/id/privasi`
+   The Privacy pages are indexable and included in the sitemap.
 3. In **Settings → Search generative AI**, verify Napas is included in Google
    Search's generative AI features. If the property inherits a parent setting,
    confirm that setting is also inclusion. Google says inclusion is the default
@@ -112,8 +115,8 @@ queries and landing-page performance to refine them after indexing.
 
 - **Available now:** the workspace homepage, a sourced air-quality guide in
   each language, and bilingual About pages. The guide pages have reciprocal
-  language links and self-canonicals. Privacy pages are directly accessible but
-  marked `noindex`.
+  language links and self-canonicals. Privacy pages are directly accessible,
+  indexable, and included in the sitemap with reciprocal language alternates.
 - **Next:** a data-source and freshness page, once the exact update cadence,
   station coverage, and fallback behavior can be stated for users.
 - **Then:** a station coverage explainer with official source links and dates;

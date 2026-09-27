@@ -117,8 +117,9 @@ Railway deployment status, and the public health endpoint after each release.
 
 - The web code defines canonical metadata, bilingual air-quality guides and
   About pages, `robots.txt`, and an XML sitemap. The sitemap lists the public
-  homepage, About pages, and both guides; bilingual Privacy pages are marked
-  `noindex`.
+  homepage, About pages, both guides, and bilingual Privacy pages with language
+  alternates. The homepage header links to the air-quality guide in the
+  currently selected language.
 - Google Analytics support is opt-in and uses Napas's configured public
   measurement ID, with `NEXT_PUBLIC_GA_MEASUREMENT_ID` available as a build-time
   override. Events include fixed interaction names and bounded action labels,
