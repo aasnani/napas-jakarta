@@ -1,6 +1,6 @@
 # Napas Jakarta application state
 
-**Last verified:** 27 September 2026 (Asia/Jakarta)
+**Last verified:** 28 September 2026 (Asia/Jakarta)
 
 This is the concise operational checkpoint for Napas Jakarta. It records the
 broad product, data, deployment, security, and observability state so future
@@ -23,11 +23,10 @@ source, and abstain when the required evidence is unavailable.
 
 ## Repository and release state
 
-- The remote source of truth is `origin/main` at commit `0a13d1a`, which includes
-  the merged Railway structured-logging work from [PR #3](https://github.com/aasnani/napas-jakarta/pull/3).
-- The latest verified production web deployment was Railway deployment
-  `e6e04dc5-ee10-47ee-a2df-668b5b37253d`, reported `SUCCESS`, and was built
-  from that merged state.
+- The remote source of truth is `origin/main` at commit `5e1c279`, which includes
+  the merged SEO and Google Analytics work from [PR #4](https://github.com/aasnani/napas-jakarta/pull/4).
+- Railway web, API, and ingestion deployments are all `SUCCESS` from commit
+  `5e1c279`.
 - The local checkout used for this snapshot was stale and divergent from
   `origin/main`, with pre-existing local modifications and scratch files. Those
   changes were intentionally left untouched. Reconcile the checkout before a
@@ -48,14 +47,16 @@ responsibilities:
 - **PostgreSQL:** shared runtime store for current observations and related
   operational data.
 
-The web service is rooted at `/web`; the API service remains rooted at `/`.
-The web readiness check includes Eve readiness. The last verified public health
-check reported the web service as healthy and Eve as ready.
+The web service is rooted at `/web`; the API and ingestion services are rooted
+at `/`. The web readiness check uses `/api/health` and includes Eve readiness.
+Ingestion runs `python -m ingestion.railway_cron` every six hours
+(`0 */6 * * *`). PostgreSQL remains a shared runtime store and is not tied to a
+repository commit.
 
-Cloudflare manages the custom-domain DNS path. The Railway web service is not
-currently connected to GitHub for automatic deploys, so a repository merge does
-not by itself prove that production changed. Verify the deployed commit,
-Railway deployment status, and the public health endpoint after each release.
+Cloudflare manages the custom-domain DNS path. The web, API, and ingestion
+services are connected to `aasnani/napas-jakarta` on `main`, with Railway
+auto-deploy enabled for each. Verify the deployed commit, Railway deployment
+status, and public health endpoint after each release.
 
 ## Data and freshness
 
@@ -128,11 +129,9 @@ Railway deployment status, and the public health endpoint after each release.
 - The owner reports that the Napas Search Console Domain property is verified.
   Sitemap submission is pending. The dedicated GA4 property and linking the
   two Google properties also remain unconfirmed.
-- The production homepage returned HTTP 200 during the 27 September 2026
-  readiness check, while `/sitemap.xml` returned HTTP 404. The local search
-  discovery changes have not been deployed. Reconcile the stale local checkout
-  with `origin/main` before a release, then verify the deployed commit and live
-  search files.
+- After deployment of commit `5e1c279`, the production homepage,
+  `/api/health`, and `/sitemap.xml` each returned HTTP 200 on 28 September
+  2026. Search Console sitemap submission remains to be confirmed.
 
 ## Current operating boundaries
 
