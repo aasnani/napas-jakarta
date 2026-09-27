@@ -464,6 +464,7 @@ export type PromptInputProps = Omit<HTMLAttributes<HTMLFormElement>, "onSubmit" 
   maxFiles?: number;
   // bytes
   maxFileSize?: number;
+  fileInputLabel?: string;
   onError?: (err: { code: "max_files" | "max_file_size" | "accept"; message: string }) => void;
   onSubmit: (
     message: PromptInputMessage,
@@ -479,6 +480,7 @@ export const PromptInput = ({
   syncHiddenInput,
   maxFiles,
   maxFileSize,
+  fileInputLabel = "Upload files",
   onError,
   onSubmit,
   children,
@@ -853,12 +855,12 @@ export const PromptInput = ({
     <>
       <input
         accept={accept}
-        aria-label="Upload files"
+        aria-label={fileInputLabel}
         className="hidden"
         multiple={multiple}
         onChange={handleChange}
         ref={inputRef}
-        title="Upload files"
+        title={fileInputLabel}
         type="file"
       />
       <form className="w-full" onSubmit={handleSubmit} ref={formRef} {...props}>

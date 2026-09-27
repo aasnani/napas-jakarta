@@ -49,3 +49,4 @@ evaluation/ground_truth_reviewed.jsonl
 Thumbs.db
 *.swp
 *.swo
+.aider*

@@ -46,6 +46,25 @@ export const Conversation = ({
   </StickToBottom>
 );
 
+export function ConversationScrollAccessibility({ label }: { readonly label: string }) {
+  const { scrollRef } = useStickToBottomContext();
+
+  useEffect(() => {
+    const scrollElement = scrollRef.current;
+    if (scrollElement === null) return;
+
+    scrollElement.setAttribute("aria-label", label);
+    scrollElement.setAttribute("tabindex", "0");
+
+    return () => {
+      scrollElement.removeAttribute("aria-label");
+      scrollElement.removeAttribute("tabindex");
+    };
+  }, [label, scrollRef]);
+
+  return null;
+}
+
 function ConversationScrollRestoration({ storageKey }: { readonly storageKey: string }) {
   const { scrollRef, scrollToBottom, state } = useStickToBottomContext();
   const restoredKeyRef = useRef<string | undefined>(undefined);

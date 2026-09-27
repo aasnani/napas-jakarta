@@ -110,6 +110,7 @@ def chat_payload(state: dict) -> dict:
     return {
         "messages": list(state.get("messages", [])),
         "conversation": state.get("conversation", {}),
+        "language": state.get("language", "English"),
     }
 
 
@@ -120,5 +121,8 @@ def restore_chat_payload(state: dict, payload: object) -> dict:
     state["messages"] = valid_chat_messages(payload.get("messages"))
     conversation = payload.get("conversation")
     state["conversation"] = conversation if isinstance(conversation, dict) else {}
+    language = payload.get("language")
+    if language in {"English", "Bahasa Indonesia"}:
+        state["language"] = language
     state["pending_question"] = None
     return state

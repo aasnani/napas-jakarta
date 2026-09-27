@@ -10,4 +10,4 @@ COPY ingestion ingestion
 COPY data data
 COPY monitoring monitoring
 COPY assets assets
-CMD ["sh", "-c", "uvicorn app.web:app --host 0.0.0.0 --port ${PORT:-8502}"]
+CMD ["sh", "-c", "uvicorn app.api:app --host 0.0.0.0 --port ${PORT:-8502}"]

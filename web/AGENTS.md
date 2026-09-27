@@ -39,16 +39,11 @@ eve add <item> --non-interactive
 
 Exit code 0 means setup completed, 1 failed, and 2 needs an answer or a prerequisite. On exit 2, run the `next.command` from the final NDJSON event. For a non-secret question, replace its `<JSON value>` answer placeholder with the answer you collected; string values need JSON quotes. Never pass a secret in `--answer`. See `docs/install-integrations.mdx` for setup prerequisites.
 
-## Use eve for Vercel operations
+## Deployment target
 
-Use eve to link and deploy Vercel projects:
-
-```sh
-eve link --non-interactive --project <name-or-id> [--team <team-id-or-slug>]
-eve deploy --non-interactive --yes [--project <name-or-id>]
-```
-
-A setup may report `eve link` as a prerequisite; run it, then retry the continuation. When a completed setup event has `deploymentRequired: true`, run the `next` command it reports.
+This workspace is intended to run on Railway, not through Eve's Vercel
+deployment path. Keep the Railway web-service configuration and the
+Cloudflare custom-host cutover documented in `../docs/deployment-railway.md`.
 
 ## Validate the change
 

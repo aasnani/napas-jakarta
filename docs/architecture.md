@@ -7,11 +7,13 @@
 > work. The new target uses Next.js/React, Eve, and MapLibre; FastAPI and the
 > verified Python data/domain layer remain authoritative initially.
 
-The deployed product is a combined NiceGUI and FastAPI ASGI service. NiceGUI
-provides the resident-facing Ask, map, overview, trends, and Monitoring pages;
-FastAPI exposes the same domain functions at HTTP endpoints. `app/ui.py` is a
-legacy Streamlit compatibility UI for local experiments only and is not the
-deployed surface.
+The replacement product is a Next.js/React/Eve web service backed by a private
+FastAPI data and telemetry service. The web surface provides the resident-facing
+advisor, map, station detail, filters, source disclosure, feedback, and
+language controls. The Python service remains authoritative for station data,
+freshness, deterministic tools, and bounded anonymous telemetry. The older
+NiceGUI and Streamlit surfaces remain compatibility paths during migration and
+are not the replacement public surface.
 
 The request router sends current readings, comparisons, history, policy
 timelines, and index interpretation to deterministic Python tools. Questions
@@ -36,17 +38,20 @@ count. `GET /version` returns only safe build metadata, plus the selected
 retrieval and prompt variants.
 
 The full local Compose environment includes PostgreSQL, Qdrant, Grafana, the
-combined web service, a standalone API, and one-shot ingest/index services.
-Railway intentionally deploys only the web service, PostgreSQL, and scheduled
-ingestion because in-process hybrid retrieval is the configured production
-method and the Monitoring page renders aggregate data directly. See
+legacy combined service, a standalone API, and one-shot ingest/index services.
+The replacement Railway shape deploys the Next/Eve web service, a private API,
+and optionally PostgreSQL plus scheduled ingestion because in-process hybrid
+retrieval is the configured production method and aggregate monitoring belongs
+behind the service boundary. See
 [deployment on Railway](deployment-railway.md) for the operational layout.
 
-Interaction storage contains question text, rewritten queries, a bounded
-anonymous session ID, response metadata, and optional feedback comments so the
-team can diagnose product quality. These fields are never returned by the
-aggregate Monitoring endpoint or rendered publicly. The scheduled ingestion
-service deletes interaction and feedback rows older than the bounded
+Interaction storage contains question text, answer text, a bounded anonymous
+page-load grouping ID, response metadata, and usefulness feedback so the team
+can diagnose product quality. The replacement workspace does not restore chat
+history after refresh and does not send account, cookie, IP, device, or contact
+identity fields in its application telemetry. These fields are never returned
+by the aggregate Monitoring endpoint or rendered publicly. The scheduled
+ingestion service deletes interaction and feedback rows older than the bounded
 `INTERACTION_RETENTION_DAYS` setting (30 days by default). Access is limited to
 the deployed service and its database operators; users should not enter
 sensitive personal or health information.

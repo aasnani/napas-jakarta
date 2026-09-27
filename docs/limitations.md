@@ -27,8 +27,11 @@ and timestamp only; it does not represent every neighborhood in Jakarta.
   than English in the current set; expanding reviewed Indonesian evidence and
   retrieval coverage is the next improvement priority.
 
-For product monitoring, the service stores question text, rewritten queries,
-an anonymous session ID, answer metadata, and optional feedback comments in its
-private PostgreSQL database. They are not public and are deleted by the
-scheduled retention job after `INTERACTION_RETENTION_DAYS` (30 days by default).
-Do not enter sensitive personal or health information.
+For anonymous product telemetry, the service stores question text, answer text,
+an in-memory page-load grouping ID, answer metadata, and explicit positive or
+negative usefulness feedback in its private PostgreSQL database. It does not
+use that grouping ID to identify a person and the application payload contains
+no account, cookie, IP, device, or contact fields. The public chat itself is
+cleared on refresh. Records are not public and are deleted by the scheduled
+retention job after `INTERACTION_RETENTION_DAYS` (30 days by default). Do not
+enter sensitive personal or health information.

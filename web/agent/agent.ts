@@ -1,6 +1,7 @@
 import { defineAgent } from "eve";
-import { anthropic } from "eve/models/anthropic";
+import { createNapasModel } from "./model";
 
 export default defineAgent({
-  model: anthropic(process.env.NAPAS_AGENT_MODEL),
+  defaultTools: false,
+  model: createNapasModel(),
 });

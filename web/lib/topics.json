@@ -1,0 +1,352 @@
+{
+  "sourceLabels": {
+    "udara-jakarta": "Udara Jakarta official monitoring",
+    "satu-data-ispu-2023": "Satu Data Jakarta ISPU 2023",
+    "permen-lhk-14-2020": "Permen LHK No. 14/2020",
+    "who-aqg-2021": "WHO air-quality guidelines",
+    "jakarta-causes": "Jakarta emissions inventory",
+    "jakarta-regulations": "Jakarta and Indonesian regulations",
+    "jakarta-policy-status": "Jakarta policy status",
+    "jakarta-improvements": "Jakarta improvement strategies",
+    "exposure-protection": "WHO exposure guidance",
+    "health-disclaimer": "Napas health communication boundary",
+    "vertical-exposure": "Vertical exposure evidence",
+    "jakarta-historical-city-series": "Jakarta historical city series",
+    "bad-air-day-protection": "WHO bad-air-day guidance",
+    "clean-air-room": "Clean-air room guidance",
+    "jakarta-seasonal-exposure": "Jakarta seasonal exposure notice",
+    "jakarta-policy-implementation": "Policy implementation evidence",
+    "individual-emission-actions": "Individual actions and accountability",
+    "policy-improvements-evidence": "Policy improvement evidence",
+    "jakarta-emission-testing": "Jakarta vehicle-emissions testing",
+    "jakarta-cems-monitoring": "Jakarta CEMS monitoring",
+    "jakarta-court-air-quality": "Jakarta air-pollution court record",
+    "pp-22-2021-air-quality": "PP No. 22/2021 ambient-air framework",
+    "permen-lhk-8-2023-vehicle-emissions": "Permen LHK No. 8/2023",
+    "pergub-66-2020-vehicle-testing": "Pergub DKI No. 66/2020",
+    "who-aqg-2021-extract": "WHO PM2.5 and PM10 guideline extract",
+    "who-personal-interventions-2024": "WHO personal interventions",
+    "epa-air-cleaners-home-2026": "US EPA home air-cleaner guide",
+    "permen-lhk-13-2021-cems": "Permen LHK No. 13/2021 CEMS",
+    "ma-jakarta-air-lawsuit-record": "Mahkamah Agung court record",
+    "jakarta-sppu-official-status-2024": "Jakarta SPPU status"
+  },
+  "groups": [
+    {
+      "id": "understand-todays-air",
+      "label": "Understand today’s air",
+      "description": "Read the map, station observations, ISPU, and pollutant units.",
+      "indonesian": {
+        "label": "Pahami udara hari ini",
+        "description": "Baca peta, pengamatan stasiun, ISPU, dan satuan polutan."
+      },
+      "topics": [
+        {
+          "id": "current-readings",
+          "label": "Current station readings",
+          "description": "Latest station values, categories, timestamps, and missing readings.",
+          "suggestedQuestion": "What is the air quality across Jakarta right now?",
+          "sourceIds": ["udara-jakarta", "permen-lhk-14-2020"],
+          "indonesian": {
+            "label": "Pembacaan stasiun terkini",
+            "description": "Nilai stasiun, kategori, waktu pengamatan, dan data yang hilang.",
+            "suggestedQuestion": "Bagaimana kualitas udara di Jakarta saat ini?"
+          }
+        },
+        {
+          "id": "ispu-pm25",
+          "label": "ISPU and PM2.5 explained",
+          "description": "Understand ISPU, PM2.5, PM10, units, averages, and category colors.",
+          "suggestedQuestion": "What do ISPU and PM2.5 mean, and how should I read them?",
+          "sourceIds": ["udara-jakarta", "permen-lhk-14-2020", "who-aqg-2021-extract"],
+          "indonesian": {
+            "label": "Penjelasan ISPU dan PM2.5",
+            "description": "Pahami ISPU, PM2.5, PM10, satuan, rata-rata, dan warna kategori.",
+            "suggestedQuestion": "Apa arti ISPU dan PM2.5, dan bagaimana cara membacanya?"
+          }
+        }
+      ]
+    },
+    {
+      "id": "protect-yourself",
+      "label": "Protect yourself now",
+      "description": "Practical steps for exposure, outdoor activity, and bad-air days.",
+      "indonesian": {
+        "label": "Lindungi diri sekarang",
+        "description": "Langkah praktis untuk paparan, aktivitas luar ruang, dan hari berpolusi."
+      },
+      "topics": [
+        {
+          "id": "bad-air-day",
+          "label": "Protect yourself on a bad-air day",
+          "description": "Exposure reduction, respirators, ventilation, and safety boundaries.",
+          "suggestedQuestion": "How can I reduce my exposure on a bad-air day?",
+          "sourceIds": ["bad-air-day-protection", "exposure-protection", "health-disclaimer"],
+          "indonesian": {
+            "label": "Lindungi diri saat udara buruk",
+            "description": "Mengurangi paparan, respirator, ventilasi, dan batasan keselamatan.",
+            "suggestedQuestion": "Bagaimana cara mengurangi paparan saat kualitas udara buruk?"
+          }
+        },
+        {
+          "id": "exercise-outdoors",
+          "label": "Outdoor activity",
+          "description": "Use current readings to frame cautious exercise and activity choices.",
+          "suggestedQuestion": "Is it safe to exercise outside with these readings?",
+          "sourceIds": ["udara-jakarta", "bad-air-day-protection", "exposure-protection"],
+          "indonesian": {
+            "label": "Aktivitas luar ruang",
+            "description": "Gunakan pembacaan terkini untuk mempertimbangkan aktivitas dengan hati-hati.",
+            "suggestedQuestion": "Apakah aman berolahraga di luar dengan pembacaan ini?"
+          }
+        }
+      ]
+    },
+    {
+      "id": "health-sensitive-people",
+      "label": "Children, pregnancy, and sensitive groups",
+      "description": "Cautious, non-diagnostic guidance for people who may face higher risk.",
+      "indonesian": {
+        "label": "Anak, kehamilan, dan kelompok sensitif",
+        "description": "Panduan hati-hati dan non-diagnostik bagi orang yang mungkin lebih berisiko."
+      },
+      "topics": [
+        {
+          "id": "children-and-sensitive-groups",
+          "label": "Children and sensitive groups",
+          "description": "Questions families can ask when air quality is poor.",
+          "suggestedQuestion": "What should families consider when air quality is poor?",
+          "sourceIds": ["bad-air-day-protection", "who-personal-interventions-2024", "health-disclaimer"],
+          "indonesian": {
+            "label": "Anak dan kelompok sensitif",
+            "description": "Pertanyaan yang dapat dipertimbangkan keluarga saat kualitas udara buruk.",
+            "suggestedQuestion": "Apa yang perlu dipertimbangkan keluarga saat kualitas udara buruk?"
+          }
+        },
+        {
+          "id": "pregnancy-and-air",
+          "label": "Pregnancy and air pollution",
+          "description": "Careful, non-diagnostic questions only; pregnancy-specific claims need clinical review.",
+          "suggestedQuestion": "What cautious questions should someone who is pregnant ask about air pollution?",
+          "sourceIds": ["bad-air-day-protection", "health-disclaimer"],
+          "reviewStatus": "clinical-review-required",
+          "indonesian": {
+            "label": "Kehamilan dan polusi udara",
+            "description": "Hanya pertanyaan hati-hati dan non-diagnostik; klaim khusus kehamilan perlu ditinjau klinis.",
+            "suggestedQuestion": "Pertanyaan hati-hati apa yang dapat diajukan orang hamil tentang polusi udara?"
+          }
+        }
+      ]
+    },
+    {
+      "id": "outdoor-workers",
+      "label": "Outdoor and professional workers",
+      "description": "Plan time outdoors, strenuous work, and exposure reduction.",
+      "indonesian": {
+        "label": "Pekerja luar ruang dan profesional",
+        "description": "Rencanakan waktu di luar, pekerjaan berat, dan pengurangan paparan."
+      },
+      "topics": [
+        {
+          "id": "outdoor-shift",
+          "label": "Reducing exposure during a shift",
+          "description": "Practical exposure-reduction questions for people working outdoors.",
+          "suggestedQuestion": "How can outdoor workers reduce air-pollution exposure during a shift?",
+          "sourceIds": ["exposure-protection", "bad-air-day-protection", "jakarta-seasonal-exposure"],
+          "indonesian": {
+            "label": "Mengurangi paparan saat bekerja",
+            "description": "Pertanyaan praktis untuk orang yang bekerja di luar ruang.",
+            "suggestedQuestion": "Bagaimana pekerja luar ruang mengurangi paparan polusi selama bekerja?"
+          }
+        },
+        {
+          "id": "timing-outdoors",
+          "label": "Timing strenuous outdoor work",
+          "description": "Connect activity planning to changing readings and seasonal conditions.",
+          "suggestedQuestion": "How should I plan strenuous outdoor work when readings change?",
+          "sourceIds": ["udara-jakarta", "exposure-protection", "jakarta-seasonal-exposure"],
+          "indonesian": {
+            "label": "Waktu kerja berat di luar ruang",
+            "description": "Hubungkan perencanaan aktivitas dengan perubahan pembacaan dan musim.",
+            "suggestedQuestion": "Bagaimana merencanakan pekerjaan berat di luar saat pembacaan berubah?"
+          }
+        }
+      ]
+    },
+    {
+      "id": "improve-home-air",
+      "label": "Improve air at home",
+      "description": "Clean-air rooms, filters, ventilation, and indoor sources.",
+      "indonesian": {
+        "label": "Perbaiki udara di rumah",
+        "description": "Ruang udara bersih, filter, ventilasi, dan sumber polusi dalam ruangan."
+      },
+      "topics": [
+        {
+          "id": "clean-air-room",
+          "label": "Create a cleaner-air room",
+          "description": "Practical steps for filtration, ventilation, and reducing indoor sources.",
+          "suggestedQuestion": "How can I improve air quality in a room at home?",
+          "sourceIds": ["clean-air-room", "epa-air-cleaners-home-2026", "exposure-protection"],
+          "indonesian": {
+            "label": "Membuat ruang udara lebih bersih",
+            "description": "Langkah praktis untuk filtrasi, ventilasi, dan mengurangi sumber polusi dalam ruangan.",
+            "suggestedQuestion": "Bagaimana cara memperbaiki kualitas udara di ruangan rumah?"
+          }
+        },
+        {
+          "id": "filters-and-ventilation",
+          "label": "Filters, air cleaners, and ventilation",
+          "description": "Learn the limits and trade-offs of CADR, HVAC/MERV, and ventilation.",
+          "suggestedQuestion": "What should I know about air cleaners, filters, and ventilation?",
+          "sourceIds": ["epa-air-cleaners-home-2026", "clean-air-room", "bad-air-day-protection"],
+          "indonesian": {
+            "label": "Filter, pembersih udara, dan ventilasi",
+            "description": "Pahami batasan dan pertimbangan CADR, HVAC/MERV, dan ventilasi.",
+            "suggestedQuestion": "Apa yang perlu diketahui tentang pembersih udara, filter, dan ventilasi?"
+          }
+        }
+      ]
+    },
+    {
+      "id": "why-jakarta-air-is-unhealthy",
+      "label": "Why Jakarta’s air is unhealthy",
+      "description": "Explore sources, seasons, weather, and limits of local evidence.",
+      "indonesian": {
+        "label": "Mengapa udara Jakarta tidak sehat",
+        "description": "Pelajari sumber, musim, cuaca, dan batasan bukti lokal."
+      },
+      "topics": [
+        {
+          "id": "jakarta-pollution-sources",
+          "label": "Pollution sources",
+          "description": "Transport, industry, power, regional transport, and source-apportionment limits.",
+          "suggestedQuestion": "Why can Jakarta’s air quality be unhealthy?",
+          "sourceIds": ["jakarta-causes", "jakarta-seasonal-exposure", "jakarta-improvements"],
+          "indonesian": {
+            "label": "Sumber polusi Jakarta",
+            "description": "Transportasi, industri, energi, transportasi regional, dan batasan atribusi sumber.",
+            "suggestedQuestion": "Mengapa kualitas udara Jakarta dapat menjadi tidak sehat?"
+          }
+        },
+        {
+          "id": "district-and-height-differences",
+          "label": "Why readings differ",
+          "description": "Understand district, weather, high-rise, and ground-level differences.",
+          "suggestedQuestion": "Why might readings differ between districts or building heights?",
+          "sourceIds": ["jakarta-causes", "vertical-exposure", "jakarta-seasonal-exposure"],
+          "indonesian": {
+            "label": "Mengapa pembacaan berbeda",
+            "description": "Pahami perbedaan antarwilayah, cuaca, gedung tinggi, dan permukaan tanah.",
+            "suggestedQuestion": "Mengapa pembacaan dapat berbeda antarwilayah atau ketinggian gedung?"
+          }
+        }
+      ]
+    },
+    {
+      "id": "help-improve-air",
+      "label": "What can I do to help?",
+      "description": "Personal actions, emissions testing, public participation, and accountability.",
+      "indonesian": {
+        "label": "Apa yang dapat saya lakukan?",
+        "description": "Tindakan pribadi, uji emisi, partisipasi publik, dan akuntabilitas."
+      },
+      "topics": [
+        {
+          "id": "personal-actions",
+          "label": "Personal and household actions",
+          "description": "Transport, maintenance, household combustion, reporting, and participation.",
+          "suggestedQuestion": "What can I do personally to help improve Jakarta’s air?",
+          "sourceIds": ["individual-emission-actions", "jakarta-improvements", "jakarta-emission-testing"],
+          "indonesian": {
+            "label": "Tindakan pribadi dan rumah tangga",
+            "description": "Transportasi, perawatan, pembakaran rumah tangga, pelaporan, dan partisipasi.",
+            "suggestedQuestion": "Apa yang dapat saya lakukan untuk membantu memperbaiki udara Jakarta?"
+          }
+        },
+        {
+          "id": "vehicle-testing",
+          "label": "Vehicle-emissions testing",
+          "description": "Understand testing obligations, maintenance, and compliance boundaries.",
+          "suggestedQuestion": "What role do vehicle-emissions testing and maintenance play?",
+          "sourceIds": ["jakarta-emission-testing", "permen-lhk-8-2023-vehicle-emissions", "pergub-66-2020-vehicle-testing"],
+          "indonesian": {
+            "label": "Uji emisi kendaraan",
+            "description": "Pahami kewajiban uji, perawatan, dan batasan data kepatuhan.",
+            "suggestedQuestion": "Apa peran uji emisi dan perawatan kendaraan?"
+          }
+        }
+      ]
+    },
+    {
+      "id": "policy-law-implementation",
+      "label": "Policy, law, and implementation",
+      "description": "Separate standards, proposals, programmes, court records, and implementation evidence.",
+      "indonesian": {
+        "label": "Kebijakan, hukum, dan pelaksanaan",
+        "description": "Bedakan standar, usulan, program, putusan pengadilan, dan bukti pelaksanaan."
+      },
+      "topics": [
+        {
+          "id": "standards-and-rules",
+          "label": "Standards and ISPU rules",
+          "description": "Compare Indonesian ambient standards, ISPU methodology, and health guidelines.",
+          "suggestedQuestion": "What do Indonesian air-quality standards and ISPU rules say?",
+          "sourceIds": ["permen-lhk-14-2020", "pp-22-2021-air-quality", "jakarta-regulations", "who-aqg-2021"],
+          "indonesian": {
+            "label": "Standar dan aturan ISPU",
+            "description": "Bandingkan standar udara ambien, metodologi ISPU, dan panduan kesehatan.",
+            "suggestedQuestion": "Apa isi standar kualitas udara Indonesia dan aturan ISPU?"
+          }
+        },
+        {
+          "id": "policy-implementation",
+          "label": "What is actually implemented?",
+          "description": "Trace policy status, SPPU, CEMS, public duties, and documented gaps.",
+          "suggestedQuestion": "What air-quality policies are proposed, active, or still awaiting implementation?",
+          "sourceIds": ["jakarta-policy-status", "jakarta-policy-implementation", "policy-improvements-evidence", "jakarta-sppu-official-status-2024", "jakarta-cems-monitoring", "jakarta-court-air-quality"],
+          "indonesian": {
+            "label": "Apa yang benar-benar dilaksanakan",
+            "description": "Telusuri status kebijakan, SPPU, CEMS, kewajiban publik, dan kesenjangan yang terdokumentasi.",
+            "suggestedQuestion": "Kebijakan kualitas udara apa yang diusulkan, aktif, atau masih menunggu pelaksanaan?"
+          }
+        }
+      ]
+    },
+    {
+      "id": "trends-and-comparisons",
+      "label": "Trends and comparisons",
+      "description": "Compare districts and distinguish station observations from historical city context.",
+      "indonesian": {
+        "label": "Tren dan perbandingan",
+        "description": "Bandingkan wilayah dan bedakan pengamatan stasiun dari konteks historis tingkat kota."
+      },
+      "topics": [
+        {
+          "id": "district-comparison",
+          "label": "Compare Jakarta districts",
+          "description": "Compare current station observations without treating them as a city-wide average.",
+          "suggestedQuestion": "How do air-quality readings compare between Jakarta districts?",
+          "sourceIds": ["udara-jakarta"],
+          "indonesian": {
+            "label": "Bandingkan wilayah Jakarta",
+            "description": "Bandingkan pengamatan stasiun terkini tanpa menganggapnya sebagai rata-rata seluruh kota.",
+            "suggestedQuestion": "Bagaimana perbandingan pembacaan kualitas udara antarwilayah Jakarta?"
+          }
+        },
+        {
+          "id": "historical-trends",
+          "label": "Historical air-quality trends",
+          "description": "Use city-level and catalogued historical context with its spatial and freshness limits.",
+          "suggestedQuestion": "What does the historical Jakarta air-quality data show?",
+          "sourceIds": ["jakarta-historical-city-series", "satu-data-ispu-2023", "udara-jakarta"],
+          "indonesian": {
+            "label": "Tren historis kualitas udara",
+            "description": "Gunakan konteks historis tingkat kota dengan memperhatikan batas spasial dan kesegarannya.",
+            "suggestedQuestion": "Apa yang ditunjukkan data historis kualitas udara Jakarta?"
+          }
+        }
+      ]
+    }
+  ]
+}

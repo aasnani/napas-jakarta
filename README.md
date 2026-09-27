@@ -87,20 +87,20 @@ flowchart LR
 
 - **Structured answers use typed tools.** Current readings, station differences, history, policy timelines, and ISPU interpretation come from validated application data rather than language-model arithmetic.
 - **Documentary answers retrieve evidence.** Causes, regulations, public-health guidance, and implementation questions search the curated corpus using hybrid retrieval; citations must resolve to retrieved evidence.
-- **The app has a useful failure mode.** Claude Haiku streams when configured. If a provider is unavailable, the application returns a cited deterministic response rather than inventing an answer.
+- **The app has a useful failure mode.** Gemini streams when configured. If a provider is unavailable, the application returns a cited deterministic response rather than inventing an answer.
 
 ## Technical snapshot
 
 | Layer | Choice |
 | --- | --- |
-| Web and API | NiceGUI + FastAPI on one ASGI deployment |
-| Answer model | Anthropic Claude Haiku, with cited deterministic fallback |
+| Web and API | Next.js + React + Eve web service, private FastAPI data boundary |
+| Answer model | Server-side Gemini Flash-Lite, with typed deterministic tools |
 | Runtime data | PostgreSQL; labelled packaged fallback for local/offline availability |
 | Evidence retrieval | Hybrid retrieval; optional Qdrant index in local Compose |
 | Ingestion | Validated official-source and historical-context jobs |
 | Quality | Human-reviewed retrieval set, contract tests, Ruff, GitHub Actions |
 | Observability | Aggregate telemetry; private interaction text excluded from the dashboard |
-| Deployment | Railway web, PostgreSQL, and scheduled ingestion |
+| Deployment | Railway web/API pilot, optional PostgreSQL, scheduled ingestion |
 
 ~~~text
 app/          web UI, API, routing, tools, retrieval, and providers
@@ -114,17 +114,24 @@ docs/         architecture, data, evaluation, deployment, and limitations
 
 ## Run locally
 
-**Prerequisites:** Python 3.11–3.13 and [uv](https://docs.astral.sh/uv/). An Anthropic key enables streamed Claude answers; without one, the cited deterministic fallback still works.
+**Prerequisites:** Node 24, Python 3.11–3.13, and [uv](https://docs.astral.sh/uv/). The current workspace uses a server-side Gemini key for Eve chat and the Python service for station data.
 
 ~~~bash
 git clone https://github.com/aasnani/napas-jakarta.git
 cd napas-jakarta
 cp .env.example .env
 uv sync --frozen --extra dev
-uv run uvicorn app.web:app --host 0.0.0.0 --port 8502
+cd web
+npm ci
+npm run dev -- --hostname 127.0.0.1 --port 3200
 ~~~
 
-Open <http://localhost:8502>. Set ANTHROPIC_API_KEY in .env to enable Claude Haiku streaming. To validate a checkout:
+Start `npm run dev:api` in a second terminal from `web/`, and set
+`GEMINI_API_KEY` in `web/.env.local`. Open <http://127.0.0.1:3200>. The
+legacy Python/NiceGUI surface remains available through `app.web:app` for
+compatibility checks, but it is not the replacement public surface.
+
+To validate a checkout:
 
 ~~~bash
 make test
@@ -159,9 +166,15 @@ Additional checks cover citation resolution and locators, deterministic numeric 
 
 ## Deploy and operate
 
-The live app runs on [Railway](https://web-production-e07b9.up.railway.app) with a web service, PostgreSQL runtime store, and scheduled ingestion service. Railway may cold-start after inactivity; the ingestion job is finite and idempotent. The [deployment guide](docs/deployment-railway.md) documents configuration, verification, source fallback, and teardown.
+The deployment candidate uses Railway with a public web service, a private
+FastAPI service, and optional PostgreSQL plus scheduled ingestion. The
+strict-$0 starting point uses the bounded JSONL fallback instead of a paid
+database. Railway may cold-start after inactivity; the [deployment guide](docs/deployment-railway.md)
+documents configuration, verification, source fallback, and rollback.
 
-The [Monitoring page](https://web-production-e07b9.up.railway.app/monitoring) shows aggregate requests, latency, answer routes, retrieval modes, citation rate, feedback totals, and estimated usage/cost. It never renders raw questions or feedback comments. Private interaction content is retained for 30 days by default; do not enter sensitive personal or health information.
+Aggregate monitoring remains a private operational surface of the FastAPI
+service. Private interaction content is retained for 30 days by default; do
+not enter sensitive personal or health information.
 
 ## Responsible use
 

@@ -270,14 +270,20 @@ def query_historical_occurrence(
 
 
 def get_latest_measurements(
-    measurements: list[Measurement], location: str | None = None, pollutant: str = "PM2.5"
+    measurements: list[Measurement],
+    location: str | None = None,
+    pollutant: str = "PM2.5",
+    now: datetime | None = None,
 ) -> list[dict]:
     rows = latest_by_station(measurements, pollutant)
     if location:
         needle = location.lower()
         rows = [x for x in rows if needle in (x.district + " " + x.station_name).lower()]
-    return [
-        {
+    output = []
+    for x in rows:
+        row_freshness = freshness(x, now=now)
+        output.append(
+            {
             "station_id": x.station_id,
             "station": x.station_name,
             "district": x.district,
@@ -286,11 +292,11 @@ def get_latest_measurements(
             "unit": x.concentration_unit,
             "averaging_period": x.averaging_period,
             "ispu": x.ispu_value,
-            "category": x.ispu_category,
+            "category": "Stale / missing" if row_freshness["stale"] else x.ispu_category,
             "observed_at": x.observed_at.isoformat(),
             "source": x.source,
             "source_url": x.source if x.source.startswith(("http://", "https://")) else None,
-            "freshness": freshness(x),
+            "freshness": row_freshness,
             "quality_flag": x.quality_flag,
             "fetched_at": x.fetched_at.isoformat() if x.fetched_at else None,
             "missing_data_warning": (
@@ -298,9 +304,9 @@ def get_latest_measurements(
                 if x.concentration is None
                 else None
             ),
-        }
-        for x in rows
-    ]
+            }
+        )
+    return output
 
 
 def get_historical_summary(

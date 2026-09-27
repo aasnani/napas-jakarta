@@ -48,11 +48,17 @@ The home route is a single responsive workspace:
 
 - Top app bar with the real Napas logo and wordmark, freshness/source status,
   language control, and a compact help/terminology affordance.
-- Left chat dock with a concise welcome, four starter prompts, and a composer.
+- Left chat dock with a larger Napas product logo beside the “Napas assistant”
+  label, a concise welcome, suggested prompts, and a composer.
+- A topic dropdown sits to the right of the assistant heading. It opens the
+  source-grounded topic list without leaving the chat window.
+- Above the composer, the selected topic is shown above the selected location
+  context. Both are removable context chips and are used to tailor the next
+  answer without becoming hidden conversation state.
 - Main map canvas centered on Jakarta with detailed streets, waterways,
   boundaries, labels, landmarks, and air-quality station markers.
-- A quiet source/freshness strip that makes demo, stale, and live states
-  explicit.
+- A quiet source/freshness strip that makes current, stale, and limited-data
+  states explicit without presenting the product as a “demo view.”
 
 ### Contextual composition
 
@@ -65,6 +71,10 @@ The home route is a single responsive workspace:
   contextual panel.
 - Source evidence is available as expandable cards and linked citations.
 - Health guidance is a sourced, bounded response, not a medical diagnosis.
+- The map legend expands horizontally into the available right-side space while
+  the selected-location detail becomes more compact. The expanded area also
+  contains short explanations of ISPU, PM2.5, PM10, units, categories, and
+  observation freshness.
 
 ## Interaction rules
 
@@ -85,6 +95,79 @@ Every interaction follows intent → action → response → recoverable next st
   action. No blank panel is an acceptable state.
 - The interface honors reduced-motion preferences and never uses motion to
   conceal latency or state changes.
+- Choosing a topic or location updates the next-turn context visibly. The
+  assistant must distinguish a user-selected context from a model inference
+  and must retain source, freshness, and health-safety boundaries.
+
+### Topic navigation and answer context
+
+The topic menu is a compact discovery layer beside the assistant heading. It
+should open a grouped list of suggested questions, then place the chosen topic
+above the chosen location in the composer context rail. Selecting a suggested
+question fills or submits a clearly visible prompt; it must not silently send a
+question without an obvious user action.
+
+The first topic groups are grounded in the current source catalog and local
+knowledge corpus:
+
+- Understand today's air: current station conditions, Jakarta map, ISPU,
+  PM2.5, PM10, categories, units, timestamps, stale readings, and station
+  versus city-level data.
+- Protect yourself now: bad-air-day actions, outdoor exertion, respirators,
+  ventilation, exposure reduction, and when to seek qualified care.
+- Children, pregnancy, older adults, and health-sensitive people: cautious,
+  non-diagnostic guidance tailored to vulnerability and exposure. Pregnancy-
+  specific evidence must be reviewed and cited before dedicated advice is
+  presented as authoritative.
+- Outdoor and professional workers: time outdoors, strenuous work, exposure
+  reduction, scheduling, and employer/public-health context.
+- Improve home air: clean-air rooms, portable cleaners, CADR, HVAC/MERV
+  filtration, cooking or combustion sources, ventilation, and maintenance.
+- Why Jakarta's air is unhealthy: transport, industry and power, regional
+  transport, seasonal accumulation, weather, source-apportionment limits, and
+  high-rise versus ground-level exposure.
+- What can I do to help: transport choices, vehicle-emissions testing,
+  household actions, public participation, and accountability.
+- Policy, law, and implementation: ISPU methodology, ambient standards,
+  Jakarta regulations, ERP/policy history, SPPU, CEMS, court records, and the
+  difference between a proposal, a legal instrument, an official programme,
+  and evidence of implementation.
+- Trends and comparisons: historical PM2.5/PM10 context, station comparisons,
+  time trends, and the distinction between modelled city series and station
+  observations.
+
+The current grounding inventory is recorded in `data/sources.yaml`: 30 source
+records are registered and 29 documents are locally materialized under
+`data/docs/`. The Satu Data Jakarta ISPU 2023 record is currently provenance-
+only and explicitly not claimed as a downloaded local dataset. Topic labels
+and suggested questions must be available in both English and Indonesian and
+must map to the same source IDs and safety boundaries.
+
+The roadmap also includes a refreshable editorial layer for approved articles
+and newsletters. It should prefer publisher APIs, RSS/Atom, or newsletter feeds
+and use explicitly allowlisted page fetches only where permitted. Each item
+needs publisher, canonical URL, publication/update time, fetch time, language,
+content hash, license/attribution, topic tags, and revision status. Editorial
+updates can supply “latest” context, but must remain visibly distinct from
+official measurements, laws, guidance, and research evidence.
+
+### Anonymous interaction telemetry
+
+- The public `/` workspace starts empty after a full page refresh. It does not
+  restore chat history from a cookie, local storage, URL session, or account.
+- Completed assistant turns and usefulness feedback are product telemetry, not
+  user profiles. The browser creates one random in-memory grouping ID per page
+  load; it is not persisted and the application payload contains no account,
+  IP, device, or contact fields.
+- A completed turn stores the question, answer text, interaction ID, turn
+  number, and transcript message count. A positive or negative feedback event
+  links to that answer and the same anonymous grouping ID.
+- Feedback is exposed only for the latest completed answer and disappears when
+  the next turn begins. Telemetry delivery is best-effort and never blocks the
+  chat experience.
+- Interaction and feedback rows remain private to the service and database
+  operators, with the bounded `INTERACTION_RETENTION_DAYS` cleanup window (30
+  days by default).
 
 ## Visual direction
 
@@ -96,6 +179,22 @@ The initial implementation stays close to the OpenDesign composition: an
 editorial assistant transcript on the left; a structured map header with title,
 three KPI cards, and filters; then a detailed map canvas, legend, and selected
 station detail dock.
+
+The next hierarchy pass should make the product feel finished rather than like
+an example view:
+
+- Remove “demo view,” “demo snapshot,” and similar implementation language from
+  normal user-facing UI. Keep necessary source, freshness, and limitation
+  messaging, but phrase it as trustworthy data status rather than scaffolding.
+- Increase the Napas logo beside the assistant heading so the product identity
+  is legible at a glance.
+- Give the legend a wider horizontal region to the right of the map while
+  reducing, but not hiding, the selected-location detail region.
+- Use the added region for concise terminology cards: ISPU is an index, PM2.5
+  and PM10 are concentrations with units and averaging periods, and station
+  observations are not interchangeable with city-level model series.
+- On mobile, make the same terminology and legend content available through a
+  collapsible panel or mobile navigation destination rather than deleting it.
 
 ### Tokens
 
@@ -143,13 +242,27 @@ modes and test the laptop mode at widths commonly produced by display scaling.
 - Validate at a representative 1536 × 864 CSS viewport and at the smallest
   supported laptop width before treating the layout as ready.
 
-### Mobile: intentionally parked
+### Mobile: full feature parity with mobile navigation
 
-There is no agreed mobile target device or composition yet. Mobile-specific
-decisions are intentionally deferred rather than inferred from the desktop
-layout. The implementation should still avoid horizontal overflow and remain
-usable as a basic stacked fallback, but mobile is not an end-product
-acceptance target until a separate mobile design pass is approved.
+Mobile is now a roadmap requirement. The mobile experience must retain the
+desktop feature set: chat, topic selection, EN/ID selection, map and station
+context, selected location, current/stale/source status, terminology,
+citations, feedback, and contextual answer artifacts.
+
+The two-column desktop relationship transforms into an assistant-first mobile
+surface rather than simply shrinking both panes. The global navigation remains
+at the top, followed by a centered Napas Advisor identity row. Beneath it,
+station and topic selectors sit on the left while a Map action is anchored on
+the right. Assistant chat, source-grounded topics, suggestions, and the
+composer are the default view. Map opens as a full-screen pannable overlay;
+the same top-right action becomes an X in place and closes the overlay. The
+conversation and selection context remain mounted while the map is open.
+
+The mobile milestone must validate portrait and landscape layouts, long
+localized labels, touch targets, keyboard/panel overlap, map gestures, topic
+and station menu scrolling, selection clearing, and access to every desktop
+capability. It should avoid horizontal overflow and use progressive disclosure
+for the legend, terminology, citations, and selected-location details.
 
 The same workspace state can eventually be deep-linked through URL parameters
 for selected station, map layer, date range, or conversation focus.
@@ -189,6 +302,10 @@ for selected station, map layer, date range, or conversation focus.
 - Existing FastAPI/Pydantic service remains the authoritative air-quality data
   API during the first migration slice.
 - PostgreSQL remains the runtime store. Qdrant remains optional for retrieval.
+- Refreshable articles and newsletters are ingested server-side through an
+  allowlisted source registry; the chat does not fetch arbitrary URLs from
+  user prompts. Failed or stale feeds remain labelled and do not silently
+  replace validated source material.
 
 ### Quality
 
@@ -300,16 +417,32 @@ it.
 - The assistant can invoke a typed air-quality tool and render a contextual
   result component.
 - A map selection can provide context to the next assistant turn.
-- Current data, demo data, stale data, and source limitations are explicit.
+- Current, stale, fallback, and source limitations are explicit without
+  exposing “demo view” or implementation-scaffold language in normal UI copy.
 - Citations are structured, linked, and source details are inspectable.
 - The 24-inch desktop and 14-inch laptop compositions are covered by automated
   browser evidence at their agreed viewport bands.
 - The default composition follows the OpenDesign assistant/map relationship,
   with the three KPI cards between the map title and filters.
+- The assistant heading uses a prominent Napas logo, with a topic dropdown and
+  selected-topic/selected-location context above the composer.
+- Topic suggestions cover personal protection, home air, vulnerable people,
+  outdoor workers, causes, individual action, policy, health, and trends, and
+  are grounded in the registered source catalog.
+- The topic navigator can surface dated, cited article/newsletter updates
+  without confusing them with station observations or authoritative legal and
+  health sources.
 - The map uses a real interactive basemap with visible roads, waterways,
   labels, attribution, station markers, filtering, and station detail.
+- The desktop legend expands horizontally into terminology and brief
+  explanations while selected-location detail remains available in a compact
+  region.
+- A full refresh clears the public chat transcript; completed answer telemetry
+  and explicit usefulness feedback remain anonymously persisted.
 - Keyboard, reduced-motion, and error states are covered before release.
-- Mobile remains a separately approved design milestone, not an implicit
-  acceptance target.
+- Mobile has the desktop feature set behind an assistant-first layout with a
+  full-screen Map overlay, station/topic selectors, and an in-place Map/X
+  control. Portrait/landscape, keyboard, touch, localization, and
+  progressive-disclosure evidence remain required before release.
 - The old UI can be removed only after the new workspace passes the above
   checks.

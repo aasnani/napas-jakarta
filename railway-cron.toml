@@ -1,5 +1,5 @@
 # Apply this file only to the separate Railway cron service. It uses the same
-# Docker image as the web service but never starts an HTTP listener.
+# Python API image but never starts an HTTP listener.
 
 [build]
 builder = "DOCKERFILE"

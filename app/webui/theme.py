@@ -68,6 +68,13 @@ def install_theme() -> None:
     }
     .napas-rounded-control:focus-visible { outline:3px solid #205C8A; outline-offset:2px; }
     .napas-source-link { color:var(--napas-primary); text-decoration:underline; }
+    .napas-inline-citation { color:var(--napas-primary); font-size:.85em; text-decoration:underline; font-weight:600; }
+    .napas-inline-citation:focus-visible { outline:3px solid #205C8A; outline-offset:2px; border-radius:2px; }
+    .napas-answer-list { margin:.35rem 0 .75rem 1.2rem; padding-left:.7rem; }
+    .napas-answer-list li { margin:.3rem 0; }
+    .napas-assistant h3 { font-size:1em; margin:.45rem 0 .2rem; }
+    .napas-assistant p { margin:.25rem 0 .65rem; }
+    .napas-source-meta { font-size:.84em; line-height:1.4; }
     .napas-legend-dot { width:12px; height:12px; border-radius:50%; display:inline-block; margin-right:6px; }
     .napas-table-wrap { width:100%; overflow-x:auto; }
     .napas-analytics-content .napas-table-wrap .q-table__container,
