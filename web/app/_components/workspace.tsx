@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import Link from "next/link";
 import { AgentChat } from "./agent-chat";
 import { WorkspaceMap } from "./workspace-map";
 import { trackNapasEvent } from "@/lib/analytics";
@@ -15,8 +16,8 @@ import {
 import { type DemoStation } from "@/lib/napas";
 import { toggleMobileMapOverlay } from "@/lib/mobile-layout";
 import { reconcileStationId, resolveStation } from "@/lib/station-selection";
+import { EN_ABOUT_PATH, EN_PRIVACY_PATH, ID_ABOUT_PATH, ID_PRIVACY_PATH } from "@/lib/site";
 
-type InfoDialog = "about" | "privacy" | null;
 type AssistantPrefill = { id: number; text: string };
 
 export function Workspace() {
@@ -24,11 +25,9 @@ export function Workspace() {
   const [stationOptions, setStationOptions] = useState<readonly DemoStation[]>([]);
   const [mapOverlayOpen, setMapOverlayOpen] = useState(false);
   const [mobileLegendOpen, setMobileLegendOpen] = useState(false);
-  const [infoDialog, setInfoDialog] = useState<InfoDialog>(null);
   const [assistantPrefill, setAssistantPrefill] = useState<AssistantPrefill>();
   const language = useSyncExternalStore(subscribeToLanguageChanges, getStoredLanguage, () => DEFAULT_LANGUAGE);
   const assistantPrefillId = useRef(0);
-  const infoDialogRef = useRef<HTMLDialogElement>(null);
   const copy = getUiCopy(language);
   const selectedStation = resolveStation(stationOptions, selectedStationId);
 
@@ -43,6 +42,7 @@ export function Workspace() {
   };
 
   const handleAskAssistant = (station: DemoStation) => {
+    trackNapasEvent("map_station_question_clicked");
     assistantPrefillId.current += 1;
     const ispu = station.ispu == null ? (language === "id" ? "tidak tersedia" : "unavailable") : `ISPU ${station.ispu}`;
     const pm25 = station.pm25 == null ? (language === "id" ? "tidak tersedia" : "unavailable") : `PM2.5 ${station.pm25} µg/m³`;
@@ -55,30 +55,20 @@ export function Workspace() {
     });
   };
 
-  const handleStationClear = useCallback(() => {
+  const handleStationClear = useCallback((source: "map_detail" | "chat_context") => {
     setSelectedStationId(undefined);
+    trackNapasEvent("station_selection_cleared", { source });
   }, []);
 
-  const handleStationSelect = useCallback((station: DemoStation) => {
+  const handleStationSelect = useCallback((station: DemoStation, source: "map_marker" | "station_list" | "chat_picker") => {
     setSelectedStationId(station.id);
-    trackNapasEvent("station_selected");
+    trackNapasEvent("station_selected", { source });
   }, []);
 
   const handleStationsChange = useCallback((stations: readonly DemoStation[]) => {
     setStationOptions(stations);
     setSelectedStationId((currentId) => reconcileStationId(stations, currentId));
   }, []);
-
-  useEffect(() => {
-    const dialog = infoDialogRef.current;
-    if (!dialog) return;
-
-    if (infoDialog && !dialog.open) {
-      dialog.showModal();
-    } else if (!infoDialog && dialog.open) {
-      dialog.close();
-    }
-  }, [infoDialog]);
 
   useEffect(() => {
     if (!mapOverlayOpen) {
@@ -95,8 +85,8 @@ export function Workspace() {
             <span className="topbar-label-mobile">{copy.navbar.mobileMonitor}</span>
           </div>
           <nav aria-label={copy.navbar.productInformation} className="topbar-actions">
-            <button aria-haspopup="dialog" className="topbar-link" onClick={() => setInfoDialog("about")} type="button">{copy.navbar.about}</button>
-            <button aria-haspopup="dialog" className="topbar-link" onClick={() => setInfoDialog("privacy")} type="button">{copy.navbar.privacy}</button>
+            <Link className="topbar-link" href={language === "id" ? ID_ABOUT_PATH : EN_ABOUT_PATH} lang={language}>{copy.navbar.about}</Link>
+            <Link className="topbar-link" href={language === "id" ? ID_PRIVACY_PATH : EN_PRIVACY_PATH} lang={language}>{copy.navbar.privacy}</Link>
           </nav>
         </div>
         <a aria-label={copy.navbar.brandHome} className="brand" href="#main" data-od-id="napas-logo">
@@ -138,35 +128,6 @@ export function Workspace() {
         />
       </div>
 
-      <dialog
-        aria-describedby="info-dialog-description"
-        aria-labelledby="info-dialog-title"
-        className="info-dialog"
-        onClose={() => setInfoDialog(null)}
-        ref={infoDialogRef}
-      >
-        <div className="info-dialog-head">
-          <div>
-            <p className="info-dialog-kicker">{copy.about.kicker}</p>
-            <h2 id="info-dialog-title">{infoDialog === "privacy" ? copy.about.privacyTitle : copy.about.aboutTitle}</h2>
-          </div>
-          <button aria-label={copy.about.close} className="dialog-close" onClick={() => setInfoDialog(null)} type="button">×</button>
-        </div>
-        <div className="info-dialog-body" id="info-dialog-description">
-          {infoDialog === "privacy" ? (
-            <>
-              <p>{copy.about.privacyBody[0]}</p>
-              <p>{copy.about.privacyBody[1]}</p>
-              <ul>
-                {copy.about.privacyBody.slice(2, 5).map((paragraph) => <li key={paragraph}>{paragraph}</li>)}
-              </ul>
-              <p>{copy.about.privacyBody[5]}</p>
-            </>
-          ) : (
-            <>{copy.about.aboutBody.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}</>
-          )}
-        </div>
-      </dialog>
     </main>
   );
 }

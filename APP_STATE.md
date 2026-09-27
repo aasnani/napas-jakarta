@@ -85,10 +85,14 @@ Railway deployment status, and the public health endpoint after each release.
   data. Interaction telemetry is best-effort, bounded, and retention-controlled.
 - The web code now supports opt-in Google Analytics 4 using Napas's own
   measurement ID. It loads only after explicit browser consent, tracks
-  public-page views and aggregate map or assistant actions, and does not send
-  chat text, station names, session IDs, or URL parameters. Ad storage, Google
-  signals, and ads personalization are disabled. Production analytics still
-  requires the web service to be redeployed and a visitor to opt in.
+  public-page views and interaction categories for assistant prompts, feedback,
+  topic and station selection, and map controls. Event parameters are bounded
+  enums; Google Analytics events do not include chat text, attachments, station
+  or district names or IDs, map coordinates, app session IDs, or URL parameters.
+  The current search/analytics PR adds About pages and expands interaction
+  coverage; those changes are not in production until the web service is
+  redeployed and a visitor opts in. Ad storage, Google signals, and ads
+  personalization are disabled.
 
 ## Logging and retention
 
@@ -111,13 +115,16 @@ Railway deployment status, and the public health endpoint after each release.
 
 ## Search discovery and analytics
 
-- The web code defines canonical metadata, a bilingual English and Indonesian
-  air-quality guide, `robots.txt`, and an XML sitemap. The sitemap lists the
-  public homepage and both guide pages.
+- The web code defines canonical metadata, bilingual air-quality guides and
+  About pages, `robots.txt`, and an XML sitemap. The sitemap lists the public
+  homepage, About pages, and both guides; bilingual Privacy pages are marked
+  `noindex`.
 - Google Analytics support is opt-in and uses Napas's configured public
   measurement ID, with `NEXT_PUBLIC_GA_MEASUREMENT_ID` available as a build-time
-  override. No analytics event contains a prompt, station name, session ID, or
-  query string. See `web/SEO_AND_GOOGLE_SETUP.md` for the setup and content plan.
+  override. Events include fixed interaction names and bounded action labels,
+  not a prompt, station or district details, map coordinates, app session ID,
+  or query string. See `web/SEO_AND_GOOGLE_SETUP.md` for the setup and content
+  plan.
 - The owner reports that the Napas Search Console Domain property is verified.
   Sitemap submission is pending. The dedicated GA4 property and linking the
   two Google properties also remain unconfirmed.

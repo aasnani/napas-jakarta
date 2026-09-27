@@ -22,10 +22,13 @@ changes; merging code alone does not prove that production has updated.
    needed. If Search Console shows verification is still pending, follow the
    method shown for that property.
 2. Submit `https://napasjakarta.armasn.dev/sitemap.xml` under **Sitemaps**.
-   Use URL inspection for the homepage and both guide pages:
+   Use URL inspection for the homepage, About page, and both guide pages:
    - `https://napasjakarta.armasn.dev/`
+   - `https://napasjakarta.armasn.dev/about`
+   - `https://napasjakarta.armasn.dev/id/tentang`
    - `https://napasjakarta.armasn.dev/air-quality-jakarta`
    - `https://napasjakarta.armasn.dev/id/kualitas-udara-jakarta`
+   The Privacy pages are intentionally marked `noindex`.
 3. In **Settings → Search generative AI**, verify Napas is included in Google
    Search's generative AI features. If the property inherits a parent setting,
    confirm that setting is also inclusion. Google says inclusion is the default
@@ -50,17 +53,26 @@ and [Search generative AI control](https://support.google.com/webmasters/answer/
    who declines before opting in does not load the Google tag. If a visitor
    later revokes consent through **Privacy choices**, the app stops sending its
    manual page-view and interaction events and updates Google's consent state.
-4. The code sends page views for the public homepage and the two guides, plus
-   `assistant_question_submitted` and `station_selected` events. It sends no
-   prompt text, attachments, station name, session ID, or query string. Ads
-   storage, Google signals, and ads personalization are disabled.
+4. The code sends page views for the homepage, About pages, and both guides.
+   After consent, it also counts assistant question starts, suggested-question
+   selections, positive/negative answer feedback, topic and station picker
+   actions, station selection and clearing, mobile map and legend actions,
+   station-list actions, map-layer and filter changes, map camera and zoom
+   changes, and map retry or station-question actions. Parameters are limited
+   to fixed action labels, feedback rating, selection source, zoom direction,
+   layer name, and coarse filter category. Events contain no question or answer
+   text, attachments, station or district names or IDs, map coordinates, app
+   session IDs, or URL parameters.
+   Ads storage, Google signals, and ads personalization are disabled.
 5. In the GA4 web stream, turn off Enhanced Measurement's **Page changes based
    on browser history events** option. The app sends its own page views for the
    public pages; the setting avoids duplicate views and keeps tracking limited
-   to the explicit public-page list.
-6. Test with an explicit opt-in: open the public homepage, use the map, submit a
-   question, and visit both guides. Confirm the events in **Realtime**. Repeat
-   after declining and confirm no Google Analytics events are sent.
+   to the homepage, About pages, and guides. Privacy pages are excluded.
+6. Test with an explicit opt-in: open the public homepage, use suggested
+   questions and topics, submit a question, rate an answer, use map controls,
+   and visit both guides. Confirm the page views and interaction events in
+   **Realtime**. Repeat after declining and confirm no Google Analytics events
+   are sent.
 
 Google's current setup steps are in its [GA4 website setup guide](https://support.google.com/analytics/answer/14183469?hl=en).
 
@@ -95,8 +107,10 @@ queries and landing-page performance to refine them after indexing.
 
 ### Pages and next content
 
-- **Available now:** the workspace homepage and a sourced guide in each
-  language, with reciprocal language links and self-canonicals.
+- **Available now:** the workspace homepage, a sourced air-quality guide in
+  each language, and bilingual About pages. The guide pages have reciprocal
+  language links and self-canonicals. Privacy pages are directly accessible but
+  marked `noindex`.
 - **Next:** a data-source and freshness page, once the exact update cadence,
   station coverage, and fallback behavior can be stated for users.
 - **Then:** a station coverage explainer with official source links and dates;
@@ -117,7 +131,7 @@ features](https://developers.google.com/search/docs/fundamentals/ai-optimization
 
 - Search Console: indexing of the three public URLs, search queries, impressions,
   clicks, and click-through rate for both English and Indonesian topics.
-- GA4: opted-in public-page views, map station selections, assistant question
-  starts, and referrals. Never treat low opt-in volume as total site traffic.
+- GA4: opted-in public-page views and counts of assistant, topic, feedback, and
+  map interactions. Never treat low opt-in volume as total site traffic.
 - After each release: verify the deployed commit, homepage, both guide URLs,
   `/robots.txt`, and `/sitemap.xml` on the live domain.

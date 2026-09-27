@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { LANGUAGE_CHANGE_EVENT, LANGUAGE_STORAGE_KEY } from "@/lib/i18n";
-import { isPublicAnalyticsPath } from "@/lib/analytics";
+import { isConsentAvailablePath, isPublicAnalyticsPath } from "@/lib/analytics";
 import { GoogleAnalytics, isValidMeasurementId } from "./google-analytics";
 import styles from "./analytics-consent.module.css";
 
@@ -72,7 +72,7 @@ export function AnalyticsConsent() {
     });
   }, [choice, pathname]);
 
-  if (!isValidMeasurementId(MEASUREMENT_ID) || !isPublicAnalyticsPath(pathname)) return null;
+  if (!isValidMeasurementId(MEASUREMENT_ID) || !isConsentAvailablePath(pathname)) return null;
 
   function saveChoice(nextChoice: ConsentChoice) {
     setBrowserLocationIsPublic(isPublicAnalyticsPath(window.location.pathname));
@@ -107,8 +107,8 @@ export function AnalyticsConsent() {
           </h2>
           <p className={styles.copy}>
             {isIndonesian
-              ? "Izinkan Google Analytics mengukur kunjungan dan penggunaan peta serta asisten. Kami tidak mengirim teks percakapan, tautan sesi, nama stasiun, atau parameter URL. Tag Google hanya dimuat setelah Anda menyetujui; Anda dapat mengubah pilihan ini kapan saja."
-              : "Allow Google Analytics to measure visits and use of the map and assistant. We do not send chat text, session links, station names, or URL parameters. Google tags load only after you opt in; you can change this choice at any time."}
+              ? "Google Analytics menghitung kunjungan halaman publik serta jenis interaksi dengan asisten dan peta. Peristiwa GA tidak berisi teks chat, lampiran, nama atau ID stasiun/wilayah, ID sesi aplikasi, atau parameter URL. Tag hanya dimuat setelah Anda menyetujui; pilihan dapat diubah kapan saja."
+              : "Google Analytics counts public-page visits and assistant or map interaction types. GA events do not include chat text, attachments, station or district names or IDs, the app's session ID, or URL parameters. The tag loads only after you opt in; you can change your choice at any time."}
           </p>
           <div className={styles.actions}>
             <button className={styles.allow} onClick={() => saveChoice("granted")} type="button">

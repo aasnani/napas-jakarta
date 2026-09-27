@@ -1,4 +1,48 @@
-export type NapasAnalyticsEvent = "assistant_question_submitted" | "station_selected";
+export type NapasAnalyticsEvent =
+  | "assistant_question_submitted"
+  | "assistant_feedback_submitted"
+  | "suggested_question_selected"
+  | "station_selected"
+  | "station_selection_cleared"
+  | "topic_picker_opened"
+  | "topic_picker_closed"
+  | "topic_selected"
+  | "topic_cleared"
+  | "station_picker_opened"
+  | "station_picker_closed"
+  | "mobile_map_opened"
+  | "mobile_map_closed"
+  | "station_list_opened"
+  | "station_list_closed"
+  | "map_layer_menu_opened"
+  | "map_layer_menu_closed"
+  | "map_layer_toggled"
+  | "map_filter_changed"
+  | "map_filters_reset"
+  | "map_zoom_control_clicked"
+  | "map_view_changed"
+  | "map_station_question_clicked"
+  | "map_legend_opened"
+  | "map_legend_closed"
+  | "map_retry_clicked";
+
+export type NapasAnalyticsEventParameters = {
+  assistant_feedback_submitted: { rating: "positive" | "negative" };
+  station_selected: { source: "map_marker" | "station_list" | "chat_picker" };
+  station_selection_cleared: { source: "map_detail" | "chat_context" };
+  topic_picker_opened: { source: "header" | "selected_topic" };
+  map_layer_toggled: {
+    layer: "heatmap" | "roads" | "boundaries" | "waterways" | "transit" | "landmarks" | "place_labels";
+  };
+  map_filter_changed:
+    | { filter: "air_quality"; value: "all" | "good" | "moderate" | "unhealthy" | "stale" }
+    | { filter: "district"; value: "all" | "specific" };
+  map_zoom_control_clicked: { direction: "in" | "out" };
+};
+
+type ParametersFor<E extends NapasAnalyticsEvent> = E extends keyof NapasAnalyticsEventParameters
+  ? NapasAnalyticsEventParameters[E]
+  : undefined;
 
 declare global {
   interface Window {
@@ -8,24 +52,37 @@ declare global {
   }
 }
 
-const SESSION_PATH = /^\/s(?:\/|$)/;
-
 export function isPublicAnalyticsPath(pathname: string): boolean {
-  return ["/", "/air-quality-jakarta", "/id/kualitas-udara-jakarta"].includes(pathname);
+  return [
+    "/",
+    "/about",
+    "/id/tentang",
+    "/air-quality-jakarta",
+    "/id/kualitas-udara-jakarta",
+  ].includes(pathname);
 }
 
-export function trackNapasEvent(eventName: NapasAnalyticsEvent): void {
+export function isConsentAvailablePath(pathname: string): boolean {
+  return isPublicAnalyticsPath(pathname) || ["/privacy", "/id/privasi"].includes(pathname);
+}
+
+export function trackNapasEvent<E extends NapasAnalyticsEvent>(eventName: E, parameters?: ParametersFor<E>): void {
   if (
     typeof window === "undefined" ||
     window.napasAnalyticsConsent !== "granted" ||
     !window.gtag ||
-    SESSION_PATH.test(window.location.pathname)
+    !isPublicAnalyticsPath(window.location.pathname)
   ) {
     return;
   }
 
-  // Deliberately send no question text, station name, session ID, or URL parameters.
-  window.gtag("event", eventName);
+  // Only fixed event names and bounded enums are allowed; never send user content,
+  // station/district identifiers, session IDs, or URL parameters.
+  if (parameters === undefined) {
+    window.gtag("event", eventName);
+  } else {
+    window.gtag("event", eventName, parameters);
+  }
 }
 
 export function suspendAnalyticsForSession(): void {
