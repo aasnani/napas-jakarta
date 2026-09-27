@@ -1,188 +1,41 @@
-<p align="center">
-  <img src="assets/napas-jakarta-air-icon.png" width="104" alt="Napas Jakarta air-quality mark">
-</p>
+# Napas Jakarta
 
-<h1 align="center">Napas Jakarta</h1>
+## Clearer air-quality intelligence for Jakarta
 
-<p align="center"><strong>Understand Jakarta’s air, why it changes, and what you can do next.</strong></p>
+Napas Jakarta brings station observations, an interactive map, and a bilingual conversational advisor together in one calm, understandable workspace. It helps residents and organizations turn air-quality data into practical next steps.
 
-<p align="center">
-  A bilingual, citation-grounded companion for current station observations,
-  city-level air-quality context, policy, and practical exposure reduction.
-</p>
+[Open Napas Jakarta →](https://web-production-e07b9.up.railway.app)
 
-<p align="center">
-  <a href="https://web-production-e07b9.up.railway.app"><strong>Open the live app →</strong></a>
-  · <a href="https://web-production-e07b9.up.railway.app/docs">API</a>
-  · <a href="https://web-production-e07b9.up.railway.app/monitoring">Monitoring</a>
-  · <a href="https://web-production-e07b9.up.railway.app/health">Health</a>
-</p>
+## What it offers
 
-[![Tests](https://github.com/aasnani/napas-jakarta/actions/workflows/test.yml/badge.svg)](https://github.com/aasnani/napas-jakarta/actions/workflows/test.yml)
+- **Current local visibility.** Explore available Jakarta monitoring stations with ISPU, PM2.5, observation times, freshness status, district filters, and direct source links.
+- **A useful conversation layer.** Ask questions in English or Bahasa Indonesia about current conditions, comparisons, historical context, standards, policy, health guidance, and exposure reduction.
+- **Map-based understanding.** Use station markers, filters, station detail, and heatmap views to see how conditions vary across the city.
+- **Evidence you can inspect.** Answers are designed around official monitoring sources, curated institutional evidence, structured retrieval, and citations rather than unsupported guesses.
+- **Responsible communication.** The product distinguishes station readings, city-level context, historical data, stale readings, and fallback data so one number is not mistaken for the whole city.
 
-<details>
-<summary>Contents</summary>
+## Useful for
 
-- [Why Jakarta needs this](#why-jakarta-needs-this)
-- [What residents can do here](#what-residents-can-do-here)
-- [Data you can trust—and its boundaries](#data-you-can-trustand-its-boundaries)
-- [How a question becomes an answer](#how-a-question-becomes-an-answer)
-- [Run locally](#run-locally)
-- [Evaluation and reliability](#evaluation-and-reliability)
-- [Deploy and operate](#deploy-and-operate)
-</details>
+Napas can support public-information services, workplace and campus wellbeing, community programs, environmental education, civic engagement, and early-stage city or NGO pilots. It is designed to make technical air-quality information easier to understand without replacing official authorities, medical advice, or regulatory guidance.
 
-## Why Jakarta needs this
+## Privacy and security
 
-Jakarta faces persistent particulate-pollution risk and recurring unhealthy-air episodes, often intensified in the dry season. This is **not** a claim of a simple, proven year-on-year decline: daily conditions also change with rainfall, wind, atmospheric mixing, season, and emissions from the wider Jakarta airshed. DKI’s 2020 emissions inventory attributed 67.03% of Jakarta’s PM₂.₅ emissions to transport. A separate 2019–2020 receptor study estimated transport’s share of measured PM₂.₅ at 32–57%, depending on sampling location and season; it also identified coal combustion, construction, open burning, soil, and road dust. [DKI inventory and source-apportionment summary](https://rendahemisi.jakarta.go.id/learn) · [DKI/ITB/Vital Strategies study summary](https://rendahemisi.jakarta.go.id/article/37/mencari-sumber-polusi-di-udara-melalui-source-apportionment)
+- No account or login is required, and browser conversation state is not restored as persistent chat history.
+- Model credentials remain server-side. The public web app communicates with a private API through an internal service token.
+- Chat input is bounded, attachments are disabled, and chat, telemetry, and feedback endpoints have rate limits and payload validation.
+- The product is not built for data harvesting or advertising profiles. Limited anonymous product telemetry may include questions, answers, turn metadata, and explicit feedback for quality improvement. It does not include account, cookie, IP, device, or contact identity fields. Users should not enter sensitive personal or health details.
 
-A bare ISPU number cannot answer a resident’s everyday questions: *Where was it measured? When? Is it a station reading or city-level context? Why might it be elevated? What is actually in force, and what practical step is proportionate today?* Napas Jakarta connects local readings and timestamps with separately labelled historical context and cited public-health and policy evidence. It helps residents stay informed, reduce avoidable exposure, and understand ways to support cleaner air—without pretending individual action can replace emission control. [DKI dry-season guidance](https://lingkunganhidup.jakarta.go.id/detail-artikel/masuki-musim-kemarau-pemprov-dki-minta-masyarakat-waspadai-penurunan-kualitas-udara) · [WHO on personal interventions and emissions reduction](https://www.who.int/news-room/questions-and-answers/item/air-pollution-personal-interventions-and-risk-communication)
+## Cost and deployment
 
-## What residents can do here
+The initial deployment is designed around a strict $0 starting point: Railway free allocation, a lightweight web service, a private API service, and a bounded JSONL telemetry fallback without requiring a paid database. PostgreSQL and scheduled ingestion can be added when a live-data operation needs them. Hosting, model, or data-provider charges may apply if usage exceeds free quotas or a paid capacity is selected.
 
-- **Check a nearby reading.** Explore the latest available station snapshot by district, pollutant, category, and freshness; each result keeps its location and observation time visible.
-- **Understand the number.** See what ISPU, PM₂.₅, and PM₁₀ mean in plain language, and compare stations without treating one station as the entire city.
-- **Ask why and what next.** Get cited explanations of likely sources, regulation and implementation status, bad-air-day protection, and realistic individual or civic actions.
-- **Inspect the evidence.** Follow source links, distinguish official observations from city-level model history, and use aggregate Monitoring without exposing people’s questions.
+The architecture can run as a standalone public service or as part of a broader city, workplace, education, or community information program. It supports bilingual presentation, official source configuration, scheduled data refresh, aggregate operational monitoring, and a clear fallback when live feeds are unavailable.
 
-### Questions to try
+## Important boundaries
 
-| Current conditions | Context and action |
-| --- | --- |
-| What is the latest PM2.5 reading in Jakarta Pusat, and when was it observed? | What causes Jakarta’s PM2.5 pollution? |
-| How does Jakarta Timur compare with Jakarta Barat? | What can I do on a polluted day if I need to be outdoors? |
-| How does that compare with the north? | Is ERP an enacted rule, a proposal, or something else? |
-|  | Does a high-rise apartment always reduce particle exposure? |
+- A station reading is local and time-stamped, not a citywide or indoor average.
+- Historical context is labelled separately and should not be read as official station history.
+- Health content is educational, not a diagnosis or emergency triage service.
+- Policy information is date- and source-bounded; users should verify obligations with the responsible authority.
 
-## Data you can trust—and its boundaries
-
-Napas does not merge unlike data into one implied truth. The label, source, timestamp, and scope stay with the result.
-
-| Data layer | Used for | Read it as | Do not read it as |
-| --- | --- | --- | --- |
-| [Official Jakarta SPKU observations](https://udara.jakarta.go.id/) | Live map, overview, current-reading answers | A station’s pollutant, index, and observation time | A citywide average, neighbourhood forecast, or indoor measurement |
-| Zenodo / [Open-Meteo CAMS](https://open-meteo.com/en/docs/air-quality-api) city context | Trends | Separately labelled daily city-level model context | Official SPKU station history |
-| Curated DKI, Indonesian-law, WHO, EPA, and research sources | Causes, regulation, protection, evidence questions | Cited context with source status and scope | A medical diagnosis, legal advice, or proof of one reading’s cause |
-
-For the fuller provenance record, see the [data contract](docs/data-contract.md), [source and citation notes](docs/corpus-and-citations.md), and [limitations](docs/limitations.md).
-
-## How a question becomes an answer
-
-~~~mermaid
-flowchart LR
-  U[Resident] --> W[Next.js + Eve web service]
-  W --> R{Question type}
-  R -->|current reading, station difference, history| T[Typed measurement and policy tools]
-  R -->|causes, regulations, protection| H[Hybrid evidence retrieval]
-  S[Official SPKU portal] --> I[Scheduled ingestion]
-  I --> P[(PostgreSQL runtime data)]
-  P --> T
-  D[Curated DKI, WHO and policy sources] --> H
-  T --> A[Grounded answer + source details]
-  H --> L[Claude Haiku when configured<br/>or cited fallback]
-  L --> A
-  A --> W
-  W --> M[Aggregate, privacy-preserving telemetry]
-~~~
-
-- **Structured answers use typed tools.** Current readings, station differences, history, policy timelines, and ISPU interpretation come from validated application data rather than language-model arithmetic.
-- **Documentary answers retrieve evidence.** Causes, regulations, public-health guidance, and implementation questions search the curated corpus using hybrid retrieval; citations must resolve to retrieved evidence.
-- **The app has a useful failure mode.** Gemini streams when configured. If a provider is unavailable, the application returns a cited deterministic response rather than inventing an answer.
-
-## Technical snapshot
-
-| Layer | Choice |
-| --- | --- |
-| Web and API | Next.js + React + Eve web service, private FastAPI data boundary |
-| Answer model | Server-side Gemini Flash-Lite, with typed deterministic tools |
-| Runtime data | PostgreSQL; labelled packaged fallback for local/offline availability |
-| Evidence retrieval | Hybrid retrieval; optional Qdrant index in local Compose |
-| Ingestion | Validated official-source and historical-context jobs |
-| Quality | Human-reviewed retrieval set, contract tests, Ruff, GitHub Actions |
-| Observability | Aggregate telemetry; private interaction text excluded from the dashboard |
-| Deployment | Railway web/API pilot, optional PostgreSQL, scheduled ingestion |
-
-~~~text
-app/          web UI, API, routing, tools, retrieval, and providers
-data/         source manifest, curated evidence, current fallback, city context
-ingestion/    validation, official connector, history refresh, and indexing
-evaluation/   reviewed set, evaluators, and reproducible result artefacts
-monitoring/   retention, interaction logging, and aggregate analytics
-tests/        unit, contract, provenance, UI, and artefact checks
-docs/         architecture, data, evaluation, deployment, and limitations
-~~~
-
-## Run locally
-
-**Prerequisites:** Node 24, Python 3.11–3.13, and [uv](https://docs.astral.sh/uv/). The current workspace uses a server-side Gemini key for Eve chat and the Python service for station data.
-
-~~~bash
-git clone https://github.com/aasnani/napas-jakarta.git
-cd napas-jakarta
-cp .env.example .env
-uv sync --frozen --extra dev
-cd web
-npm ci
-npm run dev -- --hostname 127.0.0.1 --port 3200
-~~~
-
-Start `npm run dev:api` in a second terminal from `web/`, and set
-`GEMINI_API_KEY` in `web/.env.local`. Open <http://127.0.0.1:3200>. The
-Python service is the data and telemetry boundary; it is available locally
-through `make run` on port 8502.
-
-To validate a checkout:
-
-~~~bash
-make test
-make eval
-make validate-sources
-uv run ruff check .
-~~~
-
-For the full local stack—web, standalone API, PostgreSQL, Qdrant, Grafana, ingestion, and index jobs:
-
-~~~bash
-docker compose up --build -d
-make smoke
-~~~
-
-See [local deployment and smoke checks](docs/deployment.md), the committed [.env.example](.env.example), and the [data contract](docs/data-contract.md) before changing a source URL.
-
-## Evaluation and reliability
-
-Retrieval is evaluated on **30 bilingual questions** whose relevant structure-aware chunks were completed through human review. The application selects hybrid retrieval for production; typed-data and abstention routes are tested separately.
-
-| All-system hybrid result | Value |
-| --- | ---: |
-| Question hit@5 | 0.6667 |
-| Chunk recall@5 | 0.5789 |
-| MRR@5 | 0.4694 |
-| nDCG@5 | 0.4856 |
-
-The reviewed set covers more than document retrieval, so these figures are not a claim that every answer is semantically correct or equally good in both languages. In the current reviewed slice, Indonesian document retrieval trails English; that gap is a documented improvement priority. See the [reviewed question set](evaluation/gold_review_30_final.jsonl), [result artefact](evaluation/results/retrieval_gold_review_30.json), [retrieval visual](evaluation/results/retrieval_plot.png), and [evaluation method](docs/evaluation.md).
-
-Additional checks cover citation resolution and locators, deterministic numeric and freshness behaviour, unsupported-calculation rejection, ingestion idempotency, chunking, query rewriting, safety and out-of-domain abstention, and 29 multi-turn conversation cases.
-
-## Deploy and operate
-
-The deployment candidate uses Railway with a public web service, a private
-FastAPI service, and optional PostgreSQL plus scheduled ingestion. The
-strict-$0 starting point uses the bounded JSONL fallback instead of a paid
-database. Railway may cold-start after inactivity; the [deployment guide](docs/deployment-railway.md)
-documents configuration, verification, source fallback, and rollback.
-
-Aggregate monitoring remains a private operational surface of the FastAPI
-service. Private interaction content is retained for 30 days by default; do
-not enter sensitive personal or health information.
-
-## Responsible use
-
-- Air quality can change quickly. Check the station, pollutant, observation time, and source mode before acting; a packaged fallback is not a live observation.
-- One station does not describe every neighbourhood, indoor exposure, or tomorrow’s air. The historical chart is city-level model context, not official SPKU station history.
-- Health information is educational, not diagnosis or triage. Seek professional care for concerning symptoms or urgent help for severe breathing difficulty, chest pain, fainting, or rapidly worsening symptoms.
-- Regulations and policy status are source- and date-bounded. Use displayed citations to verify obligations with the responsible authority or a qualified adviser.
-
-## Learn more
-
-Start with [architecture](docs/architecture.md), [data and provenance](docs/data-contract.md), [evaluation](docs/evaluation.md), [Railway deployment](docs/deployment-railway.md), and [limitations](docs/limitations.md).
+For the technical history, architecture notes, evaluation record, and deployment details, see the [archived project README](README.historical.md).

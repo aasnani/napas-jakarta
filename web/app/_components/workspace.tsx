@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { AgentChat } from "./agent-chat";
 import { WorkspaceMap } from "./workspace-map";
 import {
@@ -8,17 +8,19 @@ import {
   getUiCopy,
   LANGUAGE_CHANGE_EVENT,
   LANGUAGE_STORAGE_KEY,
+  syncDocumentLanguage,
   type Language,
 } from "@/lib/i18n";
-import { DEMO_STATIONS, type DemoStation } from "@/lib/napas";
+import { type DemoStation } from "@/lib/napas";
 import { toggleMobileMapOverlay } from "@/lib/mobile-layout";
+import { reconcileStationId, resolveStation } from "@/lib/station-selection";
 
 type InfoDialog = "about" | "privacy" | null;
 type AssistantPrefill = { id: number; text: string };
 
 export function Workspace() {
-  const [selectedStation, setSelectedStation] = useState<DemoStation | undefined>();
-  const [stationOptions, setStationOptions] = useState<readonly DemoStation[]>(DEMO_STATIONS);
+  const [selectedStationId, setSelectedStationId] = useState<string>();
+  const [stationOptions, setStationOptions] = useState<readonly DemoStation[]>([]);
   const [mapOverlayOpen, setMapOverlayOpen] = useState(false);
   const [mobileLegendOpen, setMobileLegendOpen] = useState(false);
   const [infoDialog, setInfoDialog] = useState<InfoDialog>(null);
@@ -27,6 +29,11 @@ export function Workspace() {
   const assistantPrefillId = useRef(0);
   const infoDialogRef = useRef<HTMLDialogElement>(null);
   const copy = getUiCopy(language);
+  const selectedStation = resolveStation(stationOptions, selectedStationId);
+
+  useEffect(() => {
+    syncDocumentLanguage(language);
+  }, [language]);
 
   const changeLanguage = (nextLanguage: Language) => {
     if (nextLanguage === language) return;
@@ -46,6 +53,19 @@ export function Workspace() {
         : `Explain why ${station.name} readings are ${ispu} and ${pm25}.`,
     });
   };
+
+  const handleStationClear = useCallback(() => {
+    setSelectedStationId(undefined);
+  }, []);
+
+  const handleStationSelect = useCallback((station: DemoStation) => {
+    setSelectedStationId(station.id);
+  }, []);
+
+  const handleStationsChange = useCallback((stations: readonly DemoStation[]) => {
+    setStationOptions(stations);
+    setSelectedStationId((currentId) => reconcileStationId(stations, currentId));
+  }, []);
 
   useEffect(() => {
     const dialog = infoDialogRef.current;
@@ -94,11 +114,11 @@ export function Workspace() {
             isMapOpen={mapOverlayOpen}
             onMapToggle={() => setMapOverlayOpen((open) => toggleMobileMapOverlay(open))}
             onLegendOpen={() => setMobileLegendOpen(true)}
-            onStationClear={() => setSelectedStation(undefined)}
-            onStationSelect={setSelectedStation}
+            onStationClear={handleStationClear}
+            onStationSelect={handleStationSelect}
             prefillPrompt={assistantPrefill}
             selectedStation={selectedStation?.name}
-            selectedStationId={selectedStation?.id}
+            selectedStationId={selectedStationId}
             stationOptions={stationOptions}
           />
         </section>
@@ -109,10 +129,10 @@ export function Workspace() {
           mobileLegendOpen={mobileLegendOpen}
           onMobileLegendClose={() => setMobileLegendOpen(false)}
           onAskAssistant={handleAskAssistant}
-          onStationClear={() => setSelectedStation(undefined)}
-          onStationSelect={setSelectedStation}
-          onStationsChange={setStationOptions}
-          selectedStationId={selectedStation?.id}
+          onStationClear={handleStationClear}
+          onStationSelect={handleStationSelect}
+          onStationsChange={handleStationsChange}
+          selectedStationId={selectedStationId}
         />
       </div>
 

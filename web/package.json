@@ -14,6 +14,7 @@
     "dev:api": "cd .. && uv run --no-sync python -m uvicorn app.api:app --host 127.0.0.1 --port 8502",
     "eval": "eve eval",
     "start": "next start",
+    "test": "node --experimental-strip-types --test",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "build:eve": "eve build",
     "dev:eve": "eve dev",

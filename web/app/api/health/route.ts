@@ -1,10 +1,19 @@
 import { NextResponse } from "next/server";
+import { probeEveHealth } from "@/lib/eve-health";
 
 export const dynamic = "force-dynamic";
 
-export function GET() {
+export async function GET() {
+  const eveReady = await probeEveHealth();
   return NextResponse.json(
-    { service: "napas-web", status: "ok" },
-    { headers: { "Cache-Control": "no-store" } },
+    {
+      dependencies: { eve: eveReady ? "ready" : "unavailable" },
+      service: "napas-web",
+      status: eveReady ? "ok" : "degraded",
+    },
+    {
+      headers: { "Cache-Control": "no-store" },
+      status: eveReady ? 200 : 503,
+    },
   );
 }

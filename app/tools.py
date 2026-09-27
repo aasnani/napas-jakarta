@@ -357,6 +357,7 @@ def compare_measurement_with_standard(value: float, pollutant: str = "PM2.5") ->
         "who_annual_guideline": guideline,
         "exceeds_guideline": value > guideline,
         "note": "WHO guideline, not an Indonesian legal threshold",
+        "source_id": "who-aqg-2021",
     }
 
 
@@ -440,17 +441,43 @@ def search_guidance(
     language: str = "English",
     retrieval_mode: str = "dense",
     top_k: int = 5,
+    source_ids: list[str] | None = None,
 ) -> list[dict]:
-    """Typed document-guidance tool; it returns source metadata, never raw SQL."""
+    """Typed document-guidance tool; it returns source metadata, never raw SQL.
+
+    ``source_ids`` lets a topic-scoped client constrain retrieval to the
+    sources selected by the product catalog. An empty or omitted filter keeps
+    the existing corpus-wide behavior.
+    """
     from .retrieval import search
 
-    results = search(query, documents, mode=retrieval_mode, top_k=top_k)
+    normalized_source_ids = {
+        source_id.strip()
+        for source_id in (source_ids or [])
+        if source_id and source_id.strip()
+    }
+    candidate_documents = (
+        [
+            document
+            for document in documents
+            if document.source_id in normalized_source_ids
+            or document.document_id in normalized_source_ids
+        ]
+        if normalized_source_ids
+        else documents
+    )
+    results = search(query, candidate_documents, mode=retrieval_mode, top_k=top_k)
     return [
         {
             "document_id": item.document.document_id,
+            "source_id": item.document.source_id or item.document.document_id,
             "title": item.document.title,
             "publisher": item.document.publisher,
             "source_url": item.document.source_url,
+            "section": item.document.section,
+            "heading_path": item.document.heading_path,
+            "page": item.document.page,
+            "article_or_clause": item.document.article_or_clause,
             "language": language,
             "score": item.score,
             "excerpt": item.document.text[:500],

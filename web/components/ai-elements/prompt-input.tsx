@@ -453,6 +453,8 @@ export interface PromptInputMessage {
 }
 
 export type PromptInputProps = Omit<HTMLAttributes<HTMLFormElement>, "onSubmit" | "onError"> & {
+  // Disable file input, paste, and drop handling for text-only composers.
+  allowAttachments?: boolean;
   // e.g., "image/*" or leave undefined for any
   accept?: string;
   multiple?: boolean;
@@ -473,6 +475,7 @@ export type PromptInputProps = Omit<HTMLAttributes<HTMLFormElement>, "onSubmit" 
 };
 
 export const PromptInput = ({
+  allowAttachments = true,
   className,
   accept,
   multiple,
@@ -496,7 +499,7 @@ export const PromptInput = ({
 
   // ----- Local attachments (only used when no provider)
   const [items, setItems] = useState<(FileUIPart & { id: string })[]>([]);
-  const files = usingProvider ? controller.attachments.files : items;
+  const files = allowAttachments ? (usingProvider ? controller.attachments.files : items) : [];
 
   // ----- Local referenced sources (always local to PromptInput)
   const [referencedSources, setReferencedSources] = useState<
@@ -513,6 +516,10 @@ export const PromptInput = ({
   const openFileDialogLocal = useCallback(() => {
     inputRef.current?.click();
   }, []);
+
+  const noOpAdd = useCallback((_fileList: File[] | FileList) => {}, []);
+  const noOpRemove = useCallback((_id: string) => {}, []);
+  const noOpOpenFileDialog = useCallback(() => {}, []);
 
   const matchesAccept = useCallback(
     (f: File) => {
@@ -637,27 +644,35 @@ export const PromptInput = ({
   );
 
   const clearAttachments = useCallback(
-    () =>
-      usingProvider
-        ? controller?.attachments.clear()
-        : setItems((prev) => {
-            for (const file of prev) {
-              if (file.url) {
-                URL.revokeObjectURL(file.url);
-              }
-            }
-            return [];
-          }),
-    [usingProvider, controller],
+    () => {
+      if (!allowAttachments) return;
+      if (usingProvider) {
+        controller?.attachments.clear();
+        return;
+      }
+      setItems((prev) => {
+        for (const file of prev) {
+          if (file.url) {
+            URL.revokeObjectURL(file.url);
+          }
+        }
+        return [];
+      });
+    },
+    [allowAttachments, usingProvider, controller],
   );
 
   const clearReferencedSources = useCallback(() => setReferencedSources([]), []);
 
-  const add = usingProvider ? addWithProviderValidation : addLocal;
-  const remove = usingProvider ? controller.attachments.remove : removeLocal;
-  const openFileDialog = usingProvider
-    ? controller.attachments.openFileDialog
-    : openFileDialogLocal;
+  const add = allowAttachments
+    ? (usingProvider ? addWithProviderValidation : addLocal)
+    : noOpAdd;
+  const remove = allowAttachments
+    ? (usingProvider ? controller.attachments.remove : removeLocal)
+    : noOpRemove;
+  const openFileDialog = allowAttachments
+    ? (usingProvider ? controller.attachments.openFileDialog : openFileDialogLocal)
+    : noOpOpenFileDialog;
 
   const clear = useCallback(() => {
     clearAttachments();
@@ -666,11 +681,11 @@ export const PromptInput = ({
 
   // Let provider know about our hidden file input so external menus can call openFileDialog()
   useEffect(() => {
-    if (!usingProvider) {
+    if (!allowAttachments || !usingProvider) {
       return;
     }
     controller.__registerFileInput(inputRef, () => inputRef.current?.click());
-  }, [usingProvider, controller]);
+  }, [allowAttachments, usingProvider, controller]);
 
   // Note: File input cannot be programmatically set for security reasons
   // The syncHiddenInput prop is no longer functional
@@ -682,6 +697,9 @@ export const PromptInput = ({
 
   // Attach drop handlers on nearest form and document (opt-in)
   useEffect(() => {
+    if (!allowAttachments) {
+      return;
+    }
     const form = formRef.current;
     if (!form) {
       return;
@@ -710,10 +728,10 @@ export const PromptInput = ({
       form.removeEventListener("dragover", onDragOver);
       form.removeEventListener("drop", onDrop);
     };
-  }, [add, globalDrop]);
+  }, [allowAttachments, add, globalDrop]);
 
   useEffect(() => {
-    if (!globalDrop) {
+    if (!allowAttachments || !globalDrop) {
       return;
     }
 
@@ -736,7 +754,7 @@ export const PromptInput = ({
       document.removeEventListener("dragover", onDragOver);
       document.removeEventListener("drop", onDrop);
     };
-  }, [add, globalDrop]);
+  }, [allowAttachments, add, globalDrop]);
 
   useEffect(
     () => () => {
@@ -801,9 +819,10 @@ export const PromptInput = ({
             return (formData.get("message") as string) || "";
           })();
 
-      // Reset form immediately after capturing text to avoid race condition
-      // where user input during async blob conversion would be lost
-      if (!usingProvider) {
+      // Attachment-enabled forms need to reset their native file input before
+      // asynchronous blob conversion. Text-only composers keep the controlled
+      // draft intact until their submitter confirms success.
+      if (!usingProvider && allowAttachments) {
         form.reset();
       }
 
@@ -847,22 +866,24 @@ export const PromptInput = ({
         // Don't clear on error - user may want to retry
       }
     },
-    [usingProvider, controller, files, onSubmit, clear],
+    [allowAttachments, usingProvider, controller, files, onSubmit, clear],
   );
 
   // Render with or without local provider
   const inner = (
     <>
-      <input
-        accept={accept}
-        aria-label={fileInputLabel}
-        className="hidden"
-        multiple={multiple}
-        onChange={handleChange}
-        ref={inputRef}
-        title={fileInputLabel}
-        type="file"
-      />
+      {allowAttachments ? (
+        <input
+          accept={accept}
+          aria-label={fileInputLabel}
+          className="hidden"
+          multiple={multiple}
+          onChange={handleChange}
+          ref={inputRef}
+          title={fileInputLabel}
+          type="file"
+        />
+      ) : null}
       <form className="w-full" onSubmit={handleSubmit} ref={formRef} {...props}>
         <InputGroup
           className={cn(

@@ -1,6 +1,5 @@
 "use client";
 
-import type { UserContent } from "ai";
 import type { EveMessage } from "eve/react";
 import { useEveAgent } from "eve/react";
 import {
@@ -28,9 +27,9 @@ import {
   type PromptInputMessage,
   PromptInputSubmit,
   PromptInputTextarea,
-  usePromptInputAttachments,
 } from "@/components/ai-elements/prompt-input";
 import { Shimmer } from "@/components/ai-elements/shimmer";
+import { localizeChatError } from "@/lib/chat-errors";
 import { getUiCopy, localizedCategory, localizedDistrict, replaceCopy, type Language } from "@/lib/i18n";
 import { recordChatTurn } from "@/lib/telemetry";
 import {
@@ -46,6 +45,7 @@ import {
 import { getSuggestedQuestions } from "@/lib/suggestions";
 import { shouldShowPendingThinking, shouldShowSuggestedQuestions } from "@/lib/chat-state";
 import type { DemoStation } from "@/lib/napas";
+import { MAX_CHAT_CHARACTERS, validateChatInput } from "@/lib/user-input-limits";
 import { AgentMessage } from "./agent-message";
 
 export function AgentChat({
@@ -75,6 +75,7 @@ export function AgentChat({
 }) {
   const copy = getUiCopy(language);
   const [cancellationError, setCancellationError] = useState<string>();
+  const [inputError, setInputError] = useState<string>();
   const [hasInputText, setHasInputText] = useState(false);
   const [inputText, setInputText] = useState("");
   const [contextOpen, setContextOpen] = useState(false);
@@ -204,12 +205,18 @@ export function AgentChat({
     const normalizedText = text.trim();
     if (normalizedText.length === 0 || isResuming) return;
 
-    setInputText("");
-    setHasInputText(false);
+    if (validateChatInput(normalizedText)) {
+      setInputError(copy.chat.inputTooLong);
+      return;
+    }
+
+    setInputError(undefined);
     setCancellationError(undefined);
 
     try {
       await agent.send(normalizedText, buildSendOptions());
+      setInputText("");
+      setHasInputText(false);
     } catch (error: unknown) {
       setCancellationError(toErrorMessage(error, language));
     }
@@ -222,41 +229,21 @@ export function AgentChat({
 
   const handleSubmit = async (message: PromptInputMessage) => {
     const text = message.text.trim();
-    if ((text.length === 0 && message.files.length === 0) || isResuming) return;
-
-    const options = buildSendOptions();
-
-    if (message.files.length === 0) {
-      await sendText(text);
-      return;
-    }
-
-    setHasInputText(false);
-    setInputText("");
-    setCancellationError(undefined);
-    const parts: UserContent = [];
-    if (text.length > 0) {
-      parts.push({ text, type: "text" });
-    }
-    for (const file of message.files) {
-      parts.push({
-        data: file.url,
-        filename: file.filename,
-        mediaType: file.mediaType,
-        type: "file",
-      });
-    }
-
-    await agent.send(parts, options);
+    if (text.length === 0 || isResuming) return;
+    await sendText(text);
   };
 
   const composer = (
-    <PromptInput fileInputLabel={copy.message.attachment} onSubmit={handleSubmit}>
+    <PromptInput allowAttachments={false} onSubmit={handleSubmit}>
       <PromptInputTextarea
         className="napas-prompt-textarea"
         disabled={isResuming}
         id="napas-composer-input"
+        aria-describedby={inputError ? "napas-composer-error" : undefined}
+        aria-invalid={inputError ? true : undefined}
+        maxLength={MAX_CHAT_CHARACTERS}
         onChange={(event) => {
+          setInputError(undefined);
           setInputText(event.currentTarget.value);
           setHasInputText(event.currentTarget.value.trim().length > 0);
         }}
@@ -439,7 +426,12 @@ export function AgentChat({
           suggestions={suggestedQuestions}
           showSuggestions={showSuggestedQuestions}
         />
-        <div className="w-full napas-composer-wrap">{composer}</div>
+      {inputError ? (
+        <p className="px-1 pb-1 text-destructive text-xs" id="napas-composer-error" role="alert">
+          {inputError}
+        </p>
+      ) : null}
+      <div className="w-full napas-composer-wrap">{composer}</div>
       </div>
     </div>
   );
@@ -758,8 +750,7 @@ function ComposerAction({
   readonly onCancel: () => void;
 }) {
   const copy = getUiCopy(language);
-  const attachments = usePromptInputAttachments();
-  const canSubmit = hasInputText || attachments.files.length > 0;
+  const canSubmit = hasInputText;
 
   if (!isBusy || canSubmit) {
     return (
@@ -827,11 +818,7 @@ function toErrorMessage(error: unknown, language: Language): string {
 }
 
 function localizeAgentError(message: string | undefined, language: Language): string | undefined {
-  if (!message) return undefined;
-  if (language === "en") return message;
-  if (/cancel|abort/i.test(message)) return getUiCopy(language).chat.unableToCancel;
-  if (/model|gemini|network|fetch|timeout|request/i.test(message)) return getUiCopy(language).chat.modelUnavailable;
-  return getUiCopy(language).chat.requestFailedDetail;
+  return localizeChatError(message, language);
 }
 
 function getLatestTurnFailure(
@@ -844,7 +831,7 @@ function getLatestTurnFailure(
     if (event.type === "turn.failed") {
       return event.data.code === "MODEL_CALL_FAILED"
         ? getUiCopy(language).chat.modelUnavailable
-        : language === "id" ? getUiCopy(language).chat.requestFailedDetail : event.data.message;
+        : getUiCopy(language).chat.requestFailedDetail;
     }
 
     if (event.type === "turn.completed" || event.type === "turn.cancelled") {

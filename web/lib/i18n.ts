@@ -87,6 +87,7 @@ export const UI_COPY = {
       unableToCancel: "Unable to cancel the response.",
       modelUnavailable: "The model is temporarily unavailable. Please try again.",
       requestFailedDetail: "We could not complete that request. Please try again.",
+      inputTooLong: "Please keep your question under 500 words.",
       scrollToBottom: "Scroll to bottom",
     },
     message: {
@@ -286,6 +287,7 @@ export const UI_COPY = {
       unableToCancel: "Respons tidak dapat dihentikan.",
       modelUnavailable: "Model sedang tidak tersedia. Silakan coba lagi.",
       requestFailedDetail: "Permintaan tidak dapat diselesaikan. Silakan coba lagi.",
+      inputTooLong: "Harap batasi pertanyaan Anda hingga 500 kata.",
       scrollToBottom: "Gulir ke bawah",
     },
     message: {
@@ -411,6 +413,15 @@ export type UiCopy = (typeof UI_COPY)[Language];
 
 export function getUiCopy(language: Language): UiCopy {
   return UI_COPY[language];
+}
+
+type DocumentLanguageTarget = { documentElement: { lang: string } };
+
+export function syncDocumentLanguage(
+  language: Language,
+  documentRef: DocumentLanguageTarget = document,
+): void {
+  documentRef.documentElement.lang = language === "id" ? "id" : "en";
 }
 
 const CATEGORY_LABELS: Record<Language, Record<AirQualityCategory, string>> = {

@@ -2,14 +2,15 @@ from __future__ import annotations
 
 import json
 import os
+import re
 from datetime import date
 from pathlib import Path
 from time import perf_counter
-from typing import Any, Literal
+from typing import Annotated, Any, Literal
 from uuid import uuid4
 
 from fastapi import Depends, FastAPI, HTTPException, Request
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, StrictStr, field_validator
 
 from monitoring.analytics import load_dashboard
 from monitoring.logging import log_feedback, log_interaction
@@ -35,6 +36,7 @@ from .tools import (
     get_latest_measurements,
     get_unhealthy_day_count,
     latest_data_age_seconds,
+    search_guidance,
 )
 
 ROOT = Path(__file__).parents[1]
@@ -42,6 +44,11 @@ RUNTIME = RuntimeRepository(os.getenv("DATA_DIR", ROOT / "data"), os.getenv("POS
 DOCUMENTS = RUNTIME.documents()
 MEASUREMENTS = RUNTIME.measurements(force=True)
 app = FastAPI(title="Napas Jakarta API", version=build_metadata()["app_version"])
+
+_USER_INPUT_WORD_RE = re.compile(r"[\w]+(?:[.'’\-][\w]+)*", re.UNICODE)
+MAX_USER_INPUT_WORDS = 500
+BoundedLocation = Annotated[StrictStr, Field(min_length=2, max_length=100)]
+BoundedSourceId = Annotated[StrictStr, Field(min_length=1, max_length=120)]
 
 
 def _public_station_category(
@@ -216,18 +223,32 @@ def _source_manifest() -> dict[str, Any]:
     }
 
 
+class HistoryMessage(BaseModel):
+    """Only conversational roles are allowed back into the model context."""
+
+    role: Literal["user", "assistant"]
+    content: StrictStr = Field(min_length=1, max_length=8_000)
+
+
 class AskRequest(BaseModel):
-    question: str = Field(min_length=3, max_length=1000)
+    question: str = Field(min_length=3, max_length=8_000)
     retrieval_mode: Literal["bm25", "dense", "hybrid", "hybrid_rerank", "qdrant_hybrid"] = Field(
         default_factory=selected_retrieval_mode
     )
     rewrite_mode: Literal["off", "rules"] = "rules"
     language: Literal["English", "Bahasa Indonesia"] = "English"
-    # The web client persists assistant citations/meta alongside string content. Keep
-    # the history envelope permissive here; the RAG layer still accepts only
-    # user/assistant roles and string content when constructing model context.
-    history: list[dict[str, Any]] = Field(default_factory=list, max_length=12)
+    # The web client persists assistant citations/meta alongside string content.
+    # HistoryMessage ignores those display-only fields while allowing only the
+    # user/assistant roles into the model context.
+    history: list[HistoryMessage] = Field(default_factory=list, max_length=12)
     session_id: str | None = Field(default=None, max_length=64)
+
+    @field_validator("question")
+    @classmethod
+    def question_word_limit(cls, value: str) -> str:
+        if len(_USER_INPUT_WORD_RE.findall(value)) > MAX_USER_INPUT_WORDS:
+            raise ValueError(f"question must contain at most {MAX_USER_INPUT_WORDS} words")
+        return value
 
 
 class FeedbackRequest(BaseModel):
@@ -247,7 +268,7 @@ class ChatTelemetryRequest(BaseModel):
 
 
 class CompareRequest(BaseModel):
-    locations: list[str] = Field(min_length=1, max_length=10)
+    locations: list[BoundedLocation] = Field(min_length=1, max_length=10)
     pollutant: str = "PM2.5"
 
 
@@ -264,7 +285,17 @@ class StandardRequest(BaseModel):
 
 
 class StudyCompareRequest(BaseModel):
-    source_ids: list[str] = Field(default_factory=list, max_length=10)
+    source_ids: list[BoundedSourceId] = Field(default_factory=list, max_length=10)
+
+
+class GuidanceSearchRequest(BaseModel):
+    query: str = Field(min_length=3, max_length=500)
+    language: Literal["English", "Bahasa Indonesia"] = "English"
+    retrieval_mode: Literal["bm25", "dense", "hybrid", "hybrid_rerank", "qdrant_hybrid"] = Field(
+        default_factory=selected_retrieval_mode
+    )
+    top_k: int = Field(default=5, ge=1, le=8)
+    source_ids: list[BoundedSourceId] = Field(default_factory=list, max_length=12)
 
 
 @app.get("/health")
@@ -302,12 +333,12 @@ def monitoring_summary(http_request: Request = None, days: int = 30) -> dict:
     return load_dashboard(days)
 
 
-@app.get("/sources")
+@app.get("/sources", dependencies=[Depends(require_internal_token)])
 def sources() -> dict:
     return _source_manifest()
 
 
-@app.get("/policies/timeline")
+@app.get("/policies/timeline", dependencies=[Depends(require_internal_token)])
 def policy_timeline(instrument: str) -> dict:
     try:
         return {"timeline": get_policy_timeline(instrument)}
@@ -315,7 +346,7 @@ def policy_timeline(instrument: str) -> dict:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
 
 
-@app.get("/policies/status")
+@app.get("/policies/status", dependencies=[Depends(require_internal_token)])
 def policy_status(instrument: str, as_of: str | None = None) -> dict:
     try:
         return {"status": get_policy_status(instrument, as_of)}
@@ -323,19 +354,35 @@ def policy_status(instrument: str, as_of: str | None = None) -> dict:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
 
 
-@app.get("/evidence/source-apportionment")
+@app.get("/evidence/source-apportionment", dependencies=[Depends(require_internal_token)])
 def source_apportionment(
     pollutant: str = "PM2.5", season: str | None = None, location: str | None = None
 ) -> dict:
     return {"findings": get_source_apportionment(pollutant, season, location)}
 
 
-@app.post("/evidence/compare")
+@app.post("/evidence/compare", dependencies=[Depends(require_internal_token)])
 def evidence_compare(request: StudyCompareRequest) -> dict:
     return compare_study_findings(request.source_ids)
 
 
-@app.get("/measurements/latest")
+@app.post("/guidance/search", dependencies=[Depends(require_internal_token)])
+def guidance_search(request: GuidanceSearchRequest) -> dict[str, Any]:
+    return {
+        "results": search_guidance(
+            request.query,
+            DOCUMENTS,
+            language=request.language,
+            retrieval_mode=request.retrieval_mode,
+            top_k=request.top_k,
+            source_ids=request.source_ids,
+        ),
+        "retrieval_mode": request.retrieval_mode,
+        "source_mode": _source_manifest()["mode"],
+    }
+
+
+@app.get("/measurements/latest", dependencies=[Depends(require_internal_token)])
 def latest_measurements(location: str | None = None, pollutant: str = "PM2.5") -> dict:
     refresh_runtime_measurements()
     return {
@@ -344,7 +391,7 @@ def latest_measurements(location: str | None = None, pollutant: str = "PM2.5") -
     }
 
 
-@app.get("/stations")
+@app.get("/stations", dependencies=[Depends(require_internal_token)])
 def stations(pollutant: str = "PM2.5") -> dict[str, Any]:
     """Return map-ready station metadata joined to the latest observation."""
     refresh_runtime_measurements()
@@ -362,7 +409,7 @@ def stations(pollutant: str = "PM2.5") -> dict[str, Any]:
     )
 
 
-@app.post("/measurements/compare")
+@app.post("/measurements/compare", dependencies=[Depends(require_internal_token)])
 def compare_measurements(request: CompareRequest) -> dict:
     refresh_runtime_measurements()
     return {
@@ -371,7 +418,7 @@ def compare_measurements(request: CompareRequest) -> dict:
     }
 
 
-@app.post("/measurements/history")
+@app.post("/measurements/history", dependencies=[Depends(require_internal_token)])
 def historical_measurements(request: HistoryRequest) -> dict:
     refresh_runtime_measurements()
     if request.end < request.start:
@@ -385,7 +432,7 @@ def historical_measurements(request: HistoryRequest) -> dict:
     return {"summary": summary, "source_mode": _source_manifest()["mode"]}
 
 
-@app.post("/measurements/unhealthy-days")
+@app.post("/measurements/unhealthy-days", dependencies=[Depends(require_internal_token)])
 def unhealthy_days(request: HistoryRequest) -> dict:
     refresh_runtime_measurements()
     if request.end < request.start:
@@ -398,7 +445,7 @@ def unhealthy_days(request: HistoryRequest) -> dict:
     }
 
 
-@app.post("/measurements/standard")
+@app.post("/measurements/standard", dependencies=[Depends(require_internal_token)])
 def measurement_standard(request: StandardRequest) -> dict:
     try:
         comparison = compare_measurement_with_standard(request.value, request.pollutant)
@@ -415,6 +462,7 @@ def ask(request: AskRequest, http_request: Request = None) -> dict:
     started = perf_counter()
     source_mode = _source_manifest()["mode"]
     session_id = request.session_id or f"api-{uuid4()}"
+    history = [item.model_dump() for item in request.history]
     try:
         result = answer(
             request.question,
@@ -423,7 +471,7 @@ def ask(request: AskRequest, http_request: Request = None) -> dict:
             retrieval_mode=request.retrieval_mode,
             rewrite_mode=request.rewrite_mode,
             language=request.language,
-            history=request.history,
+            history=history,
         )
     except ValueError as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
@@ -449,8 +497,8 @@ def ask(request: AskRequest, http_request: Request = None) -> dict:
             ),
             "source": source_mode,
             "conversation_turn": 1
-            + sum(1 for item in request.history if item.get("role") == "user"),
-            "history_messages": len(request.history),
+                + sum(1 for item in history if item.get("role") == "user"),
+            "history_messages": len(history),
             "history_summary_chars": 0,
             "provider_model": result.get("generation_usage", {}).get(
                 "model", os.getenv("LLM_MODEL", "")

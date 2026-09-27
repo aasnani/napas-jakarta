@@ -1,11 +1,12 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { chatGlobalRateLimiter, chatRateLimiter, requestClientKey } from "@/lib/request-rate-limit";
+import { validateEveRequestPayload } from "@/lib/user-input-limits";
 
-const MAX_CHAT_REQUEST_BYTES = 128_000;
+const MAX_CHAT_REQUEST_BYTES = 32_000;
 const EVE_TURN_PATH = /^\/eve\/v1\/session(?:\/[^/]+)?$/u;
 
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const routerHost = process.env.VERCEL_URL;
   const forwardedHost = request.headers.get("x-forwarded-host");
   if (process.env.__VERCEL_DEV_RUNNING === "1" && routerHost && forwardedHost !== routerHost) {
@@ -20,6 +21,35 @@ export function proxy(request: NextRequest) {
     if (contentLength > MAX_CHAT_REQUEST_BYTES) {
       return NextResponse.json({ error: "Chat request is too large." }, { status: 413 });
     }
+
+    const rawBody = await request.clone().text().catch(() => "");
+    if (new TextEncoder().encode(rawBody).byteLength > MAX_CHAT_REQUEST_BYTES) {
+      return NextResponse.json({ error: "Chat request is too large." }, { status: 413 });
+    }
+
+    let payload: unknown;
+    try {
+      payload = rawBody.length > 0 ? JSON.parse(rawBody) : undefined;
+    } catch {
+      // Leave malformed JSON handling to Eve so it keeps its normal error
+      // contract. The guard only inspects valid request objects.
+      payload = undefined;
+    }
+
+    const inputViolation = validateEveRequestPayload(payload);
+    if (inputViolation) {
+      const error =
+        inputViolation === "word-limit"
+          ? "Chat message is limited to 500 words."
+          : inputViolation === "character-limit"
+            ? "Chat message is too long."
+            : "Chat context is too large.";
+      return NextResponse.json(
+        { code: "chat_input_too_large", error },
+        { headers: { "Cache-Control": "no-store" }, status: 413 },
+      );
+    }
+
     const clientKey = requestClientKey(request);
     const clientDecision = chatRateLimiter.allow(clientKey);
     const globalDecision = clientDecision.allowed
