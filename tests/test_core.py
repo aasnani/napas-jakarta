@@ -308,10 +308,28 @@ def test_latest_station_category_does_not_promote_stale_reading_to_current():
     observed = datetime(2026, 9, 7, 11, tzinfo=UTC)
     stale = replace(measurements[0], observed_at=observed, ispu_value=72, ispu_category="Sedang")
 
-    row = get_latest_measurements([stale], now=observed + timedelta(hours=7))[0]
+    row = get_latest_measurements([stale], now=observed + timedelta(hours=25))[0]
 
     assert row["category"] == "Stale / missing"
     assert row["freshness"]["stale"] is True
+
+
+def test_latest_station_category_stays_current_through_24_hours():
+    from dataclasses import replace
+
+    measurements = load_measurements(ROOT / "data/demo/measurements.csv")
+    observed = datetime(2026, 9, 7, 11, tzinfo=UTC)
+    current = replace(measurements[0], observed_at=observed, ispu_value=72, ispu_category="Sedang")
+
+    row = get_latest_measurements([current], now=observed + timedelta(hours=24))[0]
+
+    assert row["category"] == "Sedang"
+    assert row["freshness"] == {
+        "observed_at": observed.isoformat(),
+        "age_seconds": 86400.0,
+        "stale": False,
+        "stale_after_hours": 24,
+    }
 
 
 def test_url_backed_tool_rows_expose_source_url():
@@ -534,7 +552,12 @@ def test_routes_and_typed_tools_are_deterministic():
     comparison = compare_locations(measurements, ["Jakarta Pusat", "Nowhere"])
     assert comparison[0]["available"] is True
     assert comparison[1]["available"] is False
-    assert freshness(measurements[0], measurements[0].observed_at.replace(hour=14))["stale"] is True
+    assert freshness(
+        measurements[0], measurements[0].observed_at + timedelta(hours=24)
+    )["stale"] is False
+    assert freshness(
+        measurements[0], measurements[0].observed_at + timedelta(hours=24, seconds=1)
+    )["stale"] is True
     assert latest_data_age_seconds(measurements, measurements[0].observed_at.replace(hour=14)) >= 0
     assert latest_data_age_seconds([]) is None
     guidance = search_guidance(

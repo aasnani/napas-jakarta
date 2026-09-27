@@ -60,6 +60,8 @@ _ISPU_CATEGORY_BOUNDS = {
     "hazardous": (">", 300),
 }
 
+DEFAULT_STALE_AFTER_HOURS = 24
+
 
 def _wib_timestamp(value: datetime) -> str:
     """Render an observation timestamp in Jakarta time without host-TZ dependence."""
@@ -487,7 +489,9 @@ def search_guidance(
 
 
 def freshness(
-    measurement: Measurement, now: datetime | None = None, stale_after_hours: int = 6
+    measurement: Measurement,
+    now: datetime | None = None,
+    stale_after_hours: int = DEFAULT_STALE_AFTER_HOURS,
 ) -> dict:
     now = now or datetime.now(UTC)
     observed = measurement.observed_at
