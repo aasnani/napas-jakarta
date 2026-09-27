@@ -7,8 +7,8 @@ the Markdown shown by a web client after generation has completed.
 from __future__ import annotations
 
 import re
-from html import escape
 from collections.abc import Iterable, Mapping
+from html import escape
 
 _CITATION_RE = re.compile(r"\[([A-Za-z0-9_-]+)(?:\s*§\s*([^\[\]]+?))?\]")
 

@@ -1,9 +1,7 @@
 # Railway deployment
 
-This document is being carried forward while the product moves from the
-legacy NiceGUI surface to the single Next.js/Eve workspace. The replacement
-web service is the intended public surface; the FastAPI service remains the
-authoritative data/tool backend until the cutover evidence is complete.
+The public product is the single Next.js/Eve workspace. The FastAPI service is
+the private authoritative data, tool, and telemetry boundary.
 
 ## Replacement web milestone
 

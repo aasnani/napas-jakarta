@@ -39,7 +39,7 @@ def test_exact_two_turn_followup_carries_district_and_avoids_snapshot_summary():
     assert "only the displayed observation window" not in result["answer"]
 
 
-def test_api_accepts_hydrated_nicegui_history_with_sources_and_meta(monkeypatch):
+def test_api_accepts_hydrated_history_with_sources_and_meta(monkeypatch):
     from app import rag
     from app.api import AskRequest, ask
 

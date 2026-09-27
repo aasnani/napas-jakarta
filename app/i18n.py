@@ -1,4 +1,4 @@
-"""Centralized English and Bahasa Indonesia text for the NiceGUI application.
+"""Centralized English and Bahasa Indonesia text for the application.
 
 Dynamic station, district, measurement, and table values deliberately do not
 belong here: those are observations rather than interface copy.  Everything

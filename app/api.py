@@ -223,7 +223,7 @@ class AskRequest(BaseModel):
     )
     rewrite_mode: Literal["off", "rules"] = "rules"
     language: Literal["English", "Bahasa Indonesia"] = "English"
-    # NiceGUI persists assistant citations/meta alongside string content. Keep
+    # The web client persists assistant citations/meta alongside string content. Keep
     # the history envelope permissive here; the RAG layer still accepts only
     # user/assistant roles and string content when constructing model context.
     history: list[dict[str, Any]] = Field(default_factory=list, max_length=12)

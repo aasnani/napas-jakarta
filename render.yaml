@@ -4,7 +4,7 @@ services:
     runtime: docker
     dockerfilePath: ./Dockerfile
     dockerContext: .
-    dockerCommand: uvicorn app.web:app --host 0.0.0.0 --port=$PORT
+    dockerCommand: uvicorn app.api:app --host 0.0.0.0 --port=$PORT
     plan: free
     healthCheckPath: /health
     envVars:

@@ -1,26 +1,22 @@
 # Architecture
 
-> Direction update (2026-09-26): the accepted replacement experience is the
-> single-workspace design in [product-design.md](product-design.md). The older
-> NiceGUI multi-page presentation remains the current deployed baseline during
-> migration, but its UI decision is historical and must not guide new frontend
-> work. The new target uses Next.js/React, Eve, and MapLibre; FastAPI and the
-> verified Python data/domain layer remain authoritative initially.
+> Direction update (2026-09-27): the accepted replacement experience is the
+> single-workspace design in [product-design.md](product-design.md). The
+> current product uses Next.js/React, Eve, and MapLibre; FastAPI and the
+> verified Python data/domain layer remain authoritative.
 
 The replacement product is a Next.js/React/Eve web service backed by a private
 FastAPI data and telemetry service. The web surface provides the resident-facing
 advisor, map, station detail, filters, source disclosure, feedback, and
 language controls. The Python service remains authoritative for station data,
-freshness, deterministic tools, and bounded anonymous telemetry. The older
-NiceGUI and Streamlit surfaces remain compatibility paths during migration and
-are not the replacement public surface.
+freshness, deterministic tools, and bounded anonymous telemetry.
 
 The request router sends current readings, comparisons, history, policy
 timelines, and index interpretation to deterministic Python tools. Questions
 about documentary evidence, public-health guidance, regulations, and causes use
 retrieval over the curated local corpus. The configured retrieval method is
-read from `RETRIEVAL_MODE`; `hybrid` is the selected default. Both the NiceGUI
-and API paths record the actual method used with each answer event.
+read from `RETRIEVAL_MODE`; `hybrid` is the selected default. The API records
+the actual method used with each answer event.
 
 Answer generation reads a named prompt from `app.provider.PROMPTS`. The selected
 value is `PROMPT_VARIANT=strict` by default, and the same prompt dictionary is
@@ -38,7 +34,7 @@ count. `GET /version` returns only safe build metadata, plus the selected
 retrieval and prompt variants.
 
 The full local Compose environment includes PostgreSQL, Qdrant, Grafana, the
-legacy combined service, a standalone API, and one-shot ingest/index services.
+Next.js web service, a standalone API, and one-shot ingest/index services.
 The replacement Railway shape deploys the Next/Eve web service, a private API,
 and optionally PostgreSQL plus scheduled ingestion because in-process hybrid
 retrieval is the configured production method and aggregate monitoring belongs

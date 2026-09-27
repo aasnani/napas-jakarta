@@ -18,8 +18,8 @@ validation counts for duplicates, units, negatives, and future timestamps. A
 live fetch also stores a content-addressed raw snapshot under `data/raw/`.
 The normalized measurement fingerprint excludes per-fetch `fetched_at`, so an
 unchanged upstream snapshot retains the same checksum across refreshes.
-When the processed file exists, both the API and Streamlit application consume
-it automatically; otherwise they fall back to the committed demo snapshot.
+When the processed file exists, the API consumes it automatically; otherwise
+it falls back to the committed demo snapshot.
 `GET /sources` derives the displayed mode from both configuration and the
 persisted report, preventing a live snapshot from being mislabeled after a
 restart.

@@ -70,7 +70,7 @@ For the fuller provenance record, see the [data contract](docs/data-contract.md)
 
 ~~~mermaid
 flowchart LR
-  U[Resident] --> W[NiceGUI + FastAPI]
+  U[Resident] --> W[Next.js + Eve web service]
   W --> R{Question type}
   R -->|current reading, station difference, history| T[Typed measurement and policy tools]
   R -->|causes, regulations, protection| H[Hybrid evidence retrieval]
@@ -128,8 +128,8 @@ npm run dev -- --hostname 127.0.0.1 --port 3200
 
 Start `npm run dev:api` in a second terminal from `web/`, and set
 `GEMINI_API_KEY` in `web/.env.local`. Open <http://127.0.0.1:3200>. The
-legacy Python/NiceGUI surface remains available through `app.web:app` for
-compatibility checks, but it is not the replacement public surface.
+Python service is the data and telemetry boundary; it is available locally
+through `make run` on port 8502.
 
 To validate a checkout:
 
