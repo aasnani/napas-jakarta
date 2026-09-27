@@ -13,12 +13,25 @@ type FeedbackTelemetry = {
   readonly session_id: string;
 };
 
+type ChatFailureTelemetry = {
+  readonly context_messages: number;
+  readonly conversation_turn: number;
+  readonly error_code: string;
+  readonly input_chars: number;
+  readonly interaction_id: string;
+  readonly session_id: string;
+};
+
 export function recordChatTurn(payload: ChatTurnTelemetry): void {
   void sendTelemetry({ payload, type: "turn" });
 }
 
 export function recordFeedback(payload: FeedbackTelemetry): void {
   void sendTelemetry({ payload, type: "feedback" });
+}
+
+export function recordChatFailure(payload: ChatFailureTelemetry): void {
+  void sendTelemetry({ payload, type: "failure" });
 }
 
 async function sendTelemetry(payload: Record<string, unknown>): Promise<void> {

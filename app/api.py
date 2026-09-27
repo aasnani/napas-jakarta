@@ -14,6 +14,7 @@ from pydantic import BaseModel, Field, StrictStr, field_validator
 
 from monitoring.analytics import load_dashboard
 from monitoring.logging import log_feedback, log_interaction
+from monitoring.structured import emit_exception, emit_log
 
 from .config import build_metadata, selected_retrieval_mode
 from .evidence import compare_study_findings, get_source_apportionment
@@ -46,9 +47,63 @@ MEASUREMENTS = RUNTIME.measurements(force=True)
 app = FastAPI(title="Napas Jakarta API", version=build_metadata()["app_version"])
 
 _USER_INPUT_WORD_RE = re.compile(r"[\w]+(?:[.'’\-][\w]+)*", re.UNICODE)
+_REQUEST_ID_RE = re.compile(r"^[A-Za-z0-9._:-]{1,64}$")
 MAX_USER_INPUT_WORDS = 500
 BoundedLocation = Annotated[StrictStr, Field(min_length=2, max_length=100)]
 BoundedSourceId = Annotated[StrictStr, Field(min_length=1, max_length=120)]
+
+
+@app.middleware("http")
+async def structured_request_logging(request: Request, call_next):
+    request_id = _request_id(request)
+    request.state.request_id = request_id
+    started = perf_counter()
+
+    try:
+        response = await call_next(request)
+    except Exception as exc:
+        is_chat_request = request.url.path == "/ask"
+        emit_exception(
+            "error",
+            "request_failed",
+            exc,
+            request_id=request_id,
+            route=request.url.path,
+            method=request.method,
+            http_status=500,
+            critical=is_chat_request,
+            alertable=is_chat_request,
+        )
+        raise
+
+    status_code = response.status_code
+    level = "error" if status_code >= 500 else "warn" if status_code >= 400 else "info"
+    emit_log(
+        level,
+        "request_completed",
+        request_id=request_id,
+        route=request.url.path,
+        method=request.method,
+        http_status=status_code,
+        status_class=f"{status_code // 100}xx",
+        duration_ms=round((perf_counter() - started) * 1000, 2),
+        critical=request.url.path == "/ask" and status_code >= 500,
+        alertable=request.url.path == "/ask" and status_code >= 500,
+    )
+    response.headers["X-Request-ID"] = request_id
+    return response
+
+
+def _request_id(request: Request) -> str:
+    candidate = request.headers.get("x-request-id", "").strip()
+    return candidate if _REQUEST_ID_RE.fullmatch(candidate) else f"req-{uuid4()}"
+
+
+def _request_id_from(request: Request | None) -> str | None:
+    if request is None:
+        return None
+    state = getattr(request, "state", None)
+    return getattr(state, "request_id", None)
 
 
 def _public_station_category(
@@ -458,12 +513,13 @@ def measurement_standard(request: StandardRequest) -> dict:
 def ask(request: AskRequest, http_request: Request = None) -> dict:
     if http_request is not None:
         enforce_rate_limit(http_request, CHAT_RATE_LIMITER, "ask")
-    refresh_runtime_measurements()
     started = perf_counter()
-    source_mode = _source_manifest()["mode"]
+    request_id = _request_id_from(http_request)
     session_id = request.session_id or f"api-{uuid4()}"
     history = [item.model_dump() for item in request.history]
     try:
+        refresh_runtime_measurements()
+        source_mode = _source_manifest()["mode"]
         result = answer(
             request.question,
             DOCUMENTS,
@@ -474,7 +530,26 @@ def ask(request: AskRequest, http_request: Request = None) -> dict:
             history=history,
         )
     except ValueError as exc:
+        emit_log(
+            "warn",
+            "chat_validation_rejected",
+            request_id=request_id,
+            route="/ask",
+            http_status=422,
+            error_type=type(exc).__name__,
+        )
         raise HTTPException(status_code=422, detail=str(exc)) from exc
+    except Exception as exc:
+        emit_exception(
+            "error",
+            "chat_failure",
+            exc,
+            request_id=request_id,
+            route="/ask",
+            critical=True,
+            alertable=True,
+        )
+        raise
     interaction_id = log_interaction(
         {
             "event": "answer",
