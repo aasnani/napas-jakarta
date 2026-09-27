@@ -31,7 +31,7 @@ import {
 import { Shimmer } from "@/components/ai-elements/shimmer";
 import { localizeChatError } from "@/lib/chat-errors";
 import { getUiCopy, localizedCategory, localizedDistrict, replaceCopy, type Language } from "@/lib/i18n";
-import { recordChatTurn } from "@/lib/telemetry";
+import { recordChatFailure, recordChatTurn } from "@/lib/telemetry";
 import {
   buildNapasClientContext,
   findTopic,
@@ -100,6 +100,7 @@ export function AgentChat({
   const anonymousSessionId = useRef(createAnonymousSessionId());
   const telemetrySessionId = anonymousSessionId.current;
   const recordedTurnIds = useRef(new Set<string>());
+  const recordedFailureIds = useRef(new Set<string>());
   const latestUserMessage = [...agent.data.messages].reverse().find((message) => message.role === "user");
   const latestAssistantMessage = lastMessage?.role === "assistant" ? lastMessage : undefined;
   const latestQuestion = latestUserMessage ? messageText(latestUserMessage) : "";
@@ -154,6 +155,38 @@ export function AgentChat({
     latestQuestion,
     telemetrySessionId,
   ]);
+
+  useEffect(() => {
+    let failureIndex: number | undefined;
+    for (let index = agent.events.length - 1; index >= 0; index -= 1) {
+      const event = agent.events[index];
+      if (event.type === "turn.failed") {
+        failureIndex = index;
+        break;
+      }
+      if (event.type === "turn.completed" || event.type === "turn.cancelled" || event.type === "message.received") {
+        return;
+      }
+    }
+    if (failureIndex === undefined) return;
+
+    const failure = agent.events[failureIndex];
+    if (failure?.type !== "turn.failed") return;
+
+    const errorCode = typeof failure.data.code === "string" ? failure.data.code : "UNKNOWN";
+    const failureId = `${failureIndex}:${latestUserMessage?.id ?? "none"}:${errorCode}`;
+    if (recordedFailureIds.current.has(failureId)) return;
+
+    recordedFailureIds.current.add(failureId);
+    recordChatFailure({
+      context_messages: agent.data.messages.length,
+      conversation_turn: agent.data.messages.filter((message) => message.role === "user").length,
+      error_code: errorCode,
+      input_chars: latestQuestion.length,
+      interaction_id: latestUserMessage?.id ?? failureId,
+      session_id: telemetrySessionId,
+    });
+  }, [agent.data.messages, agent.events, latestQuestion, latestUserMessage, telemetrySessionId]);
 
   useEffect(() => {
     if (!topicMenuOpen && !stationMenuOpen) return;
