@@ -490,11 +490,11 @@ textarea {
 }
 
 @media (max-width: 980px) {
-  .topbar { display: flex; height: 60px; gap: 12px; }
+  .topbar { display: grid; grid-template-columns: max-content minmax(0, 1fr) max-content; height: 60px; gap: 12px; }
   .topbar-side { display: none; }
-  .topbar-left { flex: 1 1 auto; overflow: visible; }
+  .topbar-left { flex: 0 0 auto; overflow: visible; }
   .topbar-left .topbar-actions { position: static; transform: none; }
-  .brand { position: absolute; left: 50%; transform: translateX(-50%); }
+  .brand { position: static; justify-self: center; transform: none; }
   .topbar-right { flex: 0 0 auto; }
   .workspace { position: relative; display: block; height: calc(100dvh - 60px); min-height: calc(100dvh - 60px); }
   .chat-panel { display: flex; height: calc(100dvh - 60px); min-height: 0; border-right: 0; }
@@ -602,7 +602,7 @@ textarea {
 }
 
 @media (max-width: 390px) {
-  .topbar { padding: 0 10px; }
+  .topbar { gap: 6px; padding: 0 10px; }
   .brand { gap: 5px; }
   .brand img { width: 30px; height: 30px; }
   .brand-title { font-size: 14px; }
@@ -1410,14 +1410,16 @@ textarea {
 
 @media (max-width: 980px) {
   .topbar {
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-    overflow: hidden;
+    grid-template-columns: max-content minmax(0, 1fr) max-content;
+    gap: 12px;
+    overflow: visible;
   }
 
   .topbar-left {
+    flex: 0 0 auto;
     gap: 0;
     min-width: 0;
-    overflow: hidden;
+    overflow: visible;
   }
 
   .topbar-left .topbar-side {
@@ -1427,7 +1429,7 @@ textarea {
   .topbar-left .topbar-actions {
     position: static !important;
     min-width: 0;
-    gap: 10px;
+    gap: 6px;
     transform: none;
   }
 
@@ -1439,6 +1441,9 @@ textarea {
   .brand {
     min-width: 0;
     overflow: hidden;
+    position: static;
+    transform: none;
+    justify-self: center;
   }
 
   .brand-title {
@@ -1470,11 +1475,11 @@ textarea {
   }
 
   .topbar-left .topbar-actions {
-    gap: 10px;
+    gap: 6px;
   }
 
   .napas-od-app .topbar-link {
-    font-size: 11px;
+    font-size: 10px;
   }
 
   .chat-title-copy {
@@ -1492,8 +1497,12 @@ textarea {
 }
 
 @media (max-width: 390px) {
+  .topbar {
+    gap: 4px;
+  }
+
   .topbar-left .topbar-actions {
-    gap: 8px;
+    gap: 4px;
   }
 
   .napas-od-app .topbar-link {
@@ -1504,5 +1513,9 @@ textarea {
     min-width: 25px;
     padding: 0 5px;
     font-size: 9px;
+  }
+
+  .topbar-right {
+    margin-left: 0;
   }
 }
