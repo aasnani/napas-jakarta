@@ -31,6 +31,7 @@ import {
 import { Shimmer } from "@/components/ai-elements/shimmer";
 import { localizeChatError } from "@/lib/chat-errors";
 import { getUiCopy, localizedCategory, localizedDistrict, replaceCopy, type Language } from "@/lib/i18n";
+import { trackNapasEvent } from "@/lib/analytics";
 import { recordChatFailure, recordChatTurn } from "@/lib/telemetry";
 import {
   buildNapasClientContext,
@@ -247,6 +248,7 @@ export function AgentChat({
     setCancellationError(undefined);
 
     try {
+      trackNapasEvent("assistant_question_submitted");
       await agent.send(normalizedText, buildSendOptions());
       setInputText("");
       setHasInputText(false);

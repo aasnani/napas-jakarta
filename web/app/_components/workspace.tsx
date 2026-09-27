@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { AgentChat } from "./agent-chat";
 import { WorkspaceMap } from "./workspace-map";
+import { trackNapasEvent } from "@/lib/analytics";
 import {
   DEFAULT_LANGUAGE,
   getUiCopy,
@@ -60,6 +61,7 @@ export function Workspace() {
 
   const handleStationSelect = useCallback((station: DemoStation) => {
     setSelectedStationId(station.id);
+    trackNapasEvent("station_selected");
   }, []);
 
   const handleStationsChange = useCallback((stations: readonly DemoStation[]) => {
