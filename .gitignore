@@ -1,4 +1,5 @@
 # Local environments, credentials, and secret-bearing configuration.
+.codex-dev/
 .venv/
 .env
 .env.*
