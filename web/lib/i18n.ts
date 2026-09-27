@@ -36,7 +36,7 @@ export const UI_COPY = {
         "The random grouping ID helps connect turns and feedback from one page visit; it is not linked to an identity.",
         "Telemetry is used to understand what is useful, diagnose failures, and improve Napas. It is not used to harvest personal data or build advertising profiles.",
         "Because questions and answers are part of anonymous product telemetry, please avoid entering sensitive personal details.",
-        "Google Analytics is optional. After consent, it counts public-page visits and interactions with suggested questions, feedback ratings, topics, station selection, and map controls. These events do not include question or answer text, attachments, station or district names or IDs, the app's session ID, or URL query parameters.",
+        "Google Analytics is optional. After consent, it counts public-page visits and interaction categories. Google also receives standard session, browser/device, and approximate-region information. Napas sends page paths without query strings or fragments and reduces referrers to their domain. Events do not include chat text, attachments, station or district names or IDs, or map coordinates.",
       ],
     },
     chat: {
@@ -237,7 +237,7 @@ export const UI_COPY = {
         "ID pengelompokan acak membantu menghubungkan giliran dan umpan balik dari satu kunjungan halaman. ID ini tidak terhubung dengan identitas.",
         "Telemetri digunakan untuk memahami hal yang bermanfaat, mendiagnosis kegagalan, dan meningkatkan Napas. Telemetri tidak digunakan untuk memanen data pribadi atau membuat profil iklan.",
         "Karena pertanyaan dan jawaban menjadi bagian dari telemetri produk anonim, hindari memasukkan detail pribadi yang sensitif.",
-        "Google Analytics bersifat opsional. Setelah Anda menyetujui, Google Analytics menghitung kunjungan ke halaman publik serta interaksi dengan pertanyaan yang disarankan, penilaian jawaban, topik, pilihan stasiun, dan kontrol peta. Peristiwa ini tidak menyertakan teks pertanyaan atau jawaban, lampiran, nama atau ID stasiun maupun wilayah, ID sesi aplikasi, atau parameter URL.",
+        "Google Analytics bersifat opsional. Setelah Anda menyetujui, Google Analytics menghitung kunjungan halaman publik dan kategori interaksi. Google juga menerima informasi standar tentang sesi, browser/perangkat, dan perkiraan wilayah. Napas mengirim jalur halaman tanpa parameter kueri atau fragmen dan membatasi perujuk ke domainnya. Peristiwa tidak menyertakan teks chat, lampiran, nama atau ID stasiun maupun wilayah, atau koordinat peta.",
       ],
     },
     chat: {

@@ -60,14 +60,17 @@ and [Search generative AI control](https://support.google.com/webmasters/answer/
    station-list actions, map-layer and filter changes, map camera and zoom
    changes, and map retry or station-question actions. Parameters are limited
    to fixed action labels, feedback rating, selection source, zoom direction,
-   layer name, and coarse filter category. Events contain no question or answer
-   text, attachments, station or district names or IDs, map coordinates, app
-   session IDs, or URL parameters.
+   layer name, and coarse filter category. Napas sends page paths without query
+   strings or fragments and reduces referrers to their domain. Campaign query
+   values are disabled. Events contain no question or answer text, attachments,
+   station or district names or IDs, map coordinates, or app session IDs.
    Ads storage, Google signals, and ads personalization are disabled.
-5. In the GA4 web stream, turn off Enhanced Measurement's **Page changes based
-   on browser history events** option. The app sends its own page views for the
-   public pages; the setting avoids duplicate views and keeps tracking limited
-   to the homepage, About pages, and guides. Privacy pages are excluded.
+5. In the GA4 web stream, turn **Enhanced Measurement off**. This keeps GA from
+   collecting automatic scroll, outbound-click, site-search, form, file-download,
+   and video events in addition to Napas's explicit event list. The app sends
+   its own page views for the homepage, About pages, and guides; Privacy pages
+   are excluded. GA4's standard session and device signals still apply after
+   consent.
 6. Test with an explicit opt-in: open the public homepage, use suggested
    questions and topics, submit a question, rate an answer, use map controls,
    and visit both guides. Confirm the page views and interaction events in

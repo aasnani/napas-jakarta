@@ -66,6 +66,22 @@ export function isConsentAvailablePath(pathname: string): boolean {
   return isPublicAnalyticsPath(pathname) || ["/privacy", "/id/privasi"].includes(pathname);
 }
 
+export function sanitizeAnalyticsUrl(value: string, pathOnly = false): string {
+  try {
+    const url = new URL(value);
+    if (url.protocol !== "http:" && url.protocol !== "https:") return "";
+    return pathOnly ? `${url.origin}${url.pathname}` : url.origin;
+  } catch {
+    return "";
+  }
+}
+
+function setSafePageContext(): void {
+  if (!window.gtag) return;
+  window.gtag("set", "page_location", sanitizeAnalyticsUrl(window.location.href, true));
+  window.gtag("set", "page_referrer", sanitizeAnalyticsUrl(document.referrer));
+}
+
 export function trackNapasEvent<E extends NapasAnalyticsEvent>(eventName: E, parameters?: ParametersFor<E>): void {
   if (
     typeof window === "undefined" ||
@@ -76,6 +92,7 @@ export function trackNapasEvent<E extends NapasAnalyticsEvent>(eventName: E, par
     return;
   }
 
+  setSafePageContext();
   // Only fixed event names and bounded enums are allowed; never send user content,
   // station/district identifiers, session IDs, or URL parameters.
   if (parameters === undefined) {

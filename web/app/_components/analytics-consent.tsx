@@ -107,8 +107,8 @@ export function AnalyticsConsent() {
           </h2>
           <p className={styles.copy}>
             {isIndonesian
-              ? "Google Analytics menghitung kunjungan halaman publik serta jenis interaksi dengan asisten dan peta. Peristiwa GA tidak berisi teks chat, lampiran, nama atau ID stasiun/wilayah, ID sesi aplikasi, atau parameter URL. Tag hanya dimuat setelah Anda menyetujui; pilihan dapat diubah kapan saja."
-              : "Google Analytics counts public-page visits and assistant or map interaction types. GA events do not include chat text, attachments, station or district names or IDs, the app's session ID, or URL parameters. The tag loads only after you opt in; you can change your choice at any time."}
+              ? "Google Analytics menghitung kunjungan halaman publik dan kategori interaksi. Google juga menerima informasi standar tentang sesi, browser/perangkat, dan perkiraan wilayah. Napas mengirim jalur halaman tanpa parameter kueri atau fragmen, serta perujuk sebatas domain. GA tidak menerima teks chat, lampiran, nama atau ID stasiun/wilayah, atau koordinat peta. Tag hanya dimuat setelah Anda menyetujui; pilihan dapat diubah kapan saja."
+              : "Google Analytics counts public-page visits and interaction categories. Google also receives standard session, browser/device, and approximate-region information. Napas sends page paths without query strings or fragments and limits referrers to their domain. GA does not receive chat text, attachments, station or district names or IDs, or map coordinates. The tag loads only after you opt in; you can change this choice at any time."}
           </p>
           <div className={styles.actions}>
             <button className={styles.allow} onClick={() => saveChoice("granted")} type="button">
