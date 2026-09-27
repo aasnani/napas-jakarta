@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/napas-jakarta-air-icon.png" width="104" alt="Napas Jakarta air-quality mark">
+  <img src="../assets/napas-jakarta-air-icon.png" width="104" alt="Napas Jakarta air-quality mark">
 </p>
 
 <h1 align="center">Napas Jakarta</h1>
@@ -64,7 +64,7 @@ Napas does not merge unlike data into one implied truth. The label, source, time
 | Zenodo / [Open-Meteo CAMS](https://open-meteo.com/en/docs/air-quality-api) city context | Trends | Separately labelled daily city-level model context | Official SPKU station history |
 | Curated DKI, Indonesian-law, WHO, EPA, and research sources | Causes, regulation, protection, evidence questions | Cited context with source status and scope | A medical diagnosis, legal advice, or proof of one reading’s cause |
 
-For the fuller provenance record, see the [data contract](docs/data-contract.md), [source and citation notes](docs/corpus-and-citations.md), and [limitations](docs/limitations.md).
+For the fuller provenance record, see the [data contract](data-contract.md), [source and citation notes](corpus-and-citations.md), and [limitations](limitations.md).
 
 ## How a question becomes an answer
 
@@ -147,7 +147,7 @@ docker compose up --build -d
 make smoke
 ~~~
 
-See [local deployment and smoke checks](docs/deployment.md), the committed [.env.example](.env.example), and the [data contract](docs/data-contract.md) before changing a source URL.
+See [local deployment and smoke checks](deployment.md), the committed [.env.example](../.env.example), and the [data contract](data-contract.md) before changing a source URL.
 
 ## Evaluation and reliability
 
@@ -160,7 +160,7 @@ Retrieval is evaluated on **30 bilingual questions** whose relevant structure-aw
 | MRR@5 | 0.4694 |
 | nDCG@5 | 0.4856 |
 
-The reviewed set covers more than document retrieval, so these figures are not a claim that every answer is semantically correct or equally good in both languages. In the current reviewed slice, Indonesian document retrieval trails English; that gap is a documented improvement priority. See the [reviewed question set](evaluation/gold_review_30_final.jsonl), [result artefact](evaluation/results/retrieval_gold_review_30.json), [retrieval visual](evaluation/results/retrieval_plot.png), and [evaluation method](docs/evaluation.md).
+The reviewed set covers more than document retrieval, so these figures are not a claim that every answer is semantically correct or equally good in both languages. In the current reviewed slice, Indonesian document retrieval trails English; that gap is a documented improvement priority. See the [reviewed question set](../evaluation/gold_review_30_final.jsonl), [result artefact](../evaluation/results/retrieval_gold_review_30.json), [retrieval visual](../evaluation/results/retrieval_plot.png), and [evaluation method](evaluation.md).
 
 Additional checks cover citation resolution and locators, deterministic numeric and freshness behaviour, unsupported-calculation rejection, ingestion idempotency, chunking, query rewriting, safety and out-of-domain abstention, and 29 multi-turn conversation cases.
 
@@ -169,7 +169,7 @@ Additional checks cover citation resolution and locators, deterministic numeric 
 The deployment candidate uses Railway with a public web service, a private
 FastAPI service, and optional PostgreSQL plus scheduled ingestion. The
 strict-$0 starting point uses the bounded JSONL fallback instead of a paid
-database. Railway may cold-start after inactivity; the [deployment guide](docs/deployment-railway.md)
+database. Railway may cold-start after inactivity; the [deployment guide](deployment-railway.md)
 documents configuration, verification, source fallback, and rollback.
 
 Aggregate monitoring remains a private operational surface of the FastAPI
@@ -185,4 +185,4 @@ not enter sensitive personal or health information.
 
 ## Learn more
 
-Start with [architecture](docs/architecture.md), [data and provenance](docs/data-contract.md), [evaluation](docs/evaluation.md), [Railway deployment](docs/deployment-railway.md), and [limitations](docs/limitations.md).
+Start with [architecture](architecture.md), [data and provenance](data-contract.md), [evaluation](evaluation.md), [Railway deployment](deployment-railway.md), and [limitations](limitations.md).

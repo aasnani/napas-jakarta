@@ -20,6 +20,16 @@
 
 Napas Jakarta brings station observations, an interactive map, and a bilingual conversational advisor together in one calm, understandable workspace. It helps residents and organizations turn air-quality data into practical next steps.
 
+## Why this matters
+
+Air quality in Jakarta is a serious public-health crisis. Jakarta and its surrounding metropolitan area have repeatedly appeared near the top of pollution comparisons, while industrial activity, population density, seasonal weather, regional fires, and other environmental events can intensify particulate pollution. The [World Health Organization identifies air pollution as a major health risk](https://www.who.int/southeastasia/health-topics/air-pollution), and [DKI Jakarta explains how low rainfall and wind can allow PM2.5 to accumulate](https://www.jakarta.go.id/page/upaya-bersama-jaga-kualitas-udara-jakarta).
+
+Napas Jakarta gives the average Jakartan a simple way to speak directly with the latest available data, follow local air quality, understand what a station reading means, and stay better protected and informed as conditions change. It connects current observations with clear context and practical exposure-reduction guidance, without pretending to replace official authorities or medical advice.
+
+<p align="center">
+  <img src="docs/napas-jakarta-preview.png" alt="Napas Jakarta workspace with the advisor, live map, air-quality metrics, and legend">
+</p>
+
 ## What it offers
 
 - **Current local visibility.** Explore available Jakarta monitoring stations with ISPU, PM2.5, observation times, freshness status, district filters, and direct source links.
@@ -52,4 +62,4 @@ The architecture can run as a standalone public service or as part of a broader 
 - Health content is educational, not a diagnosis or emergency triage service.
 - Policy information is date- and source-bounded; users should verify obligations with the responsible authority.
 
-For the technical history, architecture notes, evaluation record, and deployment details, see the [archived project README](README.historical.md).
+For the technical history, architecture notes, evaluation record, and deployment details, see the [archived project README](docs/README.historical.md).
