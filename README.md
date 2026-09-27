@@ -1,10 +1,24 @@
-# Napas Jakarta
+<p align="center">
+  <img src="assets/napas-jakarta-air-icon.png" width="104" alt="Napas Jakarta air-quality mark">
+</p>
 
-## Clearer air-quality intelligence for Jakarta
+<h1 align="center">Napas Jakarta</h1>
+
+<p align="center"><strong>Understand Jakarta’s air, why it changes, and what you can do next.</strong></p>
+
+<p align="center">
+  A bilingual, citation-grounded companion for current station observations,
+  city-level air-quality context, policy, and practical exposure reduction.
+</p>
+
+<p align="center">
+  <a href="https://web-production-e07b9.up.railway.app"><strong>Open the live app →</strong></a>
+  · <a href="https://web-production-e07b9.up.railway.app/docs">API</a>
+</p>
+
+[![Tests](https://github.com/aasnani/napas-jakarta/actions/workflows/test.yml/badge.svg)](https://github.com/aasnani/napas-jakarta/actions/workflows/test.yml)
 
 Napas Jakarta brings station observations, an interactive map, and a bilingual conversational advisor together in one calm, understandable workspace. It helps residents and organizations turn air-quality data into practical next steps.
-
-[Open Napas Jakarta →](https://web-production-e07b9.up.railway.app)
 
 ## What it offers
 
