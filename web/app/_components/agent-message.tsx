@@ -38,6 +38,7 @@ import { normalizeAssistantMarkdown } from "@/lib/assistant-markdown";
 import { revealPacedText } from "@/lib/paced-text";
 import { extractSourceCitations, type SourceCitation } from "@/lib/source-citations";
 import { recordFeedback } from "@/lib/telemetry";
+import { trackNapasEvent } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
 export type AgentInputResponse = {
@@ -139,6 +140,9 @@ function FeedbackActions({ interactionId, language, sessionId }: { readonly inte
   const submitFeedback = (value: "down" | "up") => {
     if (feedback) return;
     setFeedback(value);
+    trackNapasEvent("assistant_feedback_submitted", {
+      rating: value === "up" ? "positive" : "negative",
+    });
     recordFeedback({
       feedback: value === "up" ? "positive" : "negative",
       interaction_id: interactionId,

@@ -23,7 +23,6 @@ export const UI_COPY = {
       kicker: "Napas Jakarta",
       aboutTitle: "About Napas Jakarta",
       privacyTitle: "Privacy by design",
-      close: "Close information dialog",
       aboutBody: [
         "Napas Jakarta is a conversational guide to air quality across the city. It brings the map, station readings, and plain-language explanations together in one place.",
         "The map is designed around live data from operating Jakarta air-quality monitoring stations. When the station feed is reachable, the latest available measurements power the markers, filters, KPIs, and selected-station details. If a feed is unavailable or a reading falls outside the freshness window, Napas labels it as stale and shows the observation time.",
@@ -37,6 +36,7 @@ export const UI_COPY = {
         "The random grouping ID helps connect turns and feedback from one page visit; it is not linked to an identity.",
         "Telemetry is used to understand what is useful, diagnose failures, and improve Napas. It is not used to harvest personal data or build advertising profiles.",
         "Because questions and answers are part of anonymous product telemetry, please avoid entering sensitive personal details.",
+        "Google Analytics is optional. After consent, it counts public-page visits and interaction categories. Google also receives standard session, browser/device, and approximate-region information. Napas sends page paths without query strings or fragments and reduces referrers to their domain. Events do not include chat text, attachments, station or district names or IDs, or map coordinates.",
       ],
     },
     chat: {
@@ -58,6 +58,7 @@ export const UI_COPY = {
       conversation: "Napas conversation",
       emptyTitle: "Ask Napas about Jakarta's air.",
       emptyDescription: "Start with a question below, or write your own.",
+      guideLink: "Learn what PM2.5, PM10 and ISPU mean",
       suggestedQuestions: "Suggested questions",
       selectedTopic: "Selected topic: ",
       selectedLocation: "Selected map location",
@@ -223,7 +224,6 @@ export const UI_COPY = {
       kicker: "Napas Jakarta",
       aboutTitle: "Tentang Napas Jakarta",
       privacyTitle: "Privasi sejak awal",
-      close: "Tutup dialog informasi",
       aboutBody: [
         "Napas Jakarta adalah panduan percakapan tentang kualitas udara di seluruh kota. Peta, pembacaan stasiun, dan penjelasan bahasa sederhana tersedia dalam satu tempat.",
         "Peta ini menggunakan data langsung dari stasiun pemantauan kualitas udara Jakarta yang sedang beroperasi. Saat umpan stasiun dapat dijangkau, pengukuran terbaru digunakan untuk penanda, filter, KPI, dan detail stasiun terpilih. Jika umpan tidak tersedia atau pembacaan melewati batas kesegaran, Napas menandainya sebagai usang dan menampilkan waktu pengamatan.",
@@ -237,6 +237,7 @@ export const UI_COPY = {
         "ID pengelompokan acak membantu menghubungkan giliran dan umpan balik dari satu kunjungan halaman. ID ini tidak terhubung dengan identitas.",
         "Telemetri digunakan untuk memahami hal yang bermanfaat, mendiagnosis kegagalan, dan meningkatkan Napas. Telemetri tidak digunakan untuk memanen data pribadi atau membuat profil iklan.",
         "Karena pertanyaan dan jawaban menjadi bagian dari telemetri produk anonim, hindari memasukkan detail pribadi yang sensitif.",
+        "Google Analytics bersifat opsional. Setelah Anda menyetujui, Google Analytics menghitung kunjungan halaman publik dan kategori interaksi. Google juga menerima informasi standar tentang sesi, browser/perangkat, dan perkiraan wilayah. Napas mengirim jalur halaman tanpa parameter kueri atau fragmen dan membatasi perujuk ke domainnya. Peristiwa tidak menyertakan teks chat, lampiran, nama atau ID stasiun maupun wilayah, atau koordinat peta.",
       ],
     },
     chat: {
@@ -258,6 +259,7 @@ export const UI_COPY = {
       conversation: "Percakapan Napas",
       emptyTitle: "Tanyakan tentang udara Jakarta kepada Napas.",
       emptyDescription: "Mulai dengan pertanyaan di bawah, atau tulis pertanyaan Anda sendiri.",
+      guideLink: "Pelajari arti PM2.5, PM10, dan ISPU",
       suggestedQuestions: "Pertanyaan yang disarankan",
       selectedTopic: "Topik terpilih: ",
       selectedLocation: "Lokasi peta terpilih",

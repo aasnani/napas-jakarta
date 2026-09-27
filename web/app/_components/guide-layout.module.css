@@ -1,0 +1,158 @@
+.page {
+  min-height: 100vh;
+  background: #f5f8f7;
+  color: #153047;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+}
+
+.brand {
+  color: #153047;
+  font-size: 1.1rem;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.languages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  font-size: 0.9rem;
+}
+
+.languages a,
+.related a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  padding: 0.25rem;
+  color: #006c76;
+  font-weight: 650;
+  text-underline-offset: 0.18em;
+}
+
+.languages a[aria-current="page"] {
+  color: #153047;
+  text-decoration-thickness: 0.13em;
+}
+
+.article {
+  box-sizing: border-box;
+  width: min(100% - 2rem, 52rem);
+  margin: 1rem auto 3rem;
+  padding: clamp(1.25rem, 4vw, 3rem);
+  border: 1px solid #dce8e6;
+  border-radius: 1.25rem;
+  background: #fff;
+  box-shadow: 0 12px 36px rgb(21 48 71 / 6%);
+}
+
+.eyebrow {
+  margin: 0 0 0.7rem;
+  color: #087f8c;
+  font-size: 0.78rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.title {
+  max-width: 44rem;
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  letter-spacing: -0.035em;
+  line-height: 1.08;
+}
+
+.intro {
+  margin: 1.25rem 0 2rem;
+  padding: 1.15rem 1.25rem;
+  border-left: 4px solid #087f8c;
+  border-radius: 0 0.75rem 0.75rem 0;
+  background: #eff9f7;
+  color: #243f50;
+  font-size: 1.08rem;
+  line-height: 1.65;
+}
+
+.section {
+  margin-top: 2rem;
+}
+
+.section h2 {
+  margin: 0 0 0.55rem;
+  font-size: clamp(1.25rem, 3vw, 1.55rem);
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+}
+
+.section p,
+.section li {
+  color: #344b58;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.section p {
+  margin: 0.45rem 0;
+}
+
+.section ul {
+  padding-left: 1.35rem;
+}
+
+.sources {
+  display: grid;
+  gap: 0.6rem;
+  padding-left: 1.25rem;
+}
+
+.sources a {
+  color: #006c76;
+  text-underline-offset: 0.18em;
+}
+
+.related {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem 1.25rem;
+  margin-top: 2.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid #dce8e6;
+}
+
+.footer {
+  padding: 0 1.5rem 2rem;
+  color: #506674;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.brand:focus-visible,
+.languages a:focus-visible,
+.related a:focus-visible,
+.sources a:focus-visible {
+  outline: 3px solid #153047;
+  outline-offset: 3px;
+}
+
+@media (max-width: 520px) {
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  .article {
+    margin-top: 0.25rem;
+  }
+}

@@ -19,6 +19,7 @@ import {
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { getUiCopy, localizedCategory, localizedDistrict, type Language } from "@/lib/i18n";
+import { trackNapasEvent } from "@/lib/analytics";
 import {
   categoryKey,
   type StationCatalogResponse,
@@ -157,8 +158,8 @@ export function WorkspaceMap({
   readonly mobileLegendOpen?: boolean;
   readonly onAskAssistant: (station: DemoStation) => void;
   readonly onMobileLegendClose?: () => void;
-  readonly onStationClear: () => void;
-  readonly onStationSelect: (station: DemoStation) => void;
+  readonly onStationClear: (source: "map_detail" | "chat_context") => void;
+  readonly onStationSelect: (station: DemoStation, source: "map_marker" | "station_list" | "chat_picker") => void;
   readonly onStationsChange?: (stations: readonly DemoStation[]) => void;
   readonly selectedStationId?: string;
 }) {
@@ -274,9 +275,9 @@ export function WorkspaceMap({
   const unhealthyShare = stationSummary ? percentageOf(unhealthyCount, stationCount) : undefined;
 
   const selectStation = useCallback(
-    (station: DemoStation) => {
+    (station: DemoStation, source: "map_marker" | "station_list") => {
       setSelectedId(station.id);
-      onStationSelect(station);
+      onStationSelect(station, source);
     },
     [onStationSelect],
   );
@@ -296,6 +297,9 @@ export function WorkspaceMap({
     });
     mapRef.current = map;
     map.addControl(new NavigationControl({ showCompass: false, showZoom: false }), "top-right");
+    map.on("moveend", (event) => {
+      if (event.originalEvent) trackNapasEvent("map_view_changed");
+    });
 
     map.on("load", () => {
       map.addSource("napas-stations", {
@@ -395,7 +399,7 @@ export function WorkspaceMap({
     const handleStationClick = (event: MapLayerMouseEvent) => {
       const id = event.features?.[0]?.properties?.id;
       const station = stationsRef.current.find((item) => item.id === id);
-      if (station) selectStation(station);
+      if (station) selectStation(station, "map_marker");
     };
     const setPointer = () => {
       map.getCanvas().style.cursor = "pointer";
@@ -441,6 +445,9 @@ export function WorkspaceMap({
   }, []);
 
   const toggleLayer = (key: MapLayerKey) => {
+    trackNapasEvent("map_layer_toggled", {
+      layer: key === "placeLabels" ? "place_labels" : key,
+    });
     setLayers((current) => {
       const next = { ...current, [key]: !current[key] };
       setMapLayerVisibility(key, next[key]);
@@ -485,7 +492,11 @@ export function WorkspaceMap({
         <div className="filters" data-od-id="map-filters">
           <label className="filter-label" htmlFor="air-quality-level-filter">
             {copy.map.airQualityLevel}
-            <select id="air-quality-level-filter" value={categoryFilter} onChange={(event) => setCategoryFilter(event.target.value as FilterCategory)}>
+            <select id="air-quality-level-filter" value={categoryFilter} onChange={(event) => {
+              const value = event.currentTarget.value as FilterCategory;
+              setCategoryFilter(value);
+              trackNapasEvent("map_filter_changed", { filter: "air_quality", value });
+            }}>
               <option value="all">{copy.map.allLevels}</option>
               <option value="good">{copy.map.good}</option>
               <option value="moderate">{copy.map.moderate}</option>
@@ -495,12 +506,21 @@ export function WorkspaceMap({
           </label>
           <label className="filter-label" htmlFor="district-filter">
             {copy.map.district}
-            <select id="district-filter" value={districtFilter} onChange={(event) => setDistrictFilter(event.target.value)}>
+            <select id="district-filter" value={districtFilter} onChange={(event) => {
+              setDistrictFilter(event.currentTarget.value);
+              trackNapasEvent("map_filter_changed", {
+                filter: "district",
+                value: event.currentTarget.value === "all" ? "all" : "specific",
+              });
+            }}>
               <option value="all">{copy.map.allDistricts}</option>
               {districts.map((district) => <option key={district} value={district}>{localizedDistrict(district, language)}</option>)}
             </select>
           </label>
-          <button className="station-list-button" onClick={() => setStationListOpen(true)} type="button">
+          <button className="station-list-button" onClick={() => {
+            trackNapasEvent("station_list_opened");
+            setStationListOpen(true);
+          }} type="button">
             <RadioTowerIcon aria-hidden="true" />
             <span>{copy.map.stationList}</span>
           </button>
@@ -522,15 +542,27 @@ export function WorkspaceMap({
         </div>
 
         <div className="map-controls" aria-label={copy.map.mapControls}>
-          <button aria-label={copy.map.zoomIn} className="map-control" onClick={() => mapRef.current?.zoomIn()} type="button"><PlusIcon /></button>
-          <button aria-label={copy.map.zoomOut} className="map-control" onClick={() => mapRef.current?.zoomOut()} type="button"><MinusIcon /></button>
-          <button aria-controls="layers-menu" aria-expanded={layersOpen} aria-label={copy.map.mapLayers} className="map-control" onClick={() => setLayersOpen((open) => !open)} type="button"><Layers2Icon /></button>
+          <button aria-label={copy.map.zoomIn} className="map-control" onClick={() => {
+            trackNapasEvent("map_zoom_control_clicked", { direction: "in" });
+            mapRef.current?.zoomIn();
+          }} type="button"><PlusIcon /></button>
+          <button aria-label={copy.map.zoomOut} className="map-control" onClick={() => {
+            trackNapasEvent("map_zoom_control_clicked", { direction: "out" });
+            mapRef.current?.zoomOut();
+          }} type="button"><MinusIcon /></button>
+          <button aria-controls="layers-menu" aria-expanded={layersOpen} aria-label={copy.map.mapLayers} className="map-control" onClick={() => {
+            trackNapasEvent(layersOpen ? "map_layer_menu_closed" : "map_layer_menu_opened");
+            setLayersOpen(!layersOpen);
+          }} type="button"><Layers2Icon /></button>
         </div>
 
         {layersOpen ? (
           <div className="layers-menu" id="layers-menu" role="dialog" aria-label={copy.map.mapLayers}>
             <div className="layer-heading">{copy.map.airQuality}</div>
-            <LayerToggle checked={heatmapVisible} label={copy.map.heatmap} onChange={() => setHeatmapVisible((visible) => !visible)} />
+            <LayerToggle checked={heatmapVisible} label={copy.map.heatmap} onChange={() => {
+              setHeatmapVisible((visible) => !visible);
+              trackNapasEvent("map_layer_toggled", { layer: "heatmap" });
+            }} />
             {heatmapVisible ? <p className="layer-note">{copy.map.heatmapDerived}</p> : null}
             <div className="layer-heading">{copy.map.geography}</div>
             <LayerToggle checked={layers.roads} label={copy.map.roadNetwork} onChange={() => toggleLayer("roads")} />
@@ -553,7 +585,7 @@ export function WorkspaceMap({
           <div className="map-empty map-status">
             <strong>{copy.map.dataUnavailable}</strong>
             <p>{copy.map.dataUnavailableDescription}</p>
-            <button onClick={() => { setStationDataLoaded(false); setStationRequestKey((key) => key + 1); }} type="button">{copy.map.tryAgain}</button>
+            <button onClick={() => { trackNapasEvent("map_retry_clicked"); setStationDataLoaded(false); setStationRequestKey((key) => key + 1); }} type="button">{copy.map.tryAgain}</button>
           </div>
         ) : null}
 
@@ -561,7 +593,11 @@ export function WorkspaceMap({
           <div className="map-empty">
             <strong>{copy.map.noStationsMatch}</strong>
             <p>{copy.map.noStationsDescription}</p>
-            <button onClick={() => { setCategoryFilter("all"); setDistrictFilter("all"); }} type="button">{copy.map.clearFilters}</button>
+            <button onClick={() => {
+              trackNapasEvent("map_filters_reset");
+              setCategoryFilter("all");
+              setDistrictFilter("all");
+            }} type="button">{copy.map.clearFilters}</button>
           </div>
         ) : null}
       </div>
@@ -580,7 +616,7 @@ export function WorkspaceMap({
               </div>
               <div className="station-detail-actions">
                 <span className={cn("category-pill", categoryKey[selectedStation.category])}>{localizedCategory(selectedStation.category, language)}</span>
-                <button aria-label={copy.map.clearSelectedMonitor} className="station-detail-clear" onClick={onStationClear} type="button">
+                <button aria-label={copy.map.clearSelectedMonitor} className="station-detail-clear" onClick={() => onStationClear("map_detail")} type="button">
                   <XIcon aria-hidden="true" />
                 </button>
               </div>
@@ -627,7 +663,10 @@ export function WorkspaceMap({
         aria-labelledby="mobile-legend-title"
         className="mobile-legend-dialog"
         id="mobile-legend-dialog"
-        onClose={() => onMobileLegendClose?.()}
+        onClose={() => {
+          trackNapasEvent("map_legend_closed");
+          onMobileLegendClose?.();
+        }}
         ref={mobileLegendDialogRef}
       >
         <div className="dialog-head">
@@ -653,7 +692,10 @@ export function WorkspaceMap({
         ref={stationDialogRef}
         className="station-dialog"
         aria-labelledby="station-dialog-title"
-        onClose={() => setStationListOpen(false)}
+        onClose={() => {
+          trackNapasEvent("station_list_closed");
+          setStationListOpen(false);
+        }}
       >
           <div className="dialog-head">
             <div><h2 id="station-dialog-title">{copy.map.stationDialogTitle}</h2><p>{copy.map.stationDialogDescription}</p></div>
@@ -662,7 +704,7 @@ export function WorkspaceMap({
           <div className="station-table-wrap">
             <table>
               <thead><tr><th scope="col">{copy.map.tableStation}</th><th scope="col">{copy.map.tableDistrict}</th><th scope="col">{copy.map.tableIspu}</th><th scope="col">{copy.map.tablePm25}</th><th scope="col">{copy.map.tableStatus}</th></tr></thead>
-              <tbody>{visibleStations.map((station) => <tr key={station.id}><td><button className="table-station" onClick={() => { selectStation(station); setStationListOpen(false); }} type="button">{station.name}</button></td><td>{localizedDistrict(station.district, language)}</td><td>{station.ispu ?? "—"}</td><td>{station.pm25 === null ? "—" : `${station.pm25} µg/m³`}</td><td className={cn("table-status", categoryKey[station.category])}>{localizedCategory(station.category, language)}</td></tr>)}</tbody>
+          <tbody>{visibleStations.map((station) => <tr key={station.id}><td><button className="table-station" onClick={() => { selectStation(station, "station_list"); setStationListOpen(false); }} type="button">{station.name}</button></td><td>{localizedDistrict(station.district, language)}</td><td>{station.ispu ?? "—"}</td><td>{station.pm25 === null ? "—" : `${station.pm25} µg/m³`}</td><td className={cn("table-status", categoryKey[station.category])}>{localizedCategory(station.category, language)}</td></tr>)}</tbody>
             </table>
           </div>
       </dialog>

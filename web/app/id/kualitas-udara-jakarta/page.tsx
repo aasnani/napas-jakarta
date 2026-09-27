@@ -1,0 +1,115 @@
+import type { Metadata } from "next";
+import { GuideLayout } from "@/app/_components/guide-layout";
+import { absoluteUrl, EN_GUIDE_PATH, ID_GUIDE_PATH } from "@/lib/site";
+import styles from "@/app/_components/guide-layout.module.css";
+
+const title = "Kualitas Udara Jakarta: PM2.5, PM10 & ISPU | Napas Jakarta";
+const description =
+  "Panduan membaca kualitas udara Jakarta: pahami PM2.5, PM10, ISPU, nama stasiun, waktu pengamatan, dan sumber data.";
+
+export const metadata: Metadata = {
+  title,
+  description,
+  alternates: {
+    canonical: absoluteUrl(ID_GUIDE_PATH),
+    languages: {
+      en: absoluteUrl(EN_GUIDE_PATH),
+      id: absoluteUrl(ID_GUIDE_PATH),
+    },
+  },
+  openGraph: { type: "article", locale: "id_ID", title, description, url: absoluteUrl(ID_GUIDE_PATH) },
+  twitter: { card: "summary", title, description },
+};
+
+export default function PanduanKualitasUdaraJakarta() {
+  return (
+    <GuideLayout lang="id">
+      <p className={styles.eyebrow}>Napas Jakarta · Memahami kualitas udara</p>
+      <h1 className={styles.title}>Kualitas udara Jakarta: memahami PM2.5, PM10, dan ISPU</h1>
+      <p className={styles.intro}>
+        Kualitas udara Jakarta dipantau melalui stasiun di lokasi tertentu. PM2.5 dan PM10 adalah
+        ukuran partikel, sedangkan ISPU adalah indeks kualitas udara tanpa satuan. Periksa nama
+        stasiun, waktu pengamatan, dan sumber data secara bersamaan; satu angka stasiun tidak
+        otomatis mewakili seluruh Jakarta.
+      </p>
+
+      <section aria-labelledby="tampilan-napas" className={styles.section}>
+        <h2 id="tampilan-napas">Apa yang ditampilkan peta Napas Jakarta?</h2>
+        <p>
+          Napas Jakarta adalah peta dan asisten dwibahasa untuk memahami pengamatan kualitas udara
+          per stasiun di Jakarta. Setiap hasil terkait dengan lokasi dan waktu tertentu. Saat
+          membaca angka, periksa polutan, satuan, waktu pengamatan, dan tautan sumbernya.
+        </p>
+      </section>
+
+      <section aria-labelledby="pm25-pm10" className={styles.section}>
+        <h2 id="pm25-pm10">Apa perbedaan PM2.5 dan PM10?</h2>
+        <p>
+          PM2.5 adalah partikel di udara dengan diameter aerodinamis 2,5 mikrometer atau lebih
+          kecil. PM10 adalah partikel dengan diameter 10 mikrometer atau lebih kecil. Jika
+          ditampilkan dalam µg/m³, nilainya merupakan konsentrasi polutan, bukan indeks kualitas
+          udara.
+        </p>
+      </section>
+
+      <section aria-labelledby="ispu" className={styles.section}>
+        <h2 id="ispu">Apa arti ISPU Jakarta?</h2>
+        <p>
+          ISPU (Indeks Standar Pencemar Udara) adalah indeks tanpa satuan yang menggambarkan mutu
+          udara ambien di lokasi tertentu. ISPU berbeda dari konsentrasi polutan seperti PM2.5
+          dalam µg/m³. Angka ISPU tidak boleh dibaca sebagai konsentrasi.
+        </p>
+      </section>
+
+      <section aria-labelledby="cek-terkini" className={styles.section}>
+        <h2 id="cek-terkini">Bagaimana cara memeriksa kualitas udara Jakarta terkini?</h2>
+        <p>
+          Periksa nama stasiun dan waktu pembaruan, lalu ikuti tautan sumber untuk melihat catatan
+          resmi. Portal pemantauan DKI Jakarta menyediakan informasi per stasiun. Napas Jakarta
+          membantu memberi konteks melalui peta dan penjelasan; gunakan waktu pada sumber data
+          untuk menilai apakah pengamatan masih terkini.
+        </p>
+      </section>
+
+      <section aria-labelledby="pertanyaan" className={styles.section}>
+        <h2 id="pertanyaan">Pertanyaan umum tentang kualitas udara Jakarta</h2>
+        <h3>Apakah satu stasiun mewakili seluruh Jakarta?</h3>
+        <p>
+          Tidak. Monitor mencatat kondisi di lokasi dan waktu pengukurannya sendiri. Bandingkan
+          beberapa stasiun beserta waktu pengamatannya sebelum menarik kesimpulan untuk wilayah
+          yang lebih luas.
+        </p>
+        <h3>Apakah PM2.5 sama dengan ISPU?</h3>
+        <p>
+          Tidak. PM2.5 adalah konsentrasi partikel, biasanya dilaporkan dalam µg/m³. ISPU adalah
+          indeks tanpa satuan yang dihitung dari informasi polutan.
+        </p>
+        <h3>Di mana saya dapat memeriksa data stasiun resmi Jakarta?</h3>
+        <p>
+          Buka <a href="https://udara.jakarta.go.id/" rel="noreferrer" target="_blank">portal kualitas udara DKI Jakarta</a>, lalu periksa stasiun dan waktu pembaruannya.
+        </p>
+      </section>
+
+      <section aria-labelledby="sumber" className={styles.section}>
+        <h2 id="sumber">Sumber</h2>
+        <ul className={styles.sources}>
+          <li>
+            <a href="https://udara.jakarta.go.id/parameter-pengukuran" rel="noreferrer" target="_blank">
+              DKI Jakarta: parameter pengukuran kualitas udara
+            </a>
+          </li>
+          <li>
+            <a href="https://jdih.menlhk.go.id/new2/uploads/files/P_14_2020_ISPU_menlhk_07302020074834.pdf" rel="noreferrer" target="_blank">
+              Kementerian Lingkungan Hidup dan Kehutanan: peraturan ISPU (PDF)
+            </a>
+          </li>
+          <li>
+            <a href="https://www.who.int/news-room/feature-stories/detail/what-are-the-who-air-quality-guidelines" rel="noreferrer" target="_blank">
+              Organisasi Kesehatan Dunia: definisi ukuran partikel
+            </a>
+          </li>
+        </ul>
+      </section>
+    </GuideLayout>
+  );
+}

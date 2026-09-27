@@ -13,7 +13,7 @@ import {
   SquareIcon,
   XIcon,
 } from "lucide-react";
-import { useEffect, useRef, useState, type RefObject } from "react";
+import { useCallback, useEffect, useRef, useState, type RefObject } from "react";
 import {
   Conversation,
   ConversationContent,
@@ -31,6 +31,7 @@ import {
 import { Shimmer } from "@/components/ai-elements/shimmer";
 import { localizeChatError } from "@/lib/chat-errors";
 import { getUiCopy, localizedCategory, localizedDistrict, replaceCopy, type Language } from "@/lib/i18n";
+import { trackNapasEvent } from "@/lib/analytics";
 import { recordChatFailure, recordChatTurn } from "@/lib/telemetry";
 import {
   buildNapasClientContext,
@@ -43,6 +44,7 @@ import {
   type TopicOption,
 } from "@/lib/topics";
 import { getSuggestedQuestions } from "@/lib/suggestions";
+import { EN_GUIDE_PATH, ID_GUIDE_PATH } from "@/lib/site";
 import { shouldShowPendingThinking, shouldShowSuggestedQuestions } from "@/lib/chat-state";
 import type { DemoStation } from "@/lib/napas";
 import { MAX_CHAT_CHARACTERS, validateChatInput } from "@/lib/user-input-limits";
@@ -66,8 +68,8 @@ export function AgentChat({
   readonly isMapOpen: boolean;
   readonly onMapToggle: () => void;
   readonly onLegendOpen: () => void;
-  readonly onStationClear: () => void;
-  readonly onStationSelect: (station: DemoStation) => void;
+  readonly onStationClear: (source: "map_detail" | "chat_context") => void;
+  readonly onStationSelect: (station: DemoStation, source: "map_marker" | "station_list" | "chat_picker") => void;
   readonly prefillPrompt?: { readonly id: number; readonly text: string };
   readonly selectedStation?: string;
   readonly selectedStationId?: string;
@@ -111,6 +113,44 @@ export function AgentChat({
     isEmpty,
     isResuming,
   });
+
+  const closeTopicPicker = useCallback(() => {
+    if (topicMenuOpen) trackNapasEvent("topic_picker_closed");
+    setTopicMenuOpen(false);
+  }, [topicMenuOpen]);
+
+  const closeStationPicker = useCallback(() => {
+    if (stationMenuOpen) trackNapasEvent("station_picker_closed");
+    setStationMenuOpen(false);
+  }, [stationMenuOpen]);
+
+  const openTopicPicker = useCallback((source: "header" | "selected_topic") => {
+    closeStationPicker();
+    if (!topicMenuOpen) trackNapasEvent("topic_picker_opened", { source });
+    setTopicMenuOpen(true);
+  }, [closeStationPicker, topicMenuOpen]);
+
+  const toggleTopicPicker = useCallback(() => {
+    closeStationPicker();
+    if (topicMenuOpen) {
+      trackNapasEvent("topic_picker_closed");
+      setTopicMenuOpen(false);
+    } else {
+      trackNapasEvent("topic_picker_opened", { source: "header" });
+      setTopicMenuOpen(true);
+    }
+  }, [closeStationPicker, topicMenuOpen]);
+
+  const toggleStationPicker = useCallback(() => {
+    closeTopicPicker();
+    if (stationMenuOpen) {
+      trackNapasEvent("station_picker_closed");
+      setStationMenuOpen(false);
+    } else {
+      trackNapasEvent("station_picker_opened");
+      setStationMenuOpen(true);
+    }
+  }, [closeTopicPicker, stationMenuOpen]);
 
   useEffect(() => {
     if (!prefillPrompt || appliedPrefillId.current === prefillPrompt.id) return;
@@ -197,14 +237,14 @@ export function AgentChat({
         !topicPickerRef.current?.contains(event.target) &&
         !stationPickerRef.current?.contains(event.target)
       ) {
-        setTopicMenuOpen(false);
-        setStationMenuOpen(false);
+        closeTopicPicker();
+        closeStationPicker();
       }
     };
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setTopicMenuOpen(false);
-        setStationMenuOpen(false);
+        closeTopicPicker();
+        closeStationPicker();
       }
     };
 
@@ -214,17 +254,18 @@ export function AgentChat({
       document.removeEventListener("pointerdown", handlePointerDown);
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [stationMenuOpen, topicMenuOpen]);
+  }, [closeStationPicker, closeTopicPicker, stationMenuOpen, topicMenuOpen]);
 
   const handleMapToggle = () => {
-    setStationMenuOpen(false);
-    setTopicMenuOpen(false);
+    closeStationPicker();
+    closeTopicPicker();
+    trackNapasEvent(isMapOpen ? "mobile_map_closed" : "mobile_map_opened");
     onMapToggle();
   };
 
   const handleStationSelect = (station: DemoStation) => {
-    setStationMenuOpen(false);
-    onStationSelect(station);
+    closeStationPicker();
+    onStationSelect(station, "chat_picker");
   };
 
   const requestCancellation = () => {
@@ -247,6 +288,7 @@ export function AgentChat({
     setCancellationError(undefined);
 
     try {
+      trackNapasEvent("assistant_question_submitted");
       await agent.send(normalizedText, buildSendOptions());
       setInputText("");
       setHasInputText(false);
@@ -320,7 +362,10 @@ export function AgentChat({
               aria-expanded={isLegendOpen}
               aria-label={copy.chat.openLegend}
               className="mobile-legend-toggle"
-              onClick={onLegendOpen}
+              onClick={() => {
+                trackNapasEvent("map_legend_opened");
+                onLegendOpen();
+              }}
               title={copy.chat.mapLegend}
               type="button"
             >
@@ -353,11 +398,11 @@ export function AgentChat({
             <StationPicker
               language={language}
               onClear={() => {
-                setStationMenuOpen(false);
-                onStationClear();
+                closeStationPicker();
+                onStationClear("chat_context");
               }}
               onSelect={handleStationSelect}
-              onToggle={() => setStationMenuOpen((open) => !open)}
+              onToggle={toggleStationPicker}
               open={stationMenuOpen}
               pickerRef={stationPickerRef}
               selectedStation={selectedStation}
@@ -370,10 +415,7 @@ export function AgentChat({
                 aria-expanded={topicMenuOpen}
                 aria-haspopup="dialog"
                 className="napas-topic-trigger"
-                onClick={() => {
-                  setStationMenuOpen(false);
-                  setTopicMenuOpen((open) => !open);
-                }}
+                onClick={toggleTopicPicker}
                 type="button"
               >
                 <BookOpenIcon aria-hidden="true" className="size-3.5" />
@@ -384,12 +426,14 @@ export function AgentChat({
                 <TopicMenu
                   language={language}
                   onClear={() => {
+                    trackNapasEvent("topic_cleared");
                     setSelectedTopicId(undefined);
-                    setTopicMenuOpen(false);
+                    closeTopicPicker();
                   }}
                   onSelect={(topic) => {
+                    trackNapasEvent("topic_selected");
                     setSelectedTopicId(topic.id);
-                    setTopicMenuOpen(false);
+                    closeTopicPicker();
                   }}
                   selectedTopic={selectedTopic}
                 />
@@ -447,10 +491,13 @@ export function AgentChat({
           isBusy={isBusy || isResuming}
           onStationClear={() => {
             setContextOpen(false);
-            onStationClear();
+            onStationClear("chat_context");
           }}
-          onTopicClear={() => setSelectedTopicId(undefined)}
-          onTopicOpen={() => setTopicMenuOpen(true)}
+          onTopicClear={() => {
+            trackNapasEvent("topic_cleared");
+            setSelectedTopicId(undefined);
+          }}
+          onTopicOpen={() => openTopicPicker("selected_topic")}
           onContextToggle={() => setContextOpen((open) => !open)}
           onPrompt={(prompt) => void sendText(prompt)}
           language={language}
@@ -478,6 +525,9 @@ function EmptyChatState({ language }: { readonly language: Language }) {
       <div className="napas-empty-mark"><img alt="" src="/napas-jakarta-air-icon.png" /></div>
       <p>{copy.chat.emptyTitle}</p>
       <span>{copy.chat.emptyDescription}</span>
+      <a className="napas-guide-link" href={language === "id" ? ID_GUIDE_PATH : EN_GUIDE_PATH} lang={language}>
+        {copy.chat.guideLink}
+      </a>
     </div>
   );
 }
@@ -520,7 +570,10 @@ function ChatUtilityRow({
               className="prompt-chip"
               disabled={isBusy}
               key={prompt}
-              onClick={() => onPrompt(prompt)}
+              onClick={() => {
+                trackNapasEvent("suggested_question_selected");
+                onPrompt(prompt);
+              }}
               type="button"
             >
               {prompt}
