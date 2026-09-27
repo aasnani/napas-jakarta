@@ -57,11 +57,12 @@ def load_runtime_stations(
     path: str | Path = "data/demo/stations.csv",
     source_url: str = "",
     persisted_path: str | Path | None = None,
+    prefer_persisted: bool = False,
 ) -> list[dict]:
-    """Load persisted coordinates first; use the remote source only as a refresh fallback."""
+    """Load persisted coordinates first; use the remote source as a refresh fallback."""
     if persisted_path is None:
         persisted_path = Path(path).parent.parent / "processed" / "stations.csv"
-    if source_url.strip() and Path(persisted_path).exists():
+    if (prefer_persisted or source_url.strip()) and Path(persisted_path).exists():
         return load_stations(persisted_path)
     if source_url.strip():
         try:

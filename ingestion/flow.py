@@ -75,7 +75,7 @@ def run_ingestion(data_dir: str | Path = "data") -> dict[str, int]:
         try:
             measurements = fetch_measurements(source_url, raw_output=root / "raw")
             source_status = "live"
-        except requests.RequestException as exc:
+        except (requests.RequestException, UnicodeError, ValueError) as exc:
             source_error = f"{type(exc).__name__}: {exc}"
             # A cron outage must not erase or fabricate observations.  Prefer
             # the latest image/local snapshot, then the explicitly committed

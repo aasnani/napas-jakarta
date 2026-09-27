@@ -270,14 +270,20 @@ def query_historical_occurrence(
 
 
 def get_latest_measurements(
-    measurements: list[Measurement], location: str | None = None, pollutant: str = "PM2.5"
+    measurements: list[Measurement],
+    location: str | None = None,
+    pollutant: str = "PM2.5",
+    now: datetime | None = None,
 ) -> list[dict]:
     rows = latest_by_station(measurements, pollutant)
     if location:
         needle = location.lower()
         rows = [x for x in rows if needle in (x.district + " " + x.station_name).lower()]
-    return [
-        {
+    output = []
+    for x in rows:
+        row_freshness = freshness(x, now=now)
+        output.append(
+            {
             "station_id": x.station_id,
             "station": x.station_name,
             "district": x.district,
@@ -286,11 +292,11 @@ def get_latest_measurements(
             "unit": x.concentration_unit,
             "averaging_period": x.averaging_period,
             "ispu": x.ispu_value,
-            "category": x.ispu_category,
+            "category": "Stale / missing" if row_freshness["stale"] else x.ispu_category,
             "observed_at": x.observed_at.isoformat(),
             "source": x.source,
             "source_url": x.source if x.source.startswith(("http://", "https://")) else None,
-            "freshness": freshness(x),
+            "freshness": row_freshness,
             "quality_flag": x.quality_flag,
             "fetched_at": x.fetched_at.isoformat() if x.fetched_at else None,
             "missing_data_warning": (
@@ -298,9 +304,9 @@ def get_latest_measurements(
                 if x.concentration is None
                 else None
             ),
-        }
-        for x in rows
-    ]
+            }
+        )
+    return output
 
 
 def get_historical_summary(
@@ -351,6 +357,7 @@ def compare_measurement_with_standard(value: float, pollutant: str = "PM2.5") ->
         "who_annual_guideline": guideline,
         "exceeds_guideline": value > guideline,
         "note": "WHO guideline, not an Indonesian legal threshold",
+        "source_id": "who-aqg-2021",
     }
 
 
@@ -434,17 +441,43 @@ def search_guidance(
     language: str = "English",
     retrieval_mode: str = "dense",
     top_k: int = 5,
+    source_ids: list[str] | None = None,
 ) -> list[dict]:
-    """Typed document-guidance tool; it returns source metadata, never raw SQL."""
+    """Typed document-guidance tool; it returns source metadata, never raw SQL.
+
+    ``source_ids`` lets a topic-scoped client constrain retrieval to the
+    sources selected by the product catalog. An empty or omitted filter keeps
+    the existing corpus-wide behavior.
+    """
     from .retrieval import search
 
-    results = search(query, documents, mode=retrieval_mode, top_k=top_k)
+    normalized_source_ids = {
+        source_id.strip()
+        for source_id in (source_ids or [])
+        if source_id and source_id.strip()
+    }
+    candidate_documents = (
+        [
+            document
+            for document in documents
+            if document.source_id in normalized_source_ids
+            or document.document_id in normalized_source_ids
+        ]
+        if normalized_source_ids
+        else documents
+    )
+    results = search(query, candidate_documents, mode=retrieval_mode, top_k=top_k)
     return [
         {
             "document_id": item.document.document_id,
+            "source_id": item.document.source_id or item.document.document_id,
             "title": item.document.title,
             "publisher": item.document.publisher,
             "source_url": item.document.source_url,
+            "section": item.document.section,
+            "heading_path": item.document.heading_path,
+            "page": item.document.page,
+            "article_or_clause": item.document.article_or_clause,
             "language": language,
             "score": item.score,
             "excerpt": item.document.text[:500],

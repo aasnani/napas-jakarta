@@ -1,13 +1,14 @@
-# Default Railway service configuration: deploy this service as the web UI/API.
-# The ingestion service uses the same image with the command documented in
-# docs/deployment-railway.md and should not use this web start command.
+# Default Railway service configuration: deploy this service as the private
+# FastAPI data/tool boundary. The public UI is the separate web service under
+# web/. The ingestion service uses the same image with the command documented
+# in docs/deployment-railway.md and should not use this HTTP start command.
 
 [build]
 builder = "DOCKERFILE"
 dockerfilePath = "Dockerfile"
 
 [deploy]
-startCommand = "uvicorn app.web:app --host 0.0.0.0 --port $PORT"
+startCommand = "uvicorn app.api:app --host 0.0.0.0 --port $PORT"
 healthcheckPath = "/health"
 healthcheckTimeout = 30
 restartPolicyType = "ON_FAILURE"

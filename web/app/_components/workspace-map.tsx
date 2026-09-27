@@ -1,0 +1,741 @@
+"use client";
+
+import {
+  Layers2Icon,
+  MessageCircleIcon,
+  MapPinIcon,
+  MinusIcon,
+  PlusIcon,
+  RadioTowerIcon,
+  XIcon,
+} from "lucide-react";
+import {
+  Map as MapLibreMap,
+  NavigationControl,
+  setWorkerUrl,
+  type GeoJSONSource,
+  type MapLayerMouseEvent,
+} from "maplibre-gl";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { cn } from "@/lib/utils";
+import { getUiCopy, localizedCategory, localizedDistrict, type Language } from "@/lib/i18n";
+import {
+  categoryKey,
+  type StationCatalogResponse,
+  type AirQualityCategory,
+  type DemoStation,
+} from "@/lib/napas";
+import { normalizeHeatmapWeight, STATION_HEATMAP_LAYER_ID } from "@/lib/map-heatmap";
+import { MAP_LAYER_DEFAULTS, mapLayerMatches, type MapLayerKey } from "@/lib/map-layers";
+
+const MAP_STYLE_URL =
+  process.env.NEXT_PUBLIC_MAP_STYLE_URL ?? "https://tiles.openfreemap.org/styles/liberty";
+setWorkerUrl("/maplibre/maplibre-gl-worker.mjs");
+const JAKARTA_CENTER: [number, number] = [106.84, -6.2];
+const JAKARTA_BOUNDS: [[number, number], [number, number]] = [
+  [106.48, -6.55],
+  [107.18, -5.6],
+];
+
+type FilterCategory = "all" | "good" | "moderate" | "unhealthy" | "stale";
+
+const LAYER_DEFAULTS = MAP_LAYER_DEFAULTS;
+
+const CATEGORY_COLOR: Record<AirQualityCategory, string> = {
+  Good: "#2E9B78",
+  Moderate: "#E2A900",
+  Unhealthy: "#D94E3E",
+  "Stale / missing": "#7B8790",
+};
+
+function stationCollection(stations: readonly DemoStation[], selectedId?: string) {
+  return {
+    type: "FeatureCollection" as const,
+    features: stations.map((station) => ({
+      type: "Feature" as const,
+      geometry: {
+        type: "Point" as const,
+        coordinates: [station.longitude, station.latitude] as [number, number],
+      },
+      properties: {
+        category: station.category,
+        color: CATEGORY_COLOR[station.category],
+        id: station.id,
+        selected: station.id === selectedId,
+        heatWeight: normalizeHeatmapWeight(station.ispu),
+        value: station.ispu === null ? "—" : String(station.ispu),
+      },
+    })),
+  };
+}
+
+function formatObservationTime(value: string | null, language: Language): string {
+  if (!value) return language === "id" ? "Tidak ada pengamatan" : "No observation";
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return value;
+  return `${new Intl.DateTimeFormat(language === "id" ? "id-ID" : "en-ID", {
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    month: "short",
+    timeZone: "Asia/Jakarta",
+    year: "numeric",
+  }).format(parsed)} WIB`;
+}
+
+function displaySource(source: string, language: Language): string {
+  if (!source) return language === "id" ? "Sumber tidak tersedia" : "Source unavailable";
+  try {
+    return new URL(source).hostname.replace(/^www\./, "");
+  } catch {
+    return source;
+  }
+}
+
+function directSourceUrl(value: string | null | undefined): string | null {
+  if (!value) return null;
+  try {
+    const url = new URL(value);
+    return url.protocol === "http:" || url.protocol === "https:" ? url.toString() : null;
+  } catch {
+    return null;
+  }
+}
+
+function isStaleObservation(value: string | null | undefined): boolean {
+  if (!value) return false;
+  const timestamp = Date.parse(value);
+  return Number.isFinite(timestamp) && Date.now() - timestamp > 6 * 60 * 60 * 1000;
+}
+
+function isStationCatalogResponse(value: unknown): value is StationCatalogResponse {
+  if (typeof value !== "object" || value === null) return false;
+  const record = value as Record<string, unknown>;
+  const summary = record.summary;
+  return (
+    record.contract_version === 1 &&
+    Array.isArray(record.stations) &&
+    typeof summary === "object" &&
+    summary !== null &&
+    typeof (summary as Record<string, unknown>).station_count === "number"
+  );
+}
+
+function toMapStation(row: StationCatalogResponse["stations"][number], language: Language): DemoStation {
+  return {
+    category: row.category,
+    district: row.district,
+    id: row.id,
+    ispu: row.ispu,
+    latitude: row.latitude,
+    longitude: row.longitude,
+    name: row.name,
+    observedAt: formatObservationTime(row.observed_at, language),
+    pm25: row.pm25,
+    source: displaySource(row.source, language),
+    sourceUrl: directSourceUrl(row.source_url),
+  };
+}
+
+export function WorkspaceMap({
+  ariaLabelledBy,
+  id,
+  language,
+  isMobileOverlayOpen = false,
+  mobileLegendOpen = false,
+  onAskAssistant,
+  onMobileLegendClose,
+  onStationClear,
+  onStationSelect,
+  onStationsChange,
+  selectedStationId,
+}: {
+  readonly ariaLabelledBy?: string;
+  readonly id?: string;
+  readonly language: Language;
+  readonly isMobileOverlayOpen?: boolean;
+  readonly mobileLegendOpen?: boolean;
+  readonly onAskAssistant: (station: DemoStation) => void;
+  readonly onMobileLegendClose?: () => void;
+  readonly onStationClear: () => void;
+  readonly onStationSelect: (station: DemoStation) => void;
+  readonly onStationsChange?: (stations: readonly DemoStation[]) => void;
+  readonly selectedStationId?: string;
+}) {
+  const copy = getUiCopy(language);
+  const mapContainer = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<MapLibreMap | null>(null);
+  const stationsRef = useRef<readonly DemoStation[]>([]);
+  const [mapReady, setMapReady] = useState(false);
+  const [stations, setStations] = useState<readonly DemoStation[]>([]);
+  const [stationSummary, setStationSummary] = useState<StationCatalogResponse["summary"]>();
+  const [stationDataLoaded, setStationDataLoaded] = useState(false);
+  const [stationError, setStationError] = useState(false);
+  const [stationRequestKey, setStationRequestKey] = useState(0);
+  const [selectedId, setSelectedId] = useState(selectedStationId);
+  const [categoryFilter, setCategoryFilter] = useState<FilterCategory>("all");
+  const [districtFilter, setDistrictFilter] = useState("all");
+  const [layersOpen, setLayersOpen] = useState(false);
+  const [stationListOpen, setStationListOpen] = useState(false);
+  const [heatmapVisible, setHeatmapVisible] = useState(false);
+  const stationDialogRef = useRef<HTMLDialogElement>(null);
+  const mobileLegendDialogRef = useRef<HTMLDialogElement>(null);
+  const [layers, setLayers] = useState(LAYER_DEFAULTS);
+
+  useEffect(() => {
+    setSelectedId(selectedStationId);
+  }, [selectedStationId]);
+
+  useEffect(() => {
+    stationsRef.current = stations;
+  }, [stations]);
+
+  useEffect(() => {
+    let cancelled = false;
+    const loadStations = async () => {
+      try {
+        const response = await fetch("/api/stations?pollutant=PM2.5", { cache: "no-store" });
+        if (!response.ok) throw new Error("Station data unavailable");
+        const payload: unknown = await response.json();
+        if (!isStationCatalogResponse(payload)) throw new Error("Invalid station data");
+        const nextStations = payload.stations.map((row) => toMapStation(row, language));
+        if (cancelled) return;
+        setStations(nextStations);
+        onStationsChange?.(nextStations);
+        setStationSummary(payload.summary);
+        setStationError(false);
+        setStationDataLoaded(true);
+      } catch {
+        if (cancelled) return;
+        setStations([]);
+        onStationsChange?.([]);
+        setStationSummary(undefined);
+        setStationError(true);
+        setStationDataLoaded(true);
+      }
+    };
+    void loadStations();
+    return () => {
+      cancelled = true;
+    };
+  }, [language, onStationSelect, onStationsChange, stationRequestKey]);
+
+  useEffect(() => {
+    if (!isMobileOverlayOpen || !mapRef.current) return;
+    const frame = window.requestAnimationFrame(() => mapRef.current?.resize());
+    return () => window.cancelAnimationFrame(frame);
+  }, [isMobileOverlayOpen]);
+
+  useEffect(() => {
+    const dialog = stationDialogRef.current;
+    if (dialog === null) return;
+
+    if (stationListOpen && !dialog.open) {
+      dialog.showModal();
+    } else if (!stationListOpen && dialog.open) {
+      dialog.close();
+    }
+  }, [stationListOpen]);
+
+  useEffect(() => {
+    const dialog = mobileLegendDialogRef.current;
+    if (dialog === null) return;
+
+    if (mobileLegendOpen && !dialog.open) {
+      dialog.showModal();
+    } else if (!mobileLegendOpen && dialog.open) {
+      dialog.close();
+    }
+  }, [mobileLegendOpen]);
+
+  const visibleStations = useMemo(
+    () =>
+      stations.filter(
+        (station) =>
+          (categoryFilter === "all" || categoryKey[station.category] === categoryFilter) &&
+          (districtFilter === "all" || station.district === districtFilter),
+      ),
+    [categoryFilter, districtFilter, stations],
+  );
+  const latestObservationIsStale = isStaleObservation(stationSummary?.latest_observed_at);
+  const districts = useMemo(
+    () => [...new Set(stations.map((station) => station.district))].sort(),
+    [stations],
+  );
+  const selectedStation = selectedId
+    ? stations.find((station) => station.id === selectedId)
+    : undefined;
+  const reportingCount = stationSummary?.reporting_count ?? 0;
+  const moderateCount = stationSummary?.moderate_count ?? 0;
+  const unhealthyCount = stationSummary?.unhealthy_count ?? 0;
+  const stationCount = stationSummary?.station_count ?? 0;
+  const reportingShare = stationSummary ? percentageOf(reportingCount, stationCount) : undefined;
+  const moderateShare = stationSummary ? percentageOf(moderateCount, stationCount) : undefined;
+  const unhealthyShare = stationSummary ? percentageOf(unhealthyCount, stationCount) : undefined;
+
+  const selectStation = useCallback(
+    (station: DemoStation) => {
+      setSelectedId(station.id);
+      onStationSelect(station);
+    },
+    [onStationSelect],
+  );
+
+  useEffect(() => {
+    if (!mapContainer.current || mapRef.current) return;
+
+    const map = new MapLibreMap({
+      attributionControl: { compact: true },
+      center: JAKARTA_CENTER,
+      container: mapContainer.current,
+      maxBounds: JAKARTA_BOUNDS,
+      maxZoom: 15,
+      minZoom: 9.1,
+      style: MAP_STYLE_URL,
+      zoom: 10.2,
+    });
+    mapRef.current = map;
+    map.addControl(new NavigationControl({ showCompass: false, showZoom: false }), "top-right");
+
+    map.on("load", () => {
+      map.addSource("napas-stations", {
+        data: stationCollection([], selectedStationId),
+        type: "geojson",
+      });
+      map.addLayer({
+        id: STATION_HEATMAP_LAYER_ID,
+        layout: { visibility: "none" },
+        maxzoom: 15,
+        paint: {
+          "heatmap-color": [
+            "interpolate",
+            ["linear"],
+            ["heatmap-density"],
+          0,
+            "rgba(41, 128, 185, 0.06)",
+            0.04,
+            "rgba(46, 155, 120, 0.28)",
+            0.14,
+            "rgba(226, 169, 0, 0.46)",
+            0.35,
+            "rgba(217, 78, 62, 0.68)",
+            0.65,
+            "rgba(168, 36, 40, 0.82)",
+            1,
+            "rgba(122, 24, 42, 0.9)",
+          ],
+          "heatmap-intensity": [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            8,
+            1.25,
+            12,
+            1.7,
+            15,
+            2.1,
+          ],
+          "heatmap-opacity": 0.92,
+          "heatmap-radius": [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            8,
+            34,
+            12,
+            52,
+            15,
+            68,
+          ],
+          "heatmap-weight": ["get", "heatWeight"],
+        },
+        source: "napas-stations",
+        type: "heatmap",
+      });
+      map.addLayer({
+        id: "napas-station-halo",
+        paint: {
+          "circle-color": "#6DB6B0",
+          "circle-opacity": ["case", ["boolean", ["get", "selected"], false], 0.24, 0],
+          "circle-radius": ["case", ["boolean", ["get", "selected"], false], 34, 0],
+          "circle-stroke-color": "#086B68",
+          "circle-stroke-opacity": ["case", ["boolean", ["get", "selected"], false], 0.75, 0],
+          "circle-stroke-width": 2,
+        },
+        source: "napas-stations",
+        type: "circle",
+      });
+      map.addLayer({
+        id: "napas-stations",
+        paint: {
+          "circle-color": ["get", "color"],
+          "circle-radius": 10,
+          "circle-stroke-color": "#FFFFFF",
+          "circle-stroke-width": 2.5,
+        },
+        source: "napas-stations",
+        type: "circle",
+      });
+      map.addLayer({
+        id: "napas-station-values",
+        layout: {
+          "text-allow-overlap": true,
+          "text-field": ["get", "value"],
+          "text-size": 10,
+        },
+        paint: {
+          "text-color": ["case", ["==", ["get", "category"], "Moderate"], "#172B2B", "#FFFFFF"],
+        },
+        source: "napas-stations",
+        type: "symbol",
+      });
+      setMapReady(true);
+    });
+
+    const handleStationClick = (event: MapLayerMouseEvent) => {
+      const id = event.features?.[0]?.properties?.id;
+      const station = stationsRef.current.find((item) => item.id === id);
+      if (station) selectStation(station);
+    };
+    const setPointer = () => {
+      map.getCanvas().style.cursor = "pointer";
+    };
+    const clearPointer = () => {
+      map.getCanvas().style.cursor = "";
+    };
+    map.on("click", "napas-stations", handleStationClick);
+    map.on("mouseenter", "napas-stations", setPointer);
+    map.on("mouseleave", "napas-stations", clearPointer);
+
+    return () => {
+      map.remove();
+      mapRef.current = null;
+    };
+  }, [selectStation]);
+
+  useEffect(() => {
+    const source = mapRef.current?.getSource("napas-stations") as GeoJSONSource | undefined;
+    if (!source || !mapReady) return;
+    source.setData(stationCollection(visibleStations, selectedId));
+  }, [mapReady, selectedId, visibleStations]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!mapReady || !map?.getLayer(STATION_HEATMAP_LAYER_ID)) return;
+    map.setLayoutProperty(STATION_HEATMAP_LAYER_ID, "visibility", heatmapVisible ? "visible" : "none");
+  }, [heatmapVisible, mapReady]);
+
+  const setMapLayerVisibility = useCallback((key: MapLayerKey, visible: boolean) => {
+    const map = mapRef.current;
+    if (!map?.isStyleLoaded()) return;
+    const style = map.getStyle();
+    for (const layer of style.layers ?? []) {
+      if (mapLayerMatches(key, layer.id)) {
+        try {
+          map.setLayoutProperty(layer.id, "visibility", visible ? "visible" : "none");
+        } catch {
+          // Some provider layers do not expose a layout visibility property.
+        }
+      }
+    }
+  }, []);
+
+  const toggleLayer = (key: MapLayerKey) => {
+    setLayers((current) => {
+      const next = { ...current, [key]: !current[key] };
+      setMapLayerVisibility(key, next[key]);
+      return next;
+    });
+  };
+
+  return (
+    <section
+      aria-label={ariaLabelledBy ? undefined : copy.map.ariaLabel}
+      aria-labelledby={ariaLabelledBy}
+      className="map-panel"
+      id={id}
+      role={ariaLabelledBy ? "tabpanel" : undefined}
+      tabIndex={ariaLabelledBy ? 0 : undefined}
+    >
+      <header className="map-head">
+        <div className="map-head-title">
+          <h2>{copy.map.heading}</h2>
+          <p className="map-subtitle">
+            {stationSummary?.latest_observed_at
+              ? `${latestObservationIsStale ? copy.map.latestAvailableStale : copy.map.latestReadings} · ${formatObservationTime(stationSummary.latest_observed_at, language)}`
+              : stationError
+                ? copy.map.stationReadingsUnavailable
+                : copy.map.loadingReadings}
+          </p>
+        </div>
+
+        <div className="map-kpis" aria-label={copy.map.summaryAria}>
+          <KpiCard
+            detail={stationSummary ? copy.map.stationsWithReading : copy.map.loading}
+            label={copy.map.reporting}
+            networkLabel={copy.map.ofNetwork}
+            share={reportingShare}
+            tone="reporting"
+            value={stationSummary ? `${reportingCount}/${stationCount}` : "—"}
+          />
+          <KpiCard detail={stationSummary ? copy.map.moderateDetail : copy.map.loading} label={copy.map.moderate} networkLabel={copy.map.ofNetwork} share={moderateShare} value={stationSummary ? String(moderateCount) : "—"} tone="moderate" />
+          <KpiCard detail={stationSummary ? copy.map.unhealthyDetail : copy.map.loading} label={copy.map.unhealthy} networkLabel={copy.map.ofNetwork} share={unhealthyShare} value={stationSummary ? String(unhealthyCount) : "—"} tone="unhealthy" />
+        </div>
+
+        <div className="filters" data-od-id="map-filters">
+          <label className="filter-label" htmlFor="air-quality-level-filter">
+            {copy.map.airQualityLevel}
+            <select id="air-quality-level-filter" value={categoryFilter} onChange={(event) => setCategoryFilter(event.target.value as FilterCategory)}>
+              <option value="all">{copy.map.allLevels}</option>
+              <option value="good">{copy.map.good}</option>
+              <option value="moderate">{copy.map.moderate}</option>
+              <option value="unhealthy">{copy.map.unhealthy}</option>
+              <option value="stale">{copy.map.stale}</option>
+            </select>
+          </label>
+          <label className="filter-label" htmlFor="district-filter">
+            {copy.map.district}
+            <select id="district-filter" value={districtFilter} onChange={(event) => setDistrictFilter(event.target.value)}>
+              <option value="all">{copy.map.allDistricts}</option>
+              {districts.map((district) => <option key={district} value={district}>{localizedDistrict(district, language)}</option>)}
+            </select>
+          </label>
+          <button className="station-list-button" onClick={() => setStationListOpen(true)} type="button">
+            <RadioTowerIcon aria-hidden="true" />
+            <span>{copy.map.stationList}</span>
+          </button>
+        </div>
+      </header>
+
+      <div className="map-stage" id="map-stage">
+        <div ref={mapContainer} aria-label={copy.map.interactiveMap} className="napas-real-map" role="region" />
+
+        <div className="map-aids" aria-hidden="true">
+          <div className="scale-aid"><div className="scale-rule" /><div className="scale-caption"><span>0</span><span>≈ 5 km</span></div></div>
+          <div className="map-note">{copy.map.baseNote}</div>
+        </div>
+        <div className="map-guide-card" role="note">
+          <div className="map-guide-kicker"><i aria-hidden="true" />{copy.map.mapGuide}</div>
+          <strong>{heatmapVisible ? copy.map.readHeatmap : copy.map.readMarkers}</strong>
+          <p>{heatmapVisible ? copy.map.heatmapDescription : copy.map.markersDescription}</p>
+          <span>{heatmapVisible ? copy.map.heatmapNote : copy.map.markersNote}</span>
+        </div>
+
+        <div className="map-controls" aria-label={copy.map.mapControls}>
+          <button aria-label={copy.map.zoomIn} className="map-control" onClick={() => mapRef.current?.zoomIn()} type="button"><PlusIcon /></button>
+          <button aria-label={copy.map.zoomOut} className="map-control" onClick={() => mapRef.current?.zoomOut()} type="button"><MinusIcon /></button>
+          <button aria-controls="layers-menu" aria-expanded={layersOpen} aria-label={copy.map.mapLayers} className="map-control" onClick={() => setLayersOpen((open) => !open)} type="button"><Layers2Icon /></button>
+        </div>
+
+        {layersOpen ? (
+          <div className="layers-menu" id="layers-menu" role="dialog" aria-label={copy.map.mapLayers}>
+            <div className="layer-heading">{copy.map.airQuality}</div>
+            <LayerToggle checked={heatmapVisible} label={copy.map.heatmap} onChange={() => setHeatmapVisible((visible) => !visible)} />
+            {heatmapVisible ? <p className="layer-note">{copy.map.heatmapDerived}</p> : null}
+            <div className="layer-heading">{copy.map.geography}</div>
+            <LayerToggle checked={layers.roads} label={copy.map.roadNetwork} onChange={() => toggleLayer("roads")} />
+            <LayerToggle checked={layers.boundaries} label={copy.map.municipalityBoundaries} onChange={() => toggleLayer("boundaries")} />
+            <LayerToggle checked={layers.waterways} label={copy.map.waterways} onChange={() => toggleLayer("waterways")} />
+            <LayerToggle checked={layers.transit} label={copy.map.transitCorridors} onChange={() => toggleLayer("transit")} />
+            <div className="layer-heading">{copy.map.labels}</div>
+            <LayerToggle checked={layers.placeLabels} label={copy.map.placeLabels} onChange={() => toggleLayer("placeLabels")} />
+          </div>
+        ) : null}
+
+        {!stationDataLoaded ? (
+          <div className="map-empty map-status">
+            <strong>{copy.map.loadingNetwork}</strong>
+            <p>{copy.map.preparingNetwork}</p>
+          </div>
+        ) : null}
+
+        {stationError ? (
+          <div className="map-empty map-status">
+            <strong>{copy.map.dataUnavailable}</strong>
+            <p>{copy.map.dataUnavailableDescription}</p>
+            <button onClick={() => { setStationDataLoaded(false); setStationRequestKey((key) => key + 1); }} type="button">{copy.map.tryAgain}</button>
+          </div>
+        ) : null}
+
+        {stationDataLoaded && !stationError && visibleStations.length === 0 ? (
+          <div className="map-empty">
+            <strong>{copy.map.noStationsMatch}</strong>
+            <p>{copy.map.noStationsDescription}</p>
+            <button onClick={() => { setCategoryFilter("all"); setDistrictFilter("all"); }} type="button">{copy.map.clearFilters}</button>
+          </div>
+        ) : null}
+      </div>
+
+      <div className="map-dock">
+        <div className="legend" aria-label={copy.map.legendAria}>
+          <LegendContent language={language} />
+        </div>
+        {selectedStation ? (
+          <article className="station-detail" aria-live="polite">
+            <div className="station-detail-top">
+              <div>
+                <p className="station-detail-eyebrow">{copy.map.selectedMonitor}</p>
+                <h3>{selectedStation.name}</h3>
+                <p className="station-district">{localizedDistrict(selectedStation.district, language)}</p>
+              </div>
+              <div className="station-detail-actions">
+                <span className={cn("category-pill", categoryKey[selectedStation.category])}>{localizedCategory(selectedStation.category, language)}</span>
+                <button aria-label={copy.map.clearSelectedMonitor} className="station-detail-clear" onClick={onStationClear} type="button">
+                  <XIcon aria-hidden="true" />
+                </button>
+              </div>
+            </div>
+            <p className="station-detail-note">{copy.map.latestLocalReading}</p>
+            <div className="detail-lower">
+              <div className="detail-metrics">
+                <div className="detail-metric"><span>ISPU</span><strong>{selectedStation.ispu ?? "—"}</strong></div>
+                <div className="detail-metric"><span>PM2.5</span><strong>{selectedStation.pm25 ?? "—"} <small>{selectedStation.pm25 === null ? "" : "µg/m³"}</small></strong></div>
+              </div>
+              <button
+                aria-label={`${copy.map.selectedStationAria} ${selectedStation.name}`}
+                className="ask-station"
+                onClick={() => onAskAssistant(selectedStation)}
+                type="button"
+              >
+                <MessageCircleIcon aria-hidden="true" />
+                <span>{copy.map.askAssistant}</span>
+              </button>
+            </div>
+            <div className="detail-meta">
+              <span>{copy.map.observed} <strong>{selectedStation.observedAt}</strong></span>
+              <span>
+                {copy.map.source}{" "}
+                {selectedStation.sourceUrl ? (
+                  <a href={selectedStation.sourceUrl} rel="noopener noreferrer" target="_blank"><strong>{selectedStation.source}</strong></a>
+                ) : <strong>{selectedStation.source}</strong>}
+              </span>
+            </div>
+          </article>
+        ) : (
+          <article className="station-detail station-detail-empty" aria-live="polite">
+            <div aria-hidden="true" className="station-empty-icon"><MapPinIcon /></div>
+            <div className="station-empty-copy">
+              <p className="station-detail-eyebrow">{copy.map.stationDetail}</p>
+              <h3>{copy.map.selectStation}</h3>
+              <p>{copy.map.selectStationDescription}</p>
+            </div>
+          </article>
+        )}
+      </div>
+
+      <dialog
+        aria-labelledby="mobile-legend-title"
+        className="mobile-legend-dialog"
+        id="mobile-legend-dialog"
+        onClose={() => onMobileLegendClose?.()}
+        ref={mobileLegendDialogRef}
+      >
+        <div className="dialog-head">
+          <div>
+            <h2 id="mobile-legend-title">{copy.map.mobileLegendTitle}</h2>
+            <p>{copy.map.mobileLegendDescription}</p>
+          </div>
+          <button
+            aria-label={copy.map.closeMapLegend}
+            className="dialog-close"
+            onClick={() => onMobileLegendClose?.()}
+            type="button"
+          >
+            <XIcon />
+          </button>
+        </div>
+        <div className="mobile-legend-content">
+          <LegendContent language={language} />
+        </div>
+      </dialog>
+
+      <dialog
+        ref={stationDialogRef}
+        className="station-dialog"
+        aria-labelledby="station-dialog-title"
+        onClose={() => setStationListOpen(false)}
+      >
+          <div className="dialog-head">
+            <div><h2 id="station-dialog-title">{copy.map.stationDialogTitle}</h2><p>{copy.map.stationDialogDescription}</p></div>
+            <button aria-label={copy.map.closeStationList} className="dialog-close" onClick={() => setStationListOpen(false)} type="button"><XIcon /></button>
+          </div>
+          <div className="station-table-wrap">
+            <table>
+              <thead><tr><th scope="col">{copy.map.tableStation}</th><th scope="col">{copy.map.tableDistrict}</th><th scope="col">{copy.map.tableIspu}</th><th scope="col">{copy.map.tablePm25}</th><th scope="col">{copy.map.tableStatus}</th></tr></thead>
+              <tbody>{visibleStations.map((station) => <tr key={station.id}><td><button className="table-station" onClick={() => { selectStation(station); setStationListOpen(false); }} type="button">{station.name}</button></td><td>{localizedDistrict(station.district, language)}</td><td>{station.ispu ?? "—"}</td><td>{station.pm25 === null ? "—" : `${station.pm25} µg/m³`}</td><td className={cn("table-status", categoryKey[station.category])}>{localizedCategory(station.category, language)}</td></tr>)}</tbody>
+            </table>
+          </div>
+      </dialog>
+    </section>
+  );
+}
+
+function percentageOf(value: number, total: number): number | undefined {
+  return total > 0 ? Math.round((value / total) * 100) : undefined;
+}
+
+function KpiCard({ detail, label, networkLabel, share, tone = "good", value }: { readonly detail: string; readonly label: string; readonly networkLabel: string; readonly share?: number; readonly tone?: "good" | "moderate" | "unhealthy" | "reporting"; readonly value: string }) {
+  const progress = share ?? 0;
+
+  return (
+    <div className={cn("map-kpi", tone)}>
+      <span className={cn("kpi-dot", tone)} />
+      <div className="kpi-copy">
+        <div className="kpi-primary-row">
+          <div className="kpi-value-group">
+            <strong>{value}</strong>
+            <span className="kpi-label">{label}</span>
+          </div>
+          <span className="kpi-share"><strong>{share === undefined ? "—" : `${share}%`}</strong><small>{networkLabel}</small></span>
+        </div>
+        <span className="kpi-detail">{detail}</span>
+        <span aria-hidden="true" className="kpi-track"><span style={{ width: `${progress}%` }} /></span>
+      </div>
+    </div>
+  );
+}
+
+function LegendContent({ language }: { readonly language: Language }) {
+  const copy = getUiCopy(language);
+
+  return (
+    <>
+      <h3>{copy.map.legendTitle}</h3>
+      <div className="legend-grid">
+        <LegendItem color="good" label={copy.map.good} range="0–50" />
+        <LegendItem color="moderate" label={copy.map.moderate} range="51–100" />
+        <LegendItem color="unhealthy" label={copy.map.unhealthy} range="101–200" />
+        <LegendItem color="stale" label={copy.map.staleMissing} />
+      </div>
+      <div className="legend-key" aria-label={copy.map.geography}>
+        <span><i className="key-water" />{copy.map.waterway}</span>
+        <span><i className="key-road" />{copy.map.primaryRoad}</span>
+        <span><i className="key-transit" />{copy.map.transit}</span>
+        <span><i className="key-landmark" />{copy.map.landmark}</span>
+      </div>
+      <dl className="legend-terms" aria-label={copy.map.airQualityLevel}>
+        <div className="legend-term">
+          <dt>{copy.map.ispuTerm}</dt>
+          <dd>{copy.map.ispuDefinition}</dd>
+        </div>
+        <div className="legend-term">
+          <dt>{copy.map.pm25Term}</dt>
+          <dd>{copy.map.pm25Definition}</dd>
+        </div>
+        <div className="legend-term">
+          <dt>{copy.map.stationReadingTerm}</dt>
+          <dd>{copy.map.stationReadingDefinition}</dd>
+        </div>
+      </dl>
+      <p className="legend-note">{copy.map.legendNote}</p>
+    </>
+  );
+}
+
+function LegendItem({ color, label, range }: { readonly color: string; readonly label: string; readonly range?: string }) {
+  return <div className="legend-item"><i className={`legend-dot ${color}`} /><span>{label} {range ? <small>{range}</small> : null}</span></div>;
+}
+
+function LayerToggle({ checked, label, onChange }: { readonly checked: boolean; readonly label: string; readonly onChange: () => void }) {
+  return <label className="layer-toggle"><input checked={checked} onChange={onChange} type="checkbox" />{label}</label>;
+}

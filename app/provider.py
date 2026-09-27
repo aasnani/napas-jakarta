@@ -118,7 +118,7 @@ def _conversation_messages(history: list[dict] | None, question: str) -> list[di
         content = str(item.get("content", "")).strip()
         if role in {"user", "assistant"} and content:
             cleaned.append({"role": role, "content": content[:3000]})
-    # Streamlit appends the current user turn before calling answer().
+    # The web client appends the current user turn before calling answer().
     if cleaned and cleaned[-1]["role"] == "user" and cleaned[-1]["content"] == question.strip():
         cleaned.pop()
     return cleaned[-6:]

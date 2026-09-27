@@ -2,14 +2,15 @@ from __future__ import annotations
 
 import json
 import os
+import re
 from datetime import date
 from pathlib import Path
 from time import perf_counter
-from typing import Any, Literal
+from typing import Annotated, Any, Literal
 from uuid import uuid4
 
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, Field
+from fastapi import Depends, FastAPI, HTTPException, Request
+from pydantic import BaseModel, Field, StrictStr, field_validator
 
 from monitoring.analytics import load_dashboard
 from monitoring.logging import log_feedback, log_interaction
@@ -21,6 +22,13 @@ from .provenance import source_manifest
 from .provider import selected_prompt_variant, selected_prompt_version
 from .rag import answer
 from .runtime_data import RuntimeRepository
+from .security import (
+    CHAT_RATE_LIMITER,
+    TELEMETRY_RATE_LIMITER,
+    enforce_rate_limit,
+    require_internal_token,
+)
+from .stations import display_district_name, display_station_name, load_runtime_stations
 from .tools import (
     compare_locations,
     compare_measurement_with_standard,
@@ -28,6 +36,7 @@ from .tools import (
     get_latest_measurements,
     get_unhealthy_day_count,
     latest_data_age_seconds,
+    search_guidance,
 )
 
 ROOT = Path(__file__).parents[1]
@@ -35,6 +44,124 @@ RUNTIME = RuntimeRepository(os.getenv("DATA_DIR", ROOT / "data"), os.getenv("POS
 DOCUMENTS = RUNTIME.documents()
 MEASUREMENTS = RUNTIME.measurements(force=True)
 app = FastAPI(title="Napas Jakarta API", version=build_metadata()["app_version"])
+
+_USER_INPUT_WORD_RE = re.compile(r"[\w]+(?:[.'’\-][\w]+)*", re.UNICODE)
+MAX_USER_INPUT_WORDS = 500
+BoundedLocation = Annotated[StrictStr, Field(min_length=2, max_length=100)]
+BoundedSourceId = Annotated[StrictStr, Field(min_length=1, max_length=120)]
+
+
+def _public_station_category(
+    category: object, ispu: object, freshness: object | None = None
+) -> str:
+    freshness_record = freshness if isinstance(freshness, dict) else {}
+    freshness_status = str(freshness_record.get("status", "")).strip().lower()
+    freshness_is_current = (
+        freshness_record.get("stale") is False or freshness_status == "fresh"
+    )
+    # The catalog is a public presentation boundary. If the upstream row does
+    # not carry an explicit freshness result, fail closed rather than allowing
+    # a numeric value to look like a current reading.
+    if (
+        ispu is None
+        or not isinstance(freshness, dict)
+        or not freshness_is_current
+    ):
+        return "Stale / missing"
+    normalized = str(category or "").strip().upper()
+    if normalized in {"BAIK", "GOOD"}:
+        return "Good"
+    if normalized in {"SEDANG", "MODERATE"}:
+        return "Moderate"
+    if normalized in {
+        "TIDAK SEHAT",
+        "UNHEALTHY",
+        "SANGAT TIDAK SEHAT",
+        "VERY UNHEALTHY",
+        "BERBAHAYA",
+        "HAZARDOUS",
+    }:
+        return "Unhealthy"
+    try:
+        score = float(ispu)
+    except (TypeError, ValueError):
+        return "Stale / missing"
+    if score <= 50:
+        return "Good"
+    if score <= 100:
+        return "Moderate"
+    return "Unhealthy"
+
+
+def build_station_catalog(
+    station_records: list[dict], latest_rows: list[dict], source_mode: str
+) -> dict[str, Any]:
+    """Join station coordinates with the latest observation for map consumers."""
+    latest_by_id = {str(row["station_id"]): row for row in latest_rows}
+    stations: list[dict[str, Any]] = []
+    for record in station_records:
+        station_id = str(record["station_id"])
+        observation = latest_by_id.get(station_id)
+        source = (observation or {}).get("source") or record.get("source") or ""
+        source_url = (
+            source if str(source).startswith(("http://", "https://")) else None
+        )
+        ispu = (observation or {}).get("ispu")
+        category = _public_station_category(
+            (observation or {}).get("category"),
+            ispu,
+            (observation or {}).get("freshness"),
+        )
+        stations.append(
+            {
+                "id": station_id,
+                "name": display_station_name(record.get("station") or (observation or {}).get("station")),
+                "district": display_district_name(record.get("district") or (observation or {}).get("district")),
+                "latitude": float(record["latitude"]),
+                "longitude": float(record["longitude"]),
+                "ispu": ispu,
+                "pm25": (observation or {}).get("concentration"),
+                "category": category,
+                "observed_at": (observation or {}).get("observed_at"),
+                "source": source,
+                "source_url": source_url,
+                "freshness": (observation or {}).get("freshness"),
+            }
+        )
+
+    reporting = [row for row in stations if row["category"] != "Stale / missing"]
+    counts = {
+        category: sum(row["category"] == category for row in stations)
+        for category in ("Good", "Moderate", "Unhealthy", "Stale / missing")
+    }
+    newest = max(
+        (row["observed_at"] for row in reporting if row["observed_at"]),
+        default=None,
+    )
+    highest_ispu = max((float(row["ispu"]) for row in reporting), default=None)
+    overall_category = "Stale / missing"
+    if highest_ispu is not None:
+        if highest_ispu <= 50:
+            overall_category = "Good"
+        elif highest_ispu <= 100:
+            overall_category = "Moderate"
+        else:
+            overall_category = "Unhealthy"
+    return {
+        "contract_version": 1,
+        "stations": stations,
+        "summary": {
+            "station_count": len(stations),
+            "reporting_count": len(reporting),
+            "good_count": counts["Good"],
+            "moderate_count": counts["Moderate"],
+            "unhealthy_count": counts["Unhealthy"],
+            "stale_count": counts["Stale / missing"],
+            "latest_observed_at": newest,
+            "overall_category": overall_category,
+            "source_mode": source_mode,
+        },
+    }
 
 
 def refresh_runtime_measurements(force: bool = False) -> list:
@@ -96,28 +223,52 @@ def _source_manifest() -> dict[str, Any]:
     }
 
 
+class HistoryMessage(BaseModel):
+    """Only conversational roles are allowed back into the model context."""
+
+    role: Literal["user", "assistant"]
+    content: StrictStr = Field(min_length=1, max_length=8_000)
+
+
 class AskRequest(BaseModel):
-    question: str = Field(min_length=3, max_length=1000)
+    question: str = Field(min_length=3, max_length=8_000)
     retrieval_mode: Literal["bm25", "dense", "hybrid", "hybrid_rerank", "qdrant_hybrid"] = Field(
         default_factory=selected_retrieval_mode
     )
     rewrite_mode: Literal["off", "rules"] = "rules"
     language: Literal["English", "Bahasa Indonesia"] = "English"
-    # NiceGUI persists assistant citations/meta alongside string content. Keep
-    # the history envelope permissive here; the RAG layer still accepts only
-    # user/assistant roles and string content when constructing model context.
-    history: list[dict[str, Any]] = Field(default_factory=list, max_length=12)
+    # The web client persists assistant citations/meta alongside string content.
+    # HistoryMessage ignores those display-only fields while allowing only the
+    # user/assistant roles into the model context.
+    history: list[HistoryMessage] = Field(default_factory=list, max_length=12)
     session_id: str | None = Field(default=None, max_length=64)
+
+    @field_validator("question")
+    @classmethod
+    def question_word_limit(cls, value: str) -> str:
+        if len(_USER_INPUT_WORD_RE.findall(value)) > MAX_USER_INPUT_WORDS:
+            raise ValueError(f"question must contain at most {MAX_USER_INPUT_WORDS} words")
+        return value
 
 
 class FeedbackRequest(BaseModel):
     interaction_id: str = Field(min_length=1, max_length=64)
+    session_id: str | None = Field(default=None, max_length=128)
     feedback: str = Field(pattern="^(positive|negative)$")
     comment: str = Field(default="", max_length=500)
 
 
+class ChatTelemetryRequest(BaseModel):
+    session_id: str = Field(min_length=1, max_length=128)
+    interaction_id: str = Field(min_length=1, max_length=128)
+    question: str = Field(min_length=1, max_length=4000)
+    answer: str = Field(min_length=1, max_length=20000)
+    conversation_turn: int = Field(ge=1, le=100)
+    history_messages: int = Field(ge=0, le=200)
+
+
 class CompareRequest(BaseModel):
-    locations: list[str] = Field(min_length=1, max_length=10)
+    locations: list[BoundedLocation] = Field(min_length=1, max_length=10)
     pollutant: str = "PM2.5"
 
 
@@ -134,7 +285,17 @@ class StandardRequest(BaseModel):
 
 
 class StudyCompareRequest(BaseModel):
-    source_ids: list[str] = Field(default_factory=list, max_length=10)
+    source_ids: list[BoundedSourceId] = Field(default_factory=list, max_length=10)
+
+
+class GuidanceSearchRequest(BaseModel):
+    query: str = Field(min_length=3, max_length=500)
+    language: Literal["English", "Bahasa Indonesia"] = "English"
+    retrieval_mode: Literal["bm25", "dense", "hybrid", "hybrid_rerank", "qdrant_hybrid"] = Field(
+        default_factory=selected_retrieval_mode
+    )
+    top_k: int = Field(default=5, ge=1, le=8)
+    source_ids: list[BoundedSourceId] = Field(default_factory=list, max_length=12)
 
 
 @app.get("/health")
@@ -164,18 +325,20 @@ def version() -> dict[str, str]:
     }
 
 
-@app.get("/monitoring/summary")
-def monitoring_summary(days: int = 30) -> dict:
+@app.get("/monitoring/summary", dependencies=[Depends(require_internal_token)])
+def monitoring_summary(http_request: Request = None, days: int = 30) -> dict:
     """Return aggregate telemetry only; user-entered text is never exposed."""
+    if http_request is not None:
+        enforce_rate_limit(http_request, TELEMETRY_RATE_LIMITER, "monitoring-summary")
     return load_dashboard(days)
 
 
-@app.get("/sources")
+@app.get("/sources", dependencies=[Depends(require_internal_token)])
 def sources() -> dict:
     return _source_manifest()
 
 
-@app.get("/policies/timeline")
+@app.get("/policies/timeline", dependencies=[Depends(require_internal_token)])
 def policy_timeline(instrument: str) -> dict:
     try:
         return {"timeline": get_policy_timeline(instrument)}
@@ -183,7 +346,7 @@ def policy_timeline(instrument: str) -> dict:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
 
 
-@app.get("/policies/status")
+@app.get("/policies/status", dependencies=[Depends(require_internal_token)])
 def policy_status(instrument: str, as_of: str | None = None) -> dict:
     try:
         return {"status": get_policy_status(instrument, as_of)}
@@ -191,19 +354,35 @@ def policy_status(instrument: str, as_of: str | None = None) -> dict:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
 
 
-@app.get("/evidence/source-apportionment")
+@app.get("/evidence/source-apportionment", dependencies=[Depends(require_internal_token)])
 def source_apportionment(
     pollutant: str = "PM2.5", season: str | None = None, location: str | None = None
 ) -> dict:
     return {"findings": get_source_apportionment(pollutant, season, location)}
 
 
-@app.post("/evidence/compare")
+@app.post("/evidence/compare", dependencies=[Depends(require_internal_token)])
 def evidence_compare(request: StudyCompareRequest) -> dict:
     return compare_study_findings(request.source_ids)
 
 
-@app.get("/measurements/latest")
+@app.post("/guidance/search", dependencies=[Depends(require_internal_token)])
+def guidance_search(request: GuidanceSearchRequest) -> dict[str, Any]:
+    return {
+        "results": search_guidance(
+            request.query,
+            DOCUMENTS,
+            language=request.language,
+            retrieval_mode=request.retrieval_mode,
+            top_k=request.top_k,
+            source_ids=request.source_ids,
+        ),
+        "retrieval_mode": request.retrieval_mode,
+        "source_mode": _source_manifest()["mode"],
+    }
+
+
+@app.get("/measurements/latest", dependencies=[Depends(require_internal_token)])
 def latest_measurements(location: str | None = None, pollutant: str = "PM2.5") -> dict:
     refresh_runtime_measurements()
     return {
@@ -212,7 +391,25 @@ def latest_measurements(location: str | None = None, pollutant: str = "PM2.5") -
     }
 
 
-@app.post("/measurements/compare")
+@app.get("/stations", dependencies=[Depends(require_internal_token)])
+def stations(pollutant: str = "PM2.5") -> dict[str, Any]:
+    """Return map-ready station metadata joined to the latest observation."""
+    refresh_runtime_measurements()
+    data_dir = RUNTIME.data_dir
+    station_records = load_runtime_stations(
+        path=data_dir / "demo" / "stations.csv",
+        persisted_path=data_dir / "processed" / "stations.csv",
+        source_url=os.getenv("SOURCE_DATA_URL", ""),
+        prefer_persisted=True,
+    )
+    return build_station_catalog(
+        station_records,
+        get_latest_measurements(MEASUREMENTS, pollutant=pollutant),
+        _source_manifest()["mode"],
+    )
+
+
+@app.post("/measurements/compare", dependencies=[Depends(require_internal_token)])
 def compare_measurements(request: CompareRequest) -> dict:
     refresh_runtime_measurements()
     return {
@@ -221,7 +418,7 @@ def compare_measurements(request: CompareRequest) -> dict:
     }
 
 
-@app.post("/measurements/history")
+@app.post("/measurements/history", dependencies=[Depends(require_internal_token)])
 def historical_measurements(request: HistoryRequest) -> dict:
     refresh_runtime_measurements()
     if request.end < request.start:
@@ -235,7 +432,7 @@ def historical_measurements(request: HistoryRequest) -> dict:
     return {"summary": summary, "source_mode": _source_manifest()["mode"]}
 
 
-@app.post("/measurements/unhealthy-days")
+@app.post("/measurements/unhealthy-days", dependencies=[Depends(require_internal_token)])
 def unhealthy_days(request: HistoryRequest) -> dict:
     refresh_runtime_measurements()
     if request.end < request.start:
@@ -248,7 +445,7 @@ def unhealthy_days(request: HistoryRequest) -> dict:
     }
 
 
-@app.post("/measurements/standard")
+@app.post("/measurements/standard", dependencies=[Depends(require_internal_token)])
 def measurement_standard(request: StandardRequest) -> dict:
     try:
         comparison = compare_measurement_with_standard(request.value, request.pollutant)
@@ -257,12 +454,15 @@ def measurement_standard(request: StandardRequest) -> dict:
     return {"comparison": comparison}
 
 
-@app.post("/ask")
-def ask(request: AskRequest) -> dict:
+@app.post("/ask", dependencies=[Depends(require_internal_token)])
+def ask(request: AskRequest, http_request: Request = None) -> dict:
+    if http_request is not None:
+        enforce_rate_limit(http_request, CHAT_RATE_LIMITER, "ask")
     refresh_runtime_measurements()
     started = perf_counter()
     source_mode = _source_manifest()["mode"]
     session_id = request.session_id or f"api-{uuid4()}"
+    history = [item.model_dump() for item in request.history]
     try:
         result = answer(
             request.question,
@@ -271,7 +471,7 @@ def ask(request: AskRequest) -> dict:
             retrieval_mode=request.retrieval_mode,
             rewrite_mode=request.rewrite_mode,
             language=request.language,
-            history=request.history,
+            history=history,
         )
     except ValueError as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from exc
@@ -297,8 +497,8 @@ def ask(request: AskRequest) -> dict:
             ),
             "source": source_mode,
             "conversation_turn": 1
-            + sum(1 for item in request.history if item.get("role") == "user"),
-            "history_messages": len(request.history),
+                + sum(1 for item in history if item.get("role") == "user"),
+            "history_messages": len(history),
             "history_summary_chars": 0,
             "provider_model": result.get("generation_usage", {}).get(
                 "model", os.getenv("LLM_MODEL", "")
@@ -319,7 +519,30 @@ def ask(request: AskRequest) -> dict:
     }
 
 
-@app.post("/feedback")
-def feedback(request: FeedbackRequest) -> dict[str, str]:
-    log_feedback(request.interaction_id, request.feedback, request.comment)
+@app.post("/feedback", dependencies=[Depends(require_internal_token)])
+def feedback(request: FeedbackRequest, http_request: Request = None) -> dict[str, str]:
+    if http_request is not None:
+        enforce_rate_limit(http_request, TELEMETRY_RATE_LIMITER, "feedback")
+    log_feedback(request.interaction_id, request.feedback, request.comment, request.session_id)
     return {"status": "recorded"}
+
+
+@app.post("/chat-telemetry", dependencies=[Depends(require_internal_token)])
+def chat_telemetry(
+    request: ChatTelemetryRequest, http_request: Request = None
+) -> dict[str, str]:
+    if http_request is not None:
+        enforce_rate_limit(http_request, TELEMETRY_RATE_LIMITER, "chat-telemetry")
+    log_interaction(
+        {
+            "event": "answer",
+            "interaction_id": request.interaction_id,
+            "session_id": request.session_id,
+            "question": request.question,
+            "answer_text": request.answer,
+            "conversation_turn": request.conversation_turn,
+            "history_messages": request.history_messages,
+            "source": "eve",
+        }
+    )
+    return {"status": "recorded", "interaction_id": request.interaction_id}

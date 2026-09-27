@@ -36,10 +36,7 @@ index:
 	uv run python -m ingestion.build_index
 
 run:
-	uv run uvicorn app.web:app --host 0.0.0.0 --port $${PORT:-8502}
-
-run-streamlit:
-	uv run streamlit run app/ui.py --server.address=0.0.0.0 --server.port=$${PORT:-8501}
+	uv run uvicorn app.api:app --host 0.0.0.0 --port $${PORT:-8502}
 
 up:
 	@test -f .env || cp .env.example .env

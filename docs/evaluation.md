@@ -21,8 +21,8 @@ documentary evidence. Typed measurement, index, and abstention routes remain in
 the all-system set and are checked separately through deterministic tool and
 safety contracts. The artifact names the exact route list used for the slice.
 The selected `hybrid` method is configured by `RETRIEVAL_MODE=hybrid` in the
-environment template and is used by the API, NiceGUI, and local compatibility
-UI unless a supported value is explicitly supplied.
+environment template and is used by the API unless a supported value is
+explicitly supplied.
 
 The all-system hybrid result has question hit@5 of 0.6667 and chunk recall@5 of
 0.5789. Its English hit@5 is 0.8667 and Bahasa Indonesia hit@5 is 0.4667; the

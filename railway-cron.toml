@@ -1,5 +1,5 @@
 # Apply this file only to the separate Railway cron service. It uses the same
-# Docker image as the web service but never starts an HTTP listener.
+# Python API image but never starts an HTTP listener.
 
 [build]
 builder = "DOCKERFILE"
@@ -7,6 +7,6 @@ dockerfilePath = "Dockerfile"
 
 [deploy]
 startCommand = "python -m ingestion.railway_cron"
-cronSchedule = "0 * * * *"
+cronSchedule = "0 */6 * * *"
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 2

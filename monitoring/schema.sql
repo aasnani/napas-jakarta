@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS interactions (
   created_at TEXT NOT NULL,
   event TEXT NOT NULL DEFAULT 'answer',
   question TEXT NOT NULL,
+  answer_text TEXT,
   rewritten_query TEXT,
   route TEXT,
   retrieval_mode TEXT,
@@ -24,6 +25,7 @@ CREATE TABLE IF NOT EXISTS interactions (
 );
 ALTER TABLE interactions ADD COLUMN IF NOT EXISTS session_id TEXT;
 ALTER TABLE interactions ADD COLUMN IF NOT EXISTS interaction_id TEXT;
+ALTER TABLE interactions ADD COLUMN IF NOT EXISTS answer_text TEXT;
 ALTER TABLE interactions ADD COLUMN IF NOT EXISTS feedback_comment TEXT;
 ALTER TABLE interactions ADD COLUMN IF NOT EXISTS conversation_turn INTEGER;
 ALTER TABLE interactions ADD COLUMN IF NOT EXISTS history_messages INTEGER;
