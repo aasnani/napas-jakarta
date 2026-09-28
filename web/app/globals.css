@@ -1381,6 +1381,15 @@ textarea {
 
 .napas-od-app .filter-label select {
   height: var(--od-control-height);
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 34px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='m3.5 5.25 3.5 3.5 3.5-3.5' stroke='%23153047' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-position: right 10px center;
+  background-repeat: no-repeat;
+  background-size: 14px 14px;
+  cursor: pointer;
+  transition: border-color .18s, background-color .18s, box-shadow .18s;
 }
 
 .napas-od-app .napas-feedback button {
@@ -1393,7 +1402,7 @@ textarea {
 .napas-od-app .napas-feedback button:hover,
 .napas-od-app .filter-label select:hover {
   border-color: var(--od-action);
-  background: var(--od-bg);
+  background-color: var(--od-bg);
   color: var(--od-fg);
   box-shadow: none;
 }
