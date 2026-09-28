@@ -10,6 +10,7 @@ import styles from "./analytics-consent.module.css";
 type ConsentChoice = "granted" | "denied";
 
 const CONSENT_STORAGE_KEY = "napas-analytics-consent";
+export const OPEN_PRIVACY_CHOICES_EVENT = "napas:open-privacy-choices";
 const MEASUREMENT_ID =
   process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim() || "G-H242BLRQXX";
 
@@ -39,6 +40,16 @@ export function AnalyticsConsent() {
   useEffect(() => {
     setBrowserLocationIsPublic(isPublicAnalyticsPath(window.location.pathname));
   }, [pathname]);
+
+  useEffect(() => {
+    const openPrivacyChoices = () => {
+      setBrowserLocationIsPublic(isPublicAnalyticsPath(window.location.pathname));
+      setSettingsOpen(true);
+    };
+
+    window.addEventListener(OPEN_PRIVACY_CHOICES_EVENT, openPrivacyChoices);
+    return () => window.removeEventListener(OPEN_PRIVACY_CHOICES_EVENT, openPrivacyChoices);
+  }, []);
 
   useEffect(() => {
     const updateLanguage = () => {
@@ -119,18 +130,19 @@ export function AnalyticsConsent() {
             </button>
           </div>
         </section>
-      ) : (
-        <button
-          className={styles.preferences}
-          onClick={() => {
-            setBrowserLocationIsPublic(isPublicAnalyticsPath(window.location.pathname));
-            setSettingsOpen(true);
-          }}
-          type="button"
-        >
-          {isIndonesian ? "Pilihan privasi" : "Privacy choices"}
-        </button>
-      )}
+      ) : null}
     </>
+  );
+}
+
+export function PrivacyChoicesButton({ language }: { readonly language: "en" | "id" }) {
+  return (
+    <button
+      className={styles.pagePreferences}
+      onClick={() => window.dispatchEvent(new Event(OPEN_PRIVACY_CHOICES_EVENT))}
+      type="button"
+    >
+      {language === "id" ? "Pilihan privasi" : "Privacy choices"}
+    </button>
   );
 }

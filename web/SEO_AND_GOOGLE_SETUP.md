@@ -54,8 +54,9 @@ and [Search generative AI control](https://support.google.com/webmasters/answer/
    and deploy the web service after changing the value.
 3. Analytics loads only after a visitor chooses **Allow analytics**. A visitor
    who declines before opting in does not load the Google tag. If a visitor
-   later revokes consent through **Privacy choices**, the app stops sending its
-   manual page-view and interaction events and updates Google's consent state.
+   later changes consent using **Privacy choices** on the English or Indonesian
+   Privacy page, the app stops sending manual page-view and interaction events
+   when consent is declined and updates Google's consent state.
 4. The code sends page views for the homepage, About pages, and both guides.
    After consent, it also counts assistant question starts, suggested-question
    selections, positive/negative answer feedback, topic and station picker
