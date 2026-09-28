@@ -724,6 +724,12 @@ textarea {
   .napas-context-wrap { align-self: flex-end; }
 }
 
+@media (max-width: 980px) {
+  /* Keep the composer above the software keyboard on mobile Safari, where
+     the layout viewport does not resize when the keyboard opens. */
+  .napas-chat-dock { bottom: var(--napas-keyboard-offset, 0px); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .napas-chat-content > .group,
   .napas-thinking-message,
