@@ -32,7 +32,7 @@
 }
 
 .actions button,
-.preferences {
+.pagePreferences {
   min-height: 2.5rem;
   border: 1px solid #087f8c;
   border-radius: 0.625rem;
@@ -53,18 +53,17 @@
   color: #153047;
 }
 
-.preferences {
-  position: fixed;
-  z-index: 1199;
-  bottom: 1rem;
-  left: 1rem;
-  background: rgb(255 255 255 / 96%);
+.pagePreferences {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  margin-top: 0.75rem;
+  background: #fff;
   color: #153047;
-  box-shadow: 0 4px 16px rgb(16 42 54 / 12%);
 }
 
 .actions button:focus-visible,
-.preferences:focus-visible {
+.pagePreferences:focus-visible {
   outline: 3px solid #153047;
   outline-offset: 3px;
 }
@@ -74,10 +73,5 @@
     bottom: 0.5rem;
     left: 0.5rem;
     width: calc(100vw - 1rem);
-  }
-
-  .preferences {
-    bottom: 0.5rem;
-    left: 0.5rem;
   }
 }

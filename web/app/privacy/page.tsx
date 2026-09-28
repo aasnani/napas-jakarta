@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { PublicInfoLayout, PRIVACY_PATHS } from "@/app/_components/public-info-layout";
+import { PrivacyChoicesButton } from "@/app/_components/analytics-consent";
 import styles from "@/app/_components/guide-layout.module.css";
 import { absoluteUrl } from "@/lib/site";
 import { getUiCopy } from "@/lib/i18n";
@@ -33,6 +34,7 @@ export default function PrivacyPage() {
         <p>{body[5]}</p>
         <p>{body[6]}</p>
       </section>
+      <PrivacyChoicesButton language="en" />
     </PublicInfoLayout>
   );
 }

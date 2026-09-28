@@ -1475,11 +1475,11 @@ textarea {
   }
 
   .topbar-left .topbar-actions {
-    gap: 6px;
+    gap: 8px;
   }
 
   .napas-od-app .topbar-link {
-    font-size: 10px;
+    font-size: 11px;
   }
 
   .chat-title-copy {
@@ -1502,11 +1502,11 @@ textarea {
   }
 
   .topbar-left .topbar-actions {
-    gap: 4px;
+    gap: 6px;
   }
 
   .napas-od-app .topbar-link {
-    font-size: 10px;
+    font-size: 11px;
   }
 
   .language-toggle button {

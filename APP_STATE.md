@@ -94,6 +94,10 @@ status, and public health endpoint after each release.
   coverage; those changes are not in production until the web service is
   redeployed and a visitor opts in. Ad storage, Google signals, and ads
   personalization are disabled.
+- After a visitor accepts or declines, the consent prompt closes and no
+  persistent control overlays the workspace. Visitors can reopen the choice
+  from the English or Indonesian Privacy page. This UI update is in the open
+  search/analytics PR and is not in production until deployed.
 
 ## Logging and retention
 
