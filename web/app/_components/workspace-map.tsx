@@ -604,7 +604,7 @@ export function WorkspaceMap({
 
       <div className="map-dock">
         <div className="legend" aria-label={copy.map.legendAria}>
-          <LegendContent language={language} />
+          <LegendContent compact language={language} />
         </div>
         {selectedStation ? (
           <article className="station-detail" aria-live="polite">
@@ -737,8 +737,25 @@ function KpiCard({ detail, label, networkLabel, share, tone = "good", value }: {
   );
 }
 
-function LegendContent({ language }: { readonly language: Language }) {
+function LegendContent({ compact = false, language }: { readonly compact?: boolean; readonly language: Language }) {
   const copy = getUiCopy(language);
+  const termDefinitions = (
+    <dl className="legend-terms" aria-label={copy.map.airQualityLevel}>
+      <div className="legend-term">
+        <dt>{copy.map.ispuTerm}</dt>
+        <dd>{copy.map.ispuDefinition}</dd>
+      </div>
+      <div className="legend-term">
+        <dt>{copy.map.pm25Term}</dt>
+        <dd>{copy.map.pm25Definition}</dd>
+      </div>
+      <div className="legend-term">
+        <dt>{copy.map.stationReadingTerm}</dt>
+        <dd>{copy.map.stationReadingDefinition}</dd>
+      </div>
+    </dl>
+  );
+  const note = <p className="legend-note">{copy.map.legendNote}</p>;
 
   return (
     <>
@@ -755,21 +772,18 @@ function LegendContent({ language }: { readonly language: Language }) {
         <span><i className="key-transit" />{copy.map.transit}</span>
         <span><i className="key-landmark" />{copy.map.landmark}</span>
       </div>
-      <dl className="legend-terms" aria-label={copy.map.airQualityLevel}>
-        <div className="legend-term">
-          <dt>{copy.map.ispuTerm}</dt>
-          <dd>{copy.map.ispuDefinition}</dd>
-        </div>
-        <div className="legend-term">
-          <dt>{copy.map.pm25Term}</dt>
-          <dd>{copy.map.pm25Definition}</dd>
-        </div>
-        <div className="legend-term">
-          <dt>{copy.map.stationReadingTerm}</dt>
-          <dd>{copy.map.stationReadingDefinition}</dd>
-        </div>
-      </dl>
-      <p className="legend-note">{copy.map.legendNote}</p>
+      {compact ? (
+        <details className="legend-definitions">
+          <summary>{copy.map.airQualityLevel}</summary>
+          {termDefinitions}
+          {note}
+        </details>
+      ) : (
+        <>
+          {termDefinitions}
+          {note}
+        </>
+      )}
     </>
   );
 }

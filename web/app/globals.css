@@ -1058,6 +1058,22 @@ textarea {
     scroll-padding-bottom: 285px;
   }
 
+  .napas-chat-content {
+    padding: 14px clamp(16px, 1.5vw, 24px) 18px !important;
+  }
+
+  .napas-chat-utility-row:not(:has(.napas-selected-context)) .napas-context-stack {
+    display: none;
+  }
+
+  .napas-composer-wrap .napas-prompt-textarea {
+    min-height: 52px !important;
+    max-height: 120px;
+    padding: 10px 92px 10px 12px !important;
+    font-size: 13px !important;
+    line-height: 1.4 !important;
+  }
+
   .chat-panel,
   .map-panel {
     isolation: isolate;
@@ -1092,10 +1108,10 @@ textarea {
 /* Cohesive workspace foundation: outer panels carry elevation; internals stay quiet. */
 @media (min-width: 981px) {
   .workspace {
-    grid-template-columns: minmax(360px, 32fr) minmax(0, 68fr);
-    height: calc(100dvh - 64px - var(--od-space-5) - var(--od-space-6));
-    min-height: 616px;
-    margin: var(--od-space-5) var(--od-space-6) var(--od-space-6);
+    grid-template-columns: minmax(360px, 34fr) minmax(0, 66fr);
+    height: calc(100dvh - 56px - 28px);
+    min-height: 0;
+    margin: 12px clamp(14px, 1.65vw, 24px) 16px;
     gap: 0;
     padding: 0;
     overflow: hidden;
@@ -1123,36 +1139,37 @@ textarea {
   .napas-chat-shell .chat-head,
   .map-head {
     box-sizing: border-box;
-    height: 193px;
-    min-height: 193px;
+    height: auto;
+    min-height: 0;
   }
 
   .napas-chat-shell .chat-head {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    padding: var(--od-space-3) var(--od-space-5);
+    justify-content: flex-start;
+    gap: 8px;
+    padding: 10px clamp(14px, 1.35vw, 20px);
   }
 
   .chat-brand-mark {
-    width: 56px;
-    height: 56px;
-    border-radius: 12px;
+    width: 40px;
+    height: 40px;
+    border-radius: 9px;
   }
 
   .chat-brand-mark img {
-    width: 54px;
-    height: 54px;
+    width: 38px;
+    height: 38px;
   }
 
   .chat-head h1,
   .chat-head h2 {
-    font-size: 28px;
+    font-size: clamp(21px, 1.75vw, 26px);
   }
 
   .connection {
-    margin-top: 8px;
-    font-size: 13px;
+    margin-top: 4px;
+    font-size: 11px;
   }
 
   .connection-copy {
@@ -1163,19 +1180,70 @@ textarea {
 
   .chat-context-controls {
     margin-top: 0;
+    justify-content: flex-start;
+    gap: 6px;
+  }
+
+  .chat-selection-controls {
+    justify-content: flex-start;
+    margin-left: 0;
+    gap: 6px;
+  }
+
+  .assistant-guidance {
+    display: grid;
+    gap: 6px;
+    margin: 0;
+  }
+
+  .assistant-guidance-copy {
+    width: auto;
+    flex: none;
+  }
+
+  .assistant-guidance-title {
+    display: none;
+  }
+
+  .assistant-guidance-description {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.3;
+    -webkit-line-clamp: 2;
+  }
+
+  .assistant-capabilities {
+    max-width: 100%;
+    justify-content: flex-start;
+    gap: 4px;
+    padding-top: 0;
+  }
+
+  .assistant-capability {
+    min-height: 25px;
+    padding: 4px 6px;
+    font-size: clamp(10px, 0.74vw, 11px);
+  }
+
+  .napas-topic-picker {
+    margin-left: 0;
   }
 
   .map-head {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto auto auto;
-    grid-template-areas: "title" "kpis" "filters";
-    align-items: stretch;
-    gap: var(--od-space-2);
-    padding: var(--od-space-3) var(--od-space-5);
+    grid-template-columns: minmax(0, 0.75fr) minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    grid-template-areas: "title filters" "kpis kpis";
+    align-items: center;
+    gap: 8px 12px;
+    padding: 10px clamp(12px, 1.35vw, 20px);
   }
 
   .map-head-title {
-    align-self: start;
+    align-self: center;
+  }
+
+  .map-head h2 {
+    font-size: clamp(18px, 1.5vw, 21px);
   }
 
   .map-kpis,
@@ -1184,27 +1252,44 @@ textarea {
   }
 
   .map-kpis {
-    gap: var(--od-space-2);
+    gap: 6px;
+  }
+
+  .map-kpi {
+    flex-basis: 0;
+    gap: 6px;
+    padding: 6px 8px;
+  }
+
+  .map-kpi strong {
+    font-size: clamp(18px, 1.4vw, 22px);
   }
 
   .filters {
     align-items: center;
-    justify-content: flex-start;
-    gap: var(--od-space-2);
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 6px;
+    min-width: 0;
   }
 
   .filter-label {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
+    min-width: 0;
+    font-size: 9px;
   }
 
   .filter-label select {
-    min-width: 136px;
+    min-width: 120px;
   }
 
   .station-list-button {
     margin-top: 0;
+    min-height: 34px;
+    padding: 0 8px;
+    font-size: 11px;
   }
 
   .map-kpi,
@@ -1216,13 +1301,15 @@ textarea {
   }
 
   .map-stage {
+    min-height: clamp(220px, 30dvh, 360px);
     box-shadow: none;
   }
 
   .map-dock {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
     gap: 0;
-    min-height: 185px;
-    padding: 0 0 var(--od-space-3);
+    min-height: 0;
+    padding: 0;
     border-top: 1px solid var(--od-border);
     background: var(--od-surface);
   }
@@ -1236,12 +1323,69 @@ textarea {
   }
 
   .legend {
-    padding: var(--od-space-4) var(--od-space-5);
+    position: relative;
+    padding: 12px clamp(12px, 1.35vw, 20px);
     border-right: 1px solid var(--od-border);
   }
 
+  .legend h3 {
+    margin-bottom: 6px;
+    font-size: 10px;
+  }
+
+  .legend-grid {
+    gap: 5px 9px;
+  }
+
+  .legend-key {
+    gap: 6px 10px;
+    margin-top: 7px;
+    padding-top: 6px;
+  }
+
+  .legend-definitions > summary {
+    display: inline-flex;
+    min-height: 26px;
+    align-items: center;
+    gap: 5px;
+    margin-top: 6px;
+    padding: 3px 6px;
+    border: 1px solid var(--od-border);
+    border-radius: 6px;
+    background: var(--od-bg);
+    color: var(--od-action);
+    cursor: pointer;
+    font-size: 10px;
+    font-weight: 700;
+  }
+
+  .legend-definitions > summary:focus-visible {
+    outline: 2px solid var(--od-accent-dark);
+    outline-offset: 2px;
+  }
+
+  .legend-definitions[open] {
+    position: absolute;
+    bottom: calc(100% - 8px);
+    left: 12px;
+    z-index: 12;
+    width: min(430px, calc(100cqw - 32px));
+    max-height: min(45dvh, 360px);
+    overflow: auto;
+    padding: 12px 14px;
+    border: 1px solid var(--od-border);
+    border-radius: 10px;
+    background: var(--od-surface);
+    box-shadow: var(--od-elevation-panel);
+  }
+
   .station-detail {
-    padding: var(--od-space-4) var(--od-space-5) var(--od-space-3);
+    padding: 12px clamp(12px, 1.35vw, 20px);
+  }
+
+  .station-detail-empty {
+    min-height: 0;
+    padding-block: 10px;
   }
 
   .legend-term {
@@ -1253,7 +1397,8 @@ textarea {
   }
 
   .napas-empty-state {
-    transform: translateY(-32px);
+    padding-block: 16px;
+    transform: none;
   }
 }
 
@@ -1382,29 +1527,33 @@ textarea {
 
 /* Give the desktop navbar enough presence to anchor the workspace. */
 @media (min-width: 981px) {
+  .topbar {
+    height: 56px;
+  }
+
   .topbar-side {
-    font-size: 13px;
+    font-size: 12px;
   }
 
   .topbar-actions {
-    gap: 18px;
+    gap: 14px;
   }
 
   .napas-od-app .topbar-link {
-    font-size: 14px;
+    font-size: 13px;
   }
 
   .brand {
-    gap: 10px;
+    gap: 8px;
   }
 
   .brand img {
-    width: 46px;
-    height: 46px;
+    width: 40px;
+    height: 40px;
   }
 
   .brand-title {
-    font-size: 20px;
+    font-size: 18px;
   }
 }
 
@@ -1517,5 +1666,138 @@ textarea {
 
   .topbar-right {
     margin-left: 0;
+  }
+}
+
+@container map-panel (max-width: 760px) {
+  .map-head {
+    grid-template-columns: minmax(0, 0.75fr) minmax(0, 1fr);
+    grid-template-areas: "title filters" "kpis kpis";
+    grid-template-rows: auto auto;
+    align-items: center;
+    gap: 6px 8px;
+    padding: 9px 12px;
+  }
+
+  .map-head h2 {
+    font-size: clamp(18px, 3vw, 20px);
+  }
+
+  .map-subtitle {
+    font-size: 10px;
+  }
+
+  .filters {
+    justify-content: flex-start;
+    gap: 6px;
+  }
+
+  .filter-label {
+    display: grid;
+    align-items: stretch;
+    gap: 2px;
+    font-size: 9px;
+  }
+
+  .filter-label select {
+    width: clamp(110px, 19vw, 136px);
+    min-width: 0;
+    height: 34px;
+    padding: 0 20px 0 8px;
+  }
+
+  .station-list-button {
+    min-height: 34px;
+    margin-top: 0;
+    padding: 0 8px;
+    font-size: 10px;
+  }
+}
+
+@media (min-width: 981px) and (max-height: 820px) {
+  .workspace {
+    height: calc(100dvh - 56px - 22px);
+    margin-top: 10px;
+    margin-bottom: 12px;
+  }
+
+  .napas-chat-shell .chat-head {
+    gap: 6px;
+    padding-block: 8px;
+  }
+
+  .assistant-guidance-description {
+    -webkit-line-clamp: 2;
+  }
+
+  .map-head {
+    padding-block: 8px;
+  }
+
+  .legend,
+  .station-detail {
+    padding-block: 8px;
+  }
+}
+
+@media (min-width: 981px) {
+  .station-detail-empty {
+    min-height: 0;
+  }
+}
+
+@media (min-width: 981px) {
+  @container chat-panel (min-width: 440px) {
+    .napas-chat-shell .chat-head {
+      gap: 12px;
+      padding-block: 12px;
+    }
+
+    .assistant-guidance {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin: 0;
+    }
+
+    .assistant-guidance-copy {
+      width: 0;
+      min-width: 0;
+      flex: 1 1 0;
+    }
+
+    .assistant-capabilities {
+      flex: 0 1 auto;
+      justify-content: flex-end;
+      max-width: 62%;
+    }
+
+    .chat-selection-controls {
+      width: 100%;
+    }
+
+    .napas-topic-picker {
+      margin-left: auto;
+    }
+  }
+}
+
+@media (min-width: 981px) and (max-width: 1150px) {
+  .map-head {
+    gap: 6px 10px;
+    padding-block: 6px;
+  }
+
+  .map-kpi {
+    padding-block: 4px;
+  }
+
+  .filters {
+    gap: 4px;
+  }
+
+  .station-list-button {
+    min-height: 32px;
   }
 }
