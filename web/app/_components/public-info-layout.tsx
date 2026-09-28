@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { EN_ABOUT_PATH, EN_GUIDE_PATH, EN_PRIVACY_PATH, ID_ABOUT_PATH, ID_GUIDE_PATH, ID_PRIVACY_PATH } from "@/lib/site";
+import { SiteHeader } from "./site-header";
 import styles from "./guide-layout.module.css";
 
 export function PublicInfoLayout({
@@ -17,13 +18,7 @@ export function PublicInfoLayout({
 
   return (
     <main className={styles.page} lang={lang}>
-      <header className={styles.header}>
-        <Link className={styles.brand} href="/">Napas Jakarta</Link>
-        <nav aria-label={isEnglish ? "Choose language" : "Pilih bahasa"} className={styles.languages}>
-          <Link aria-current={isEnglish ? "page" : undefined} href={localizedPaths.en} lang="en">English</Link>
-          <Link aria-current={!isEnglish ? "page" : undefined} href={localizedPaths.id} lang="id">Bahasa Indonesia</Link>
-        </nav>
-      </header>
+      <SiteHeader language={lang} localizedPaths={localizedPaths} />
       <article className={styles.article} lang={lang}>
         {children}
         <nav aria-label={isEnglish ? "Related pages" : "Halaman terkait"} className={styles.related}>

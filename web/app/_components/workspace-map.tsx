@@ -2,7 +2,6 @@
 
 import {
   Layers2Icon,
-  MessageCircleIcon,
   MapPinIcon,
   MinusIcon,
   PlusIcon,
@@ -144,7 +143,6 @@ export function WorkspaceMap({
   language,
   isMobileOverlayOpen = false,
   mobileLegendOpen = false,
-  onAskAssistant,
   onMobileLegendClose,
   onStationClear,
   onStationSelect,
@@ -156,7 +154,6 @@ export function WorkspaceMap({
   readonly language: Language;
   readonly isMobileOverlayOpen?: boolean;
   readonly mobileLegendOpen?: boolean;
-  readonly onAskAssistant: (station: DemoStation) => void;
   readonly onMobileLegendClose?: () => void;
   readonly onStationClear: (source: "map_detail" | "chat_context") => void;
   readonly onStationSelect: (station: DemoStation, source: "map_marker" | "station_list" | "chat_picker") => void;
@@ -534,13 +531,6 @@ export function WorkspaceMap({
           <div className="scale-aid"><div className="scale-rule" /><div className="scale-caption"><span>0</span><span>≈ 5 km</span></div></div>
           <div className="map-note">{copy.map.baseNote}</div>
         </div>
-        <div className="map-guide-card" role="note">
-          <div className="map-guide-kicker"><i aria-hidden="true" />{copy.map.mapGuide}</div>
-          <strong>{heatmapVisible ? copy.map.readHeatmap : copy.map.readMarkers}</strong>
-          <p>{heatmapVisible ? copy.map.heatmapDescription : copy.map.markersDescription}</p>
-          <span>{heatmapVisible ? copy.map.heatmapNote : copy.map.markersNote}</span>
-        </div>
-
         <div className="map-controls" aria-label={copy.map.mapControls}>
           <button aria-label={copy.map.zoomIn} className="map-control" onClick={() => {
             trackNapasEvent("map_zoom_control_clicked", { direction: "in" });
@@ -604,47 +594,18 @@ export function WorkspaceMap({
 
       <div className="map-dock">
         <div className="legend" aria-label={copy.map.legendAria}>
-          <LegendContent compact language={language} />
+          <LegendContent language={language} />
         </div>
         {selectedStation ? (
           <article className="station-detail" aria-live="polite">
             <div className="station-detail-top">
               <div>
-                <p className="station-detail-eyebrow">{copy.map.selectedMonitor}</p>
                 <h3>{selectedStation.name}</h3>
                 <p className="station-district">{localizedDistrict(selectedStation.district, language)}</p>
               </div>
-              <div className="station-detail-actions">
-                <span className={cn("category-pill", categoryKey[selectedStation.category])}>{localizedCategory(selectedStation.category, language)}</span>
-                <button aria-label={copy.map.clearSelectedMonitor} className="station-detail-clear" onClick={() => onStationClear("map_detail")} type="button">
-                  <XIcon aria-hidden="true" />
-                </button>
-              </div>
-            </div>
-            <p className="station-detail-note">{copy.map.latestLocalReading}</p>
-            <div className="detail-lower">
-              <div className="detail-metrics">
-                <div className="detail-metric"><span>ISPU</span><strong>{selectedStation.ispu ?? "—"}</strong></div>
-                <div className="detail-metric"><span>PM2.5</span><strong>{selectedStation.pm25 ?? "—"} <small>{selectedStation.pm25 === null ? "" : "µg/m³"}</small></strong></div>
-              </div>
-              <button
-                aria-label={`${copy.map.selectedStationAria} ${selectedStation.name}`}
-                className="ask-station"
-                onClick={() => onAskAssistant(selectedStation)}
-                type="button"
-              >
-                <MessageCircleIcon aria-hidden="true" />
-                <span>{copy.map.askAssistant}</span>
+              <button aria-label={copy.map.clearSelectedMonitor} className="station-detail-clear" onClick={() => onStationClear("map_detail")} type="button">
+                <XIcon aria-hidden="true" />
               </button>
-            </div>
-            <div className="detail-meta">
-              <span>{copy.map.observed} <strong>{selectedStation.observedAt}</strong></span>
-              <span>
-                {copy.map.source}{" "}
-                {selectedStation.sourceUrl ? (
-                  <a href={selectedStation.sourceUrl} rel="noopener noreferrer" target="_blank"><strong>{selectedStation.source}</strong></a>
-                ) : <strong>{selectedStation.source}</strong>}
-              </span>
             </div>
           </article>
         ) : (
@@ -737,7 +698,7 @@ function KpiCard({ detail, label, networkLabel, share, tone = "good", value }: {
   );
 }
 
-function LegendContent({ compact = false, language }: { readonly compact?: boolean; readonly language: Language }) {
+function LegendContent({ language }: { readonly language: Language }) {
   const copy = getUiCopy(language);
   const termDefinitions = (
     <dl className="legend-terms" aria-label={copy.map.airQualityLevel}>
@@ -755,8 +716,6 @@ function LegendContent({ compact = false, language }: { readonly compact?: boole
       </div>
     </dl>
   );
-  const note = <p className="legend-note">{copy.map.legendNote}</p>;
-
   return (
     <>
       <h3>{copy.map.legendTitle}</h3>
@@ -772,18 +731,7 @@ function LegendContent({ compact = false, language }: { readonly compact?: boole
         <span><i className="key-transit" />{copy.map.transit}</span>
         <span><i className="key-landmark" />{copy.map.landmark}</span>
       </div>
-      {compact ? (
-        <details className="legend-definitions">
-          <summary>{copy.map.airQualityLevel}</summary>
-          {termDefinitions}
-          {note}
-        </details>
-      ) : (
-        <>
-          {termDefinitions}
-          {note}
-        </>
-      )}
+      {termDefinitions}
     </>
   );
 }

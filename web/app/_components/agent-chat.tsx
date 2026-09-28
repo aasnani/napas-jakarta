@@ -47,6 +47,7 @@ import { getSuggestedQuestions } from "@/lib/suggestions";
 import { EN_GUIDE_PATH, ID_GUIDE_PATH } from "@/lib/site";
 import { shouldShowPendingThinking, shouldShowSuggestedQuestions } from "@/lib/chat-state";
 import type { DemoStation } from "@/lib/napas";
+import { PACED_TEXT_START_BUFFER } from "@/lib/paced-text";
 import { MAX_CHAT_CHARACTERS, validateChatInput } from "@/lib/user-input-limits";
 import { AgentMessage } from "./agent-message";
 
@@ -78,6 +79,7 @@ export function AgentChat({
   const copy = getUiCopy(language);
   const [cancellationError, setCancellationError] = useState<string>();
   const [inputError, setInputError] = useState<string>();
+  const [isSending, setIsSending] = useState(false);
   const [hasInputText, setHasInputText] = useState(false);
   const [inputText, setInputText] = useState("");
   const [contextOpen, setContextOpen] = useState(false);
@@ -92,11 +94,17 @@ export function AgentChat({
   const localizedTopic = selectedTopic ? getLocalizedTopicCopy(selectedTopic, language) : undefined;
   const suggestedQuestions = getSuggestedQuestions(localizedTopic, selectedStation, language);
 
-  const isBusy = agent.status === "submitted" || agent.status === "streaming";
+  const isBusy = isSending || agent.status === "submitted" || agent.status === "streaming";
   const isResuming = agent.status === "resuming";
   const isEmpty = agent.data.messages.length === 0;
   const lastMessage = agent.data.messages.at(-1);
-  const showPendingThinking = shouldShowPendingThinking({ isBusy, isResuming });
+  const hasStreamingAnswer =
+    agent.status === "streaming" &&
+    lastMessage?.role === "assistant" &&
+    lastMessage.parts.some(
+      (part) => part.type === "text" && part.text.trim().length >= PACED_TEXT_START_BUFFER,
+    );
+  const showPendingThinking = shouldShowPendingThinking({ isBusy, isResuming }) && !hasStreamingAnswer;
   const turnFailure = isBusy || isResuming ? undefined : getLatestTurnFailure(agent.events, language);
   const errorMessage = cancellationError ?? localizeAgentError(agent.error?.message, language) ?? turnFailure;
   const anonymousSessionId = useRef(createAnonymousSessionId());
@@ -286,6 +294,7 @@ export function AgentChat({
 
     setInputError(undefined);
     setCancellationError(undefined);
+    setIsSending(true);
 
     try {
       trackNapasEvent("assistant_question_submitted");
@@ -294,6 +303,8 @@ export function AgentChat({
       setHasInputText(false);
     } catch (error: unknown) {
       setCancellationError(toErrorMessage(error, language));
+    } finally {
+      setIsSending(false);
     }
   };
 
@@ -458,9 +469,7 @@ export function AgentChat({
         <ConversationContent className="mx-auto w-full gap-6 px-4 sm:px-6 napas-chat-content max-w-none pt-4 pb-5">
           {isEmpty ? <EmptyChatState language={language} /> : null}
           {agent.data.messages.map((message, index) =>
-            showPendingThinking &&
-            message.role === "assistant" &&
-            message.id === lastMessage?.id ? null : (
+            showPendingThinking && message.role === "assistant" && message.id === lastMessage?.id ? null : (
               <AgentMessage
                 canRespond={!isBusy && !isResuming}
                 isLatest={index === agent.data.messages.length - 1}
