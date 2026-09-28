@@ -2176,6 +2176,15 @@ textarea {
   animation: none;
 }
 
+.napas-od-app .napas-station-trigger:focus-visible,
+.napas-od-app .napas-topic-trigger:focus-visible,
+.napas-od-app .filter-select-trigger:focus-visible {
+  border-color: var(--od-action);
+  outline: 2px solid var(--od-accent-dark);
+  outline-offset: 1px;
+  box-shadow: none;
+}
+
 @media (max-width: 670px) {
   .chat-selection-controls {
     display: flex;
