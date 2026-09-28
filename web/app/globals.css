@@ -2086,15 +2086,30 @@ textarea {
     left: auto;
     right: clamp(14px, 1.35vw, 20px);
     bottom: 8px;
-    width: max-content;
+    width: clamp(220px, 70cqw, 380px);
     margin: 0;
     padding: 0;
     justify-content: flex-end;
   }
 
   .chat-selection-controls {
-    width: auto;
+    width: 100%;
     gap: 12px;
+  }
+
+  .napas-station-picker,
+  .napas-topic-picker {
+    flex: 1 1 0;
+    width: 0;
+    max-width: none;
+    min-width: 0;
+    margin-left: 0;
+  }
+
+  .napas-station-trigger,
+  .napas-od-app .napas-topic-trigger {
+    width: 100%;
+    max-width: none;
   }
 
   .napas-station-menu {
