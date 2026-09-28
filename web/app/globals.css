@@ -214,10 +214,9 @@ textarea {
 .topbar-side:last-child { text-align: right; }
 .topbar-label-mobile { display: none; }
 .topbar-actions { display: flex; flex: 0 0 auto; align-items: center; gap: 14px; min-width: 0; }
-.napas-od-app .topbar-link { display: inline-flex; min-height: 44px; align-items: center; padding: 4px 1px; border: 0; border-bottom: 1px solid transparent; background: transparent; color: var(--od-muted); font-size: 12px; font-weight: 700; text-decoration: none; }
+.topbar-link { display: inline-flex; min-height: 44px; align-items: center; padding: 4px 1px; border: 0; border-bottom: 1px solid transparent; background: transparent; color: var(--od-muted); font-size: 12px; font-weight: 700; text-decoration: none; }
 .topbar-link:hover { border-bottom-color: currentColor; color: var(--od-fg); }
-.napas-od-app .topbar-link[aria-current="page"] { border-bottom-color: var(--od-action); background: var(--od-action-soft); color: var(--od-action); font-weight: 800; }
-.napas-od-app .topbar-link:focus-visible { border-radius: 2px; outline: 3px solid var(--od-accent-dark); outline-offset: 2px; }
+.topbar-link:focus-visible { border-radius: 2px; outline: 3px solid var(--od-accent-dark); outline-offset: 2px; }
 .brand { display: flex; align-items: center; gap: 8px; min-height: 44px; color: var(--od-fg); text-decoration: none; }
 .brand img { width: 38px; height: 38px; object-fit: contain; }
 .brand-title { margin: 0; font-family: "Cantarell", "Avenir Next", "Trebuchet MS", sans-serif; font-size: 17px; font-weight: 700; letter-spacing: -.015em; }
@@ -611,7 +610,7 @@ textarea {
   .topbar-left { gap: 4px; }
   .topbar-left .topbar-side { flex: 0 0 45px; max-width: 45px; font-size: 8px; }
   .topbar-actions { flex: 0 0 auto; gap: 4px; }
-  .napas-od-app .topbar-link { font-size: 10px; }
+  .topbar-link { font-size: 10px; }
   .legend-grid { grid-template-columns: 1fr 1fr; gap: 7px 12px; }
   .legend-terms { grid-template-columns: 1fr; }
   .map-stage { height: 430px; }
@@ -822,7 +821,7 @@ textarea {
   .topbar-label-full { display: none; }
   .topbar-label-mobile { display: inline; }
   .topbar-actions { gap: 6px; }
-  .napas-od-app .topbar-link { font-size: 10px; }
+  .topbar-link { font-size: 10px; }
   .napas-od-app .napas-station-trigger { font-size: 10px; }
   .napas-topic-picker { max-width: 124px; }
   .napas-od-app .napas-topic-trigger { font-size: 10px; }
@@ -860,7 +859,7 @@ textarea {
   .topbar-left { gap: 0; }
   .topbar-left .topbar-side { flex: 0 0 auto; max-width: none; font-size: 8px; letter-spacing: .01em; }
   .topbar-actions { gap: 4px; }
-  .napas-od-app .topbar-link { font-size: 10px; }
+  .topbar-link { font-size: 10px; }
 }
 
 @media (max-width: 430px) {
@@ -960,7 +959,7 @@ textarea {
 /* Productive motion system and clean clipping for elevated desktop surfaces. */
 .napas-od-app .napas-topbar-button,
 .napas-od-app .napas-icon-button,
-.napas-od-app .topbar-link,
+.topbar-link,
 .napas-od-app .filter-label select,
 .napas-od-app .station-list-button,
 .napas-od-app .map-control,
@@ -1526,7 +1525,7 @@ textarea {
     gap: 14px;
   }
 
-  .napas-od-app .topbar-link {
+  .topbar-link {
     font-size: 13px;
   }
 
@@ -1614,7 +1613,7 @@ textarea {
     gap: 8px;
   }
 
-  .napas-od-app .topbar-link {
+  .topbar-link {
     font-size: 11px;
   }
 
@@ -1641,7 +1640,7 @@ textarea {
     gap: 6px;
   }
 
-  .napas-od-app .topbar-link {
+  .topbar-link {
     font-size: 11px;
   }
 
@@ -1848,6 +1847,16 @@ textarea {
   outline-offset: 2px;
 }
 
+/* Keep the current informational page visible after navigation on every layout. */
+.topbar-link[aria-current="page"] {
+  border-bottom: 2px solid var(--od-action);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--od-action);
+  font-weight: 800;
+}
+
 @media (min-width: 981px) {
   .napas-chat-shell .chat-head,
   .map-head {
@@ -2024,15 +2033,15 @@ textarea {
 @media (max-width: 670px) {
   .topbar {
     grid-template-columns: minmax(0, 1fr) auto max-content;
-    grid-template-areas: "nav brand language";
-    gap: 6px;
+    grid-template-areas: "brand nav language";
+    gap: 10px;
     height: 60px;
     padding: 0 10px;
   }
 
   .topbar-left {
     grid-area: nav;
-    justify-content: flex-start;
+    justify-content: flex-end;
     min-width: 0;
     overflow: hidden;
     scrollbar-width: none;
@@ -2044,18 +2053,22 @@ textarea {
 
   .topbar-actions {
     width: auto;
-    justify-content: flex-start;
-    gap: 6px;
+    justify-content: flex-end;
+    gap: 10px;
   }
 
   .brand {
     grid-area: brand;
-    justify-self: center;
+    justify-self: start;
   }
 
   .topbar-right {
     grid-area: language;
     margin-left: 0;
+  }
+
+  .topbar-link {
+    font-size: 12px;
   }
 
   .workspace,
