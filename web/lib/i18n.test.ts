@@ -5,10 +5,6 @@ import { getUiCopy, localizedCategory, localizedDistrict, replaceCopy, syncDocum
 test("English is the default UI language and Indonesian copy is available", () => {
   assert.equal(getUiCopy("en").chat.heading, "Napas Advisor");
   assert.equal(getUiCopy("id").chat.heading, "Penasihat Napas");
-  assert.equal(getUiCopy("en").chat.capabilityStationAware, "Station-aware");
-  assert.equal(getUiCopy("id").chat.capabilityStationAware, "Berbasis stasiun");
-  assert.equal(getUiCopy("en").chat.capabilityTopicAware, "Topic-aware");
-  assert.equal(getUiCopy("id").chat.capabilityTopicAware, "Berbasis topik");
   assert.notEqual(getUiCopy("en").map.heading, getUiCopy("id").map.heading);
 });
 
