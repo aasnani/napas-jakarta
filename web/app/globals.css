@@ -2122,6 +2122,11 @@ textarea {
   .napas-station-menu {
     right: 0;
     left: auto;
+    width: min(398px, calc(100cqw - 26px), calc(100vw - 32px));
+  }
+
+  .napas-topic-menu {
+    width: min(398px, calc(100cqw - 26px), calc(100vw - 32px));
   }
 }
 
