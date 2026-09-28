@@ -2176,6 +2176,14 @@ textarea {
   animation: none;
 }
 
+.napas-od-app .napas-station-trigger,
+.napas-od-app .napas-topic-trigger,
+.napas-od-app .filter-select-trigger,
+.napas-od-app .filter-select-option {
+  font-family: inherit;
+  font-size: 13px;
+}
+
 .napas-od-app .napas-station-trigger:focus-visible,
 .napas-od-app .napas-topic-trigger:focus-visible,
 .napas-od-app .filter-select-trigger:focus-visible {
