@@ -265,6 +265,29 @@ export function AgentChat({
     };
   }, [closeStationPicker, closeTopicPicker, stationMenuOpen, topicMenuOpen]);
 
+  useEffect(() => {
+    const viewport = window.visualViewport;
+    if (!viewport) return;
+
+    const updateKeyboardOffset = () => {
+      // On iOS the layout viewport stays at its full height while the visual
+      // viewport is reduced by the software keyboard. Android browsers often
+      // resize both viewports, so this naturally resolves to zero there.
+      const keyboardOffset = Math.max(0, window.innerHeight - viewport.height - viewport.offsetTop);
+      document.documentElement.style.setProperty("--napas-keyboard-offset", `${keyboardOffset}px`);
+    };
+
+    updateKeyboardOffset();
+    viewport.addEventListener("resize", updateKeyboardOffset);
+    viewport.addEventListener("scroll", updateKeyboardOffset);
+
+    return () => {
+      viewport.removeEventListener("resize", updateKeyboardOffset);
+      viewport.removeEventListener("scroll", updateKeyboardOffset);
+      document.documentElement.style.removeProperty("--napas-keyboard-offset");
+    };
+  }, []);
+
   const handleMapToggle = () => {
     closeStationPicker();
     closeTopicPicker();
