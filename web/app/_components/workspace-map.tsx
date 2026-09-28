@@ -2,6 +2,7 @@
 
 import {
   Layers2Icon,
+  ChevronDownIcon,
   MapPinIcon,
   MinusIcon,
   PlusIcon,
@@ -38,6 +39,85 @@ const JAKARTA_BOUNDS: [[number, number], [number, number]] = [
 ];
 
 type FilterCategory = "all" | "good" | "moderate" | "unhealthy" | "stale";
+
+type MapFilterOption = {
+  readonly label: string;
+  readonly value: string;
+};
+
+function MapFilterDropdown({
+  id,
+  label,
+  onChange,
+  options,
+  value,
+}: {
+  readonly id: string;
+  readonly label: string;
+  readonly onChange: (value: string) => void;
+  readonly options: readonly MapFilterOption[];
+  readonly value: string;
+}) {
+  const pickerRef = useRef<HTMLDivElement>(null);
+  const [open, setOpen] = useState(false);
+  const selectedOption = options.find((option) => option.value === value) ?? options[0];
+
+  useEffect(() => {
+    if (!open) return;
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!pickerRef.current?.contains(event.target as Node)) setOpen(false);
+    };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+        pickerRef.current?.querySelector<HTMLButtonElement>(".filter-select-trigger")?.focus();
+      }
+    };
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [open]);
+
+  return (
+    <div className="filter-label map-filter-dropdown" ref={pickerRef}>
+      <span>{label}</span>
+      <button
+        aria-controls={`${id}-menu`}
+        aria-expanded={open}
+        aria-haspopup="listbox"
+        className="filter-select-trigger"
+        id={id}
+        onClick={() => setOpen((current) => !current)}
+        type="button"
+      >
+        <span>{selectedOption?.label}</span>
+        <ChevronDownIcon aria-hidden="true" />
+      </button>
+      {open ? (
+        <div aria-labelledby={id} className="filter-select-menu" id={`${id}-menu`} role="listbox">
+          {options.map((option) => (
+            <button
+              aria-selected={option.value === value}
+              className={cn("filter-select-option", option.value === value && "is-selected")}
+              key={option.value}
+              onClick={() => {
+                onChange(option.value);
+                setOpen(false);
+              }}
+              role="option"
+              type="button"
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
+}
 
 const LAYER_DEFAULTS = MAP_LAYER_DEFAULTS;
 
@@ -487,33 +567,39 @@ export function WorkspaceMap({
         </div>
 
         <div className="filters" data-od-id="map-filters">
-          <label className="filter-label" htmlFor="air-quality-level-filter">
-            {copy.map.airQualityLevel}
-            <select id="air-quality-level-filter" value={categoryFilter} onChange={(event) => {
-              const value = event.currentTarget.value as FilterCategory;
-              setCategoryFilter(value);
-              trackNapasEvent("map_filter_changed", { filter: "air_quality", value });
-            }}>
-              <option value="all">{copy.map.allLevels}</option>
-              <option value="good">{copy.map.good}</option>
-              <option value="moderate">{copy.map.moderate}</option>
-              <option value="unhealthy">{copy.map.unhealthy}</option>
-              <option value="stale">{copy.map.stale}</option>
-            </select>
-          </label>
-          <label className="filter-label" htmlFor="district-filter">
-            {copy.map.district}
-            <select id="district-filter" value={districtFilter} onChange={(event) => {
-              setDistrictFilter(event.currentTarget.value);
+          <MapFilterDropdown
+            id="air-quality-level-filter"
+            label={copy.map.airQualityLevel}
+            onChange={(value) => {
+              const nextValue = value as FilterCategory;
+              setCategoryFilter(nextValue);
+              trackNapasEvent("map_filter_changed", { filter: "air_quality", value: nextValue });
+            }}
+            options={[
+              { label: copy.map.allLevels, value: "all" },
+              { label: copy.map.good, value: "good" },
+              { label: copy.map.moderate, value: "moderate" },
+              { label: copy.map.unhealthy, value: "unhealthy" },
+              { label: copy.map.stale, value: "stale" },
+            ]}
+            value={categoryFilter}
+          />
+          <MapFilterDropdown
+            id="district-filter"
+            label={copy.map.district}
+            onChange={(value) => {
+              setDistrictFilter(value);
               trackNapasEvent("map_filter_changed", {
                 filter: "district",
-                value: event.currentTarget.value === "all" ? "all" : "specific",
+                value: value === "all" ? "all" : "specific",
               });
-            }}>
-              <option value="all">{copy.map.allDistricts}</option>
-              {districts.map((district) => <option key={district} value={district}>{localizedDistrict(district, language)}</option>)}
-            </select>
-          </label>
+            }}
+            options={[
+              { label: copy.map.allDistricts, value: "all" },
+              ...districts.map((district) => ({ label: localizedDistrict(district, language), value: district })),
+            ]}
+            value={districtFilter}
+          />
           <button className="station-list-button" onClick={() => {
             trackNapasEvent("station_list_opened");
             setStationListOpen(true);
