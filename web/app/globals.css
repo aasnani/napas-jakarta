@@ -2179,8 +2179,28 @@ textarea {
 .napas-od-app .napas-station-trigger:focus-visible,
 .napas-od-app .napas-topic-trigger:focus-visible,
 .napas-od-app .filter-select-trigger:focus-visible {
-  border-color: var(--od-border);
   outline: none;
+}
+
+.napas-od-app .napas-station-trigger:focus-visible {
+  border-color: oklch(0.75 0.045 170);
+  background: var(--od-hover-soft);
+  color: var(--od-fg);
+  box-shadow: var(--od-elevation-control);
+}
+
+.napas-od-app .napas-topic-trigger:focus-visible {
+  border-color: oklch(0.75 0.045 170);
+  background: var(--od-hover-soft);
+  color: var(--od-fg);
+  box-shadow: 0 4px 12px oklch(0.3 0.04 180 / .045);
+  transform: translateY(-1px);
+}
+
+.napas-od-app .filter-select-trigger:focus-visible {
+  border-color: var(--od-action);
+  background: var(--od-bg);
+  color: var(--od-fg);
   box-shadow: none;
 }
 
