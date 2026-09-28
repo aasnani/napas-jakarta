@@ -112,8 +112,8 @@ export const UI_COPY = {
       thoughtForFew: "Thought for a few seconds",
     },
     map: {
-      ariaLabel: "Jakarta monitoring map",
-      heading: "Jakarta monitoring map",
+      ariaLabel: "Jakarta Monitoring Map",
+      heading: "Jakarta Monitoring Map",
       loadingReadings: "Loading station readings…",
       latestReadings: "Latest readings",
       latestAvailableStale: "Latest available readings · stale",
