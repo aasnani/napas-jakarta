@@ -328,11 +328,11 @@ textarea {
 .filter-label { display: grid; gap: 3px; color: var(--od-muted); font-size: 10px; font-weight: 700; letter-spacing: .04em; }
 .filter-label select { min-width: 125px; height: 37px; padding: 0 28px 0 10px; border: 1px solid var(--od-border); border-radius: 7px; background: var(--od-surface); color: var(--od-fg); font-size: 12px; font-weight: 600; }
 .map-filter-dropdown { position: relative; min-width: 125px; }
-.filter-select-trigger { display: inline-flex; width: 100%; min-width: 0; height: 37px; align-items: center; justify-content: space-between; gap: 8px; padding: 0 10px; border: 1px solid var(--od-border); border-radius: var(--od-control-radius); background: var(--od-surface); color: var(--od-fg); font-size: 12px; font-weight: 600; text-align: left; }
+.filter-select-trigger { display: inline-flex; width: 100%; min-width: 0; height: 37px; align-items: center; justify-content: space-between; gap: 7px; padding: 0 10px; border: 1px solid var(--od-border); border-radius: var(--od-control-radius); background: var(--od-surface); color: var(--od-fg); font-size: 13px; font-weight: 600; text-align: left; }
 .filter-select-trigger span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.filter-select-trigger svg { width: 14px; height: 14px; flex: none; }
+.filter-select-trigger svg { width: 14px; height: 14px; flex: none; color: var(--od-accent-dark); }
 .filter-select-menu { position: absolute; top: calc(100% + 6px); right: 0; z-index: 50; display: grid; width: max(100%, 170px); max-height: min(320px, calc(100dvh - 120px)); overflow-y: auto; padding: 5px; border: 1px solid var(--od-border); border-radius: var(--od-control-radius); background: var(--od-surface); box-shadow: var(--od-shadow); }
-.filter-select-option { width: 100%; min-height: 32px; padding: 7px 9px; border: 1px solid transparent; border-radius: 6px; background: transparent; color: var(--od-fg); font-size: 12px; font-weight: 600; text-align: left; }
+.filter-select-option { width: 100%; min-height: 32px; padding: 7px 9px; border: 1px solid transparent; border-radius: 6px; background: transparent; color: var(--od-fg); font-size: 13px; font-weight: 600; text-align: left; }
 .filter-select-option:hover, .filter-select-option.is-selected { border-color: var(--od-border); background: var(--od-bg); }
 .filter-select-trigger:hover { border-color: var(--od-action); background: var(--od-bg); }
 .filter-select-trigger:focus-visible { border-color: var(--od-action); outline: 2px solid var(--od-accent-dark); outline-offset: 2px; }

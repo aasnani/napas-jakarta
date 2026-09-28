@@ -9,6 +9,7 @@ import {
   ChevronDownIcon,
   MapIcon,
   MapPinIcon,
+  RadioTowerIcon,
   SendHorizontalIcon,
   SquareIcon,
   XIcon,
@@ -670,7 +671,7 @@ function StationPicker({
         onClick={onToggle}
         type="button"
       >
-        <MapPinIcon aria-hidden="true" className="size-3.5" />
+        <RadioTowerIcon aria-hidden="true" className="size-3.5" />
         <span>{selected?.name ?? selectedStation ?? copy.chat.station}</span>
         <ChevronDownIcon aria-hidden="true" className="size-3.5" />
       </button>

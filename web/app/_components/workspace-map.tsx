@@ -8,6 +8,7 @@ import {
   PlusIcon,
   RadioTowerIcon,
   XIcon,
+  WindIcon,
 } from "lucide-react";
 import {
   Map as MapLibreMap,
@@ -16,7 +17,7 @@ import {
   type GeoJSONSource,
   type MapLayerMouseEvent,
 } from "maplibre-gl";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { getUiCopy, localizedCategory, localizedDistrict, type Language } from "@/lib/i18n";
 import { trackNapasEvent } from "@/lib/analytics";
@@ -47,12 +48,14 @@ type MapFilterOption = {
 
 function MapFilterDropdown({
   id,
+  icon,
   label,
   onChange,
   options,
   value,
 }: {
   readonly id: string;
+  readonly icon: ReactNode;
   readonly label: string;
   readonly onChange: (value: string) => void;
   readonly options: readonly MapFilterOption[];
@@ -93,6 +96,7 @@ function MapFilterDropdown({
         onClick={() => setOpen((current) => !current)}
         type="button"
       >
+        {icon}
         <span>{selectedOption?.label}</span>
         <ChevronDownIcon aria-hidden="true" />
       </button>
@@ -569,6 +573,7 @@ export function WorkspaceMap({
         <div className="filters" data-od-id="map-filters">
           <MapFilterDropdown
             id="air-quality-level-filter"
+            icon={<WindIcon aria-hidden="true" />}
             label={copy.map.airQualityLevel}
             onChange={(value) => {
               const nextValue = value as FilterCategory;
@@ -586,6 +591,7 @@ export function WorkspaceMap({
           />
           <MapFilterDropdown
             id="district-filter"
+            icon={<MapPinIcon aria-hidden="true" />}
             label={copy.map.district}
             onChange={(value) => {
               setDistrictFilter(value);
