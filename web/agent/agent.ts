@@ -4,4 +4,5 @@ import { createNapasModel } from "./model";
 export default defineAgent({
   defaultTools: false,
   model: createNapasModel(),
+  reasoning: "none",
 });

@@ -1,6 +1,6 @@
-// Keep the buffered answer reveal smooth while making it faster than the
-// original 72-character-per-second presentation rate.
-export const PACED_TEXT_RATE = 130;
+// Hold a short provider buffer before revealing the answer at a steady rate.
+export const PACED_TEXT_RATE = 200;
+export const PACED_TEXT_START_BUFFER = 36;
 
 const MAX_ELAPSED_MS = 100;
 const MAX_CHARACTER_BUDGET = 12;

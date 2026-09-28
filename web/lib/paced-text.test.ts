@@ -29,8 +29,8 @@ test("revealPacedText carries fractional budget between frames", () => {
   });
 
   strictEqual(first.text, "a");
-  strictEqual(second.text, "ab");
-  strictEqual(Number(second.characterBudget.toFixed(3)), 0.08);
+  strictEqual(second.text, "abc");
+  strictEqual(Number(second.characterBudget.toFixed(3)), 0.2);
 });
 
 test("revealPacedText completes immediately when the stream target changes", () => {

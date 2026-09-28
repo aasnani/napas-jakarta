@@ -73,7 +73,11 @@ export function AgentMessage({
   const hasAssistantText =
     message.role === "assistant" &&
     message.parts.some((part) => part.type === "text" && part.text.length > 0);
-  const shouldPaceText = isLatest && message.role === "assistant" && !isStreaming;
+  const pacedTurnRef = useRef(isStreaming && message.role === "assistant");
+  if (isStreaming && message.role === "assistant") {
+    pacedTurnRef.current = true;
+  }
+  const shouldPaceText = isLatest && message.role === "assistant" && pacedTurnRef.current;
   const [isPacingText, setIsPacingText] = useState(() => shouldPaceText && hasAssistantText);
   const sourceCitations = Array.from(
     new Map(
@@ -371,7 +375,9 @@ function usePacedText(targetText: string, shouldPace: boolean): {
 } {
   const [reducedMotion, setReducedMotion] = useState(false);
   const pacePresentation = shouldPace && !reducedMotion;
-  const [visibleText, setVisibleText] = useState(() => (pacePresentation ? "" : targetText));
+  const [visibleText, setVisibleText] = useState(() =>
+    pacePresentation ? targetText.slice(0, Math.min(targetText.length, 12)) : targetText,
+  );
   const targetRef = useRef(targetText);
   const visibleRef = useRef(visibleText);
   const characterBudgetRef = useRef(0);
