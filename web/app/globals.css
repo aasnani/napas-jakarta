@@ -2016,17 +2016,18 @@ textarea {
 
 @media (max-width: 670px) {
   .topbar {
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas: "brand language" "nav nav";
-    gap: 2px 12px;
-    height: 94px;
-    padding: 7px 14px;
+    grid-template-columns: minmax(0, 1fr) auto max-content;
+    grid-template-areas: "nav brand language";
+    gap: 6px;
+    height: 60px;
+    padding: 0 10px;
   }
 
   .topbar-left {
     grid-area: nav;
     justify-content: flex-start;
-    overflow-x: auto;
+    min-width: 0;
+    overflow: hidden;
     scrollbar-width: none;
   }
 
@@ -2035,13 +2036,14 @@ textarea {
   }
 
   .topbar-actions {
-    width: 100%;
+    width: auto;
     justify-content: flex-start;
+    gap: 6px;
   }
 
   .brand {
     grid-area: brand;
-    justify-self: start;
+    justify-self: center;
   }
 
   .topbar-right {
@@ -2051,7 +2053,7 @@ textarea {
 
   .workspace,
   .chat-panel {
-    height: calc(100dvh - 94px);
+    height: calc(100dvh - 60px);
   }
 
   .map-head {
