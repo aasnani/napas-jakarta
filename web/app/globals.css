@@ -2129,7 +2129,7 @@ textarea {
   }
 
   .napas-station-menu {
-    right: 0;
+    right: calc(-100% - 12px);
     left: auto;
     width: min(398px, calc(100cqw - 26px), calc(100vw - 32px));
   }
