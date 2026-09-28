@@ -1,6 +1,6 @@
 # Napas Jakarta application state
 
-**Last verified:** 28 September 2026 (Asia/Jakarta)
+**Last verified:** 29 September 2026 (Asia/Jakarta)
 
 This is the concise operational checkpoint for Napas Jakarta. It records the
 broad product, data, deployment, security, and observability state so future
@@ -107,6 +107,11 @@ status, and public health endpoint after each release.
   debug, info, warning, and error severity. Important events include request
   completion, rejected chat input, chat/provider failures, missing provider
   configuration, and telemetry-forwarding failures.
+- Eve chat instrumentation records request arrival, model-call start and
+  completion, Gemini request start, first provider byte, first streamed token,
+  and each tool-call start/completion/failure. These events retain bounded
+  identifiers and timings only; prompts, generated text, tool arguments, and
+  tool results are excluded.
 - Request IDs support correlation between a user-visible failure and its server
   logs.
 - Diagnostic stack traces stay in Railway logs. Authorization headers, cookies,
