@@ -133,7 +133,7 @@ export const UI_COPY = {
       stale: "Stale / missing",
       district: "DISTRICT",
       allDistricts: "All districts",
-      stationList: "Station list",
+      stationList: "Stations",
       interactiveMap: "Interactive map of Jakarta with air-quality stations",
       baseNote: "OpenStreetMap-derived vector base · provider attribution below",
       mapControls: "Map controls",
