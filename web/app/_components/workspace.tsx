@@ -16,7 +16,14 @@ import {
 import { type DemoStation } from "@/lib/napas";
 import { toggleMobileMapOverlay } from "@/lib/mobile-layout";
 import { reconcileStationId, resolveStation } from "@/lib/station-selection";
-import { EN_ABOUT_PATH, EN_PRIVACY_PATH, ID_ABOUT_PATH, ID_PRIVACY_PATH } from "@/lib/site";
+import {
+  EN_ABOUT_PATH,
+  EN_GUIDE_PATH,
+  EN_PRIVACY_PATH,
+  ID_ABOUT_PATH,
+  ID_GUIDE_PATH,
+  ID_PRIVACY_PATH,
+} from "@/lib/site";
 
 type AssistantPrefill = { id: number; text: string };
 
@@ -86,6 +93,7 @@ export function Workspace() {
           </div>
           <nav aria-label={copy.navbar.productInformation} className="topbar-actions">
             <Link className="topbar-link" href={language === "id" ? ID_ABOUT_PATH : EN_ABOUT_PATH} lang={language}>{copy.navbar.about}</Link>
+            <Link aria-label={copy.navbar.airQualityGuide} className="topbar-link" href={language === "id" ? ID_GUIDE_PATH : EN_GUIDE_PATH} lang={language}>{copy.navbar.guide}</Link>
             <Link className="topbar-link" href={language === "id" ? ID_PRIVACY_PATH : EN_PRIVACY_PATH} lang={language}>{copy.navbar.privacy}</Link>
           </nav>
         </div>

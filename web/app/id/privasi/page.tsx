@@ -11,7 +11,6 @@ const description = "Cara Napas Jakarta menangani chat, telemetri produk, dan Go
 export const metadata: Metadata = {
   title,
   description,
-  robots: { index: false, follow: true },
   alternates: {
     canonical: absoluteUrl(PRIVACY_PATHS.id),
     languages: {

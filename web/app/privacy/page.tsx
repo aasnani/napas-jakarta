@@ -11,7 +11,6 @@ const description = "How Napas Jakarta handles chat, product telemetry, and opt-
 export const metadata: Metadata = {
   title,
   description,
-  robots: { index: false, follow: true },
   alternates: {
     canonical: absoluteUrl(PRIVACY_PATHS.en),
     languages: {
