@@ -2209,3 +2209,24 @@ textarea {
     margin-left: auto;
   }
 }
+
+@media (max-width: 980px) {
+  .chat-selection-controls {
+    width: 100%;
+  }
+
+  .napas-station-picker,
+  .napas-topic-picker {
+    flex: 1 1 0;
+    width: 0;
+    max-width: none;
+    min-width: 0;
+    margin-left: 0;
+  }
+
+  .napas-station-trigger,
+  .napas-od-app .napas-topic-trigger {
+    width: 100%;
+    max-width: none;
+  }
+}
