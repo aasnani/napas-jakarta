@@ -389,20 +389,6 @@ export function AgentChat({
             <p className="assistant-guidance-title">{copy.chat.guidanceTitle}</p>
             <p className="assistant-guidance-description">{copy.chat.guidanceDescription}</p>
           </div>
-          <div aria-label={copy.chat.capabilities} className="assistant-capabilities">
-            <span className="assistant-capability">
-              <MapPinIcon aria-hidden="true" className="size-3.5" />
-              {copy.chat.capabilityStationAware}
-            </span>
-            <span className="assistant-capability">
-              <BookOpenIcon aria-hidden="true" className="size-3.5" />
-              {copy.chat.capabilityPlainLanguage}
-            </span>
-            <span className="assistant-capability">
-              <BrainIcon aria-hidden="true" className="size-3.5" />
-              {copy.chat.capabilityTopicAware}
-            </span>
-          </div>
         </div>
         <div className="chat-context-controls">
           <div className="chat-selection-controls">

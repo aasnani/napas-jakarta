@@ -744,7 +744,7 @@ textarea {
 .napas-od-app .napas-topic-trigger { display: inline-flex; align-items: center; gap: 5px; min-height: 29px; padding: 5px 8px; border: 1px solid var(--od-border); border-radius: 7px; background: var(--od-bg); color: var(--od-muted); font-size: 11px; font-weight: 700; box-shadow: var(--od-elevation-control); transition: background .18s, border-color .18s, box-shadow .18s, color .18s, transform .18s; }
 .napas-topic-trigger:hover { border-color: oklch(0.75 0.045 170); background: var(--od-hover-soft); color: var(--od-fg); transform: translateY(-1px); }
 .napas-topic-trigger:focus-visible, .napas-topic-option:focus-visible, .napas-topic-clear:focus-visible, .napas-context-main:focus-visible, .napas-context-clear:focus-visible { outline: 2px solid var(--od-accent-dark); outline-offset: 2px; }
-.napas-station-menu { position: absolute; top: calc(100% + 10px); left: 0; z-index: 40; display: grid; grid-template-rows: auto minmax(0, 1fr); width: min(360px, calc(100vw - 26px)); max-height: min(440px, calc(100dvh - 145px)); overflow: hidden; border: 1px solid var(--od-border); border-radius: 12px; background: var(--od-surface); box-shadow: 0 22px 65px oklch(0.2 0.03 240 / .2); }
+.napas-station-menu { position: absolute; top: calc(100% + 10px); left: 0; z-index: 40; display: grid; grid-template-rows: auto minmax(0, 1fr); width: min(398px, calc(100vw - 32px)); max-height: min(580px, calc(100dvh - 96px)); overflow: hidden; border: 1px solid var(--od-border); border-radius: 12px; background: var(--od-surface); box-shadow: 0 22px 65px oklch(0.2 0.03 240 / .2); }
 .napas-station-menu-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 14px 15px 10px; border-bottom: 1px solid var(--od-border); }
 .napas-station-menu-head div { display: grid; gap: 3px; min-width: 0; }
 .napas-station-menu-head strong { color: var(--od-fg); font-size: 13px; }
@@ -810,7 +810,7 @@ textarea {
   .napas-od-app .napas-station-trigger { font-size: 10px; }
   .napas-topic-picker { max-width: 124px; }
   .napas-od-app .napas-topic-trigger { font-size: 10px; }
-  .napas-station-menu { width: min(360px, calc(100vw - 26px)); }
+  .napas-station-menu { width: min(398px, calc(100vw - 26px)); }
   .napas-topic-menu { width: min(398px, calc(100vw - 26px)); max-height: calc(100dvh - 145px); }
   .napas-context-stack { width: 100%; max-width: 100%; }
   .napas-selected-topic, .napas-selected-location { max-width: 100%; }
@@ -2067,20 +2067,30 @@ textarea {
     position: relative;
   }
 
-  .assistant-capabilities {
-    padding-right: 104px;
+  .assistant-guidance-description {
+    font-size: 14px;
+    line-height: 1.35;
   }
 
   .chat-context-controls {
     position: absolute;
+    left: auto;
     right: clamp(14px, 1.35vw, 20px);
-    bottom: 10px;
-    width: auto;
+    bottom: 8px;
+    width: max-content;
     margin: 0;
+    padding: 0;
+    justify-content: flex-end;
   }
 
   .chat-selection-controls {
     width: auto;
+    gap: 12px;
+  }
+
+  .napas-station-menu {
+    right: 0;
+    left: auto;
   }
 }
 
@@ -2109,6 +2119,16 @@ textarea {
 
 .napas-feedback {
   font-size: 12px;
+}
+
+/* Keep streamed and optimistic messages visually stable while their content updates. */
+.napas-chat-content > .group {
+  animation: none;
+  opacity: 1;
+}
+
+.napas-thinking-message {
+  animation: none;
 }
 
 @media (max-width: 670px) {
