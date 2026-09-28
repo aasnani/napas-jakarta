@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { getUiCopy, type Language } from "@/lib/i18n";
 import {
   EN_ABOUT_PATH,
@@ -21,6 +22,12 @@ export function SiteHeader({
   readonly onLanguageChange?: (language: Language) => void;
 }) {
   const copy = getUiCopy(language);
+  const pathname = usePathname();
+  const normalizedPathname = pathname.replace(/\/+$/u, "") || "/";
+  const aboutPath = language === "id" ? ID_ABOUT_PATH : EN_ABOUT_PATH;
+  const guidePath = language === "id" ? ID_GUIDE_PATH : EN_GUIDE_PATH;
+  const privacyPath = language === "id" ? ID_PRIVACY_PATH : EN_PRIVACY_PATH;
+  const isActive = (path: string) => normalizedPathname === path || normalizedPathname.startsWith(`${path}/`);
 
   return (
     <header className="topbar" data-od-id="top-navbar">
@@ -30,9 +37,9 @@ export function SiteHeader({
           <span className="topbar-label-mobile">{copy.navbar.mobileMonitor}</span>
         </div>
         <nav aria-label={copy.navbar.productInformation} className="topbar-actions">
-          <Link className="topbar-link" href={language === "id" ? ID_ABOUT_PATH : EN_ABOUT_PATH} lang={language}>{copy.navbar.about}</Link>
-          <Link aria-label={copy.navbar.airQualityGuide} className="topbar-link" href={language === "id" ? ID_GUIDE_PATH : EN_GUIDE_PATH} lang={language}>{copy.navbar.guide}</Link>
-          <Link className="topbar-link" href={language === "id" ? ID_PRIVACY_PATH : EN_PRIVACY_PATH} lang={language}>{copy.navbar.privacy}</Link>
+          <Link aria-current={isActive(aboutPath) ? "page" : undefined} className="topbar-link" href={aboutPath} lang={language}>{copy.navbar.about}</Link>
+          <Link aria-current={isActive(guidePath) ? "page" : undefined} aria-label={copy.navbar.airQualityGuide} className="topbar-link" href={guidePath} lang={language}>{copy.navbar.guide}</Link>
+          <Link aria-current={isActive(privacyPath) ? "page" : undefined} className="topbar-link" href={privacyPath} lang={language}>{copy.navbar.privacy}</Link>
         </nav>
       </div>
       <Link aria-label={copy.navbar.brandHome} className="brand" href="/" data-od-id="napas-logo">
