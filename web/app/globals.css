@@ -2290,4 +2290,19 @@ textarea {
     width: 100%;
     max-width: none;
   }
+
+  .napas-od-app .napas-station-trigger span,
+  .napas-od-app .napas-topic-trigger span {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .napas-od-app .napas-station-trigger svg:last-child,
+  .napas-od-app .napas-topic-trigger svg:last-child {
+    margin-left: 0;
+  }
 }
