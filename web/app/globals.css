@@ -1407,6 +1407,13 @@ textarea {
   box-shadow: none;
 }
 
+.napas-od-app .filter-label select:focus-visible {
+  border-color: var(--od-action);
+  outline: 2px solid var(--od-accent-dark);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
 .napas-od-app .napas-topic-trigger,
 .napas-od-app .napas-station-trigger,
 .napas-od-app .mobile-legend-toggle {
