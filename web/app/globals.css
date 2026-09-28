@@ -2184,6 +2184,31 @@ textarea {
   font-size: 13px;
 }
 
+.napas-od-app .napas-station-trigger,
+.napas-od-app .napas-topic-trigger {
+  justify-content: space-between;
+}
+
+.napas-od-app .napas-station-trigger span,
+.napas-od-app .napas-topic-trigger span {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.napas-od-app .napas-station-trigger svg,
+.napas-od-app .napas-topic-trigger svg {
+  flex: none;
+}
+
+.napas-od-app .napas-station-trigger svg:last-child,
+.napas-od-app .napas-topic-trigger svg:last-child {
+  margin-left: 0;
+}
+
 .napas-od-app .napas-station-trigger:focus-visible,
 .napas-od-app .napas-topic-trigger:focus-visible,
 .napas-od-app .filter-select-trigger:focus-visible {
