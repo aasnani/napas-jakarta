@@ -774,18 +774,14 @@ function KpiCard({ detail, label, networkLabel, share, tone = "good", value }: {
 
   return (
     <div className={cn("map-kpi", tone)}>
-      <span className={cn("kpi-dot", tone)} />
-      <div className="kpi-copy">
-        <div className="kpi-primary-row">
-          <div className="kpi-value-group">
-            <strong>{value}</strong>
-            <span className="kpi-label">{label}</span>
-          </div>
-          <span className="kpi-share"><strong>{share === undefined ? "—" : `${share}%`}</strong><small>{networkLabel}</small></span>
-        </div>
-        <span className="kpi-detail">{detail}</span>
-        <span aria-hidden="true" className="kpi-track"><span style={{ width: `${progress}%` }} /></span>
+      <div className="kpi-heading">
+        <span className={cn("kpi-dot", tone)} />
+        <span className="kpi-label">{label}</span>
       </div>
+      <strong>{value}</strong>
+      <span className="kpi-share"><strong>{share === undefined ? "—" : `${share}%`}</strong><small>{networkLabel}</small></span>
+      <span className="kpi-detail">{detail}</span>
+      <span aria-hidden="true" className="kpi-track"><span style={{ width: `${progress}%` }} /></span>
     </div>
   );
 }

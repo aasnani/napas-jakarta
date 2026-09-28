@@ -307,22 +307,20 @@ textarea {
 .map-head h2 { margin: 0; color: var(--od-fg); font-family: "Cantarell", "Avenir Next", "Trebuchet MS", sans-serif; font-size: 21px; font-weight: 700; letter-spacing: -.02em; line-height: 1.15; }
 .map-subtitle { margin: 5px 0 0; color: var(--od-muted); font-size: 11px; }
 .map-kpis { display: flex; grid-area: kpis; align-items: stretch; gap: 8px; }
-.map-kpi { display: grid; grid-template-columns: 7px minmax(0, 1fr); align-items: start; gap: 8px; min-width: 0; flex: 1 1 122px; overflow: hidden; padding: 8px 10px; border: 1px solid var(--od-border); border-top: 2px solid var(--kpi-accent); border-radius: 9px; background: var(--od-bg); }
+.map-kpi { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: auto auto auto auto; grid-template-areas: "heading share" "value share" "detail detail" "track track"; align-items: center; gap: 3px 10px; min-width: 0; flex: 1 1 122px; overflow: hidden; padding: 10px 12px; border: 1px solid var(--od-border); border-top: 3px solid var(--kpi-accent); border-radius: 10px; background: var(--od-surface); box-shadow: 0 2px 7px oklch(0.24 0.04 246 / .05); }
 .map-kpi.reporting { --kpi-accent: var(--od-action); }
 .map-kpi.good { --kpi-accent: var(--od-good); }
 .map-kpi.moderate { --kpi-accent: var(--od-moderate); }
 .map-kpi.unhealthy { --kpi-accent: var(--od-unhealthy); }
-.map-kpi .kpi-dot { width: 7px; height: 7px; margin-top: 4px; border-radius: 50%; background: var(--kpi-accent); }
-.kpi-copy { display: grid; gap: 4px; min-width: 0; }
-.kpi-primary-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; min-width: 0; }
-.kpi-value-group { display: grid; gap: 3px; min-width: 0; }
-.map-kpi strong { display: block; color: var(--od-fg); font-family: "Cantarell", sans-serif; font-size: 23px; letter-spacing: -.035em; line-height: .95; }
-.map-kpi .kpi-label { color: var(--od-fg); font-size: 10px; font-weight: 800; letter-spacing: .045em; line-height: 1.05; text-transform: uppercase; }
-.kpi-share { display: grid; flex: none; justify-items: end; gap: 1px; padding-top: 1px; text-align: right; }
+.kpi-heading { display: flex; grid-area: heading; min-width: 0; align-items: center; gap: 6px; }
+.map-kpi .kpi-dot { width: 7px; height: 7px; flex: none; border-radius: 50%; background: var(--kpi-accent); }
+.map-kpi strong { grid-area: value; display: block; color: var(--od-fg); font-family: "Cantarell", sans-serif; font-size: 24px; letter-spacing: -.035em; line-height: .95; }
+.map-kpi .kpi-label { min-width: 0; overflow: hidden; color: var(--od-fg); font-size: 10px; font-weight: 800; letter-spacing: .045em; line-height: 1.05; text-overflow: ellipsis; text-transform: uppercase; white-space: nowrap; }
+.kpi-share { display: grid; grid-area: share; align-self: center; justify-items: end; gap: 1px; padding-top: 0; text-align: right; }
 .kpi-share strong { color: var(--kpi-accent); font-size: 15px; line-height: 1; }
 .kpi-share small { color: var(--od-muted); font-size: 8px; line-height: 1; text-transform: uppercase; }
-.kpi-detail { min-width: 0; overflow: hidden; color: var(--od-muted); font-size: 9px; line-height: 1.1; text-overflow: ellipsis; white-space: nowrap; }
-.kpi-track { display: block; height: 4px; overflow: hidden; border-radius: 999px; background: color-mix(in oklch, var(--kpi-accent) 15%, var(--od-surface)); }
+.kpi-detail { grid-area: detail; min-width: 0; overflow: hidden; color: var(--od-muted); font-size: 9px; line-height: 1.1; text-overflow: ellipsis; white-space: nowrap; }
+.kpi-track { display: block; grid-area: track; height: 4px; overflow: hidden; border-radius: 999px; background: color-mix(in oklch, var(--kpi-accent) 15%, var(--od-surface)); }
 .kpi-track span { display: block; height: 100%; min-width: 0; border-radius: inherit; background: var(--kpi-accent); }
 .filters { display: flex; grid-area: filters; align-items: end; justify-content: flex-end; flex-wrap: wrap; gap: 8px; }
 .filter-label { display: grid; gap: 3px; color: var(--od-muted); font-size: 10px; font-weight: 700; letter-spacing: .04em; }
