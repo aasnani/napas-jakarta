@@ -53,7 +53,7 @@ export function AnalyticsConsent() {
 
   useEffect(() => {
     const updateLanguage = () => {
-      if (pathname.startsWith("/id/")) {
+      if (pathname === "/id" || pathname.startsWith("/id/")) {
         setIsIndonesian(true);
         return;
       }

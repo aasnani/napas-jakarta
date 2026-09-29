@@ -112,8 +112,8 @@ export const UI_COPY = {
       thoughtForFew: "Thought for a few seconds",
     },
     map: {
-      ariaLabel: "Jakarta Monitoring Map",
-      heading: "Jakarta Monitoring Map",
+      ariaLabel: "Jakarta Air Quality Map",
+      heading: "Jakarta Air Quality Map",
       loadingReadings: "Loading station readings…",
       latestReadings: "Latest readings",
       latestAvailableStale: "Latest available readings · stale",
@@ -310,8 +310,8 @@ export const UI_COPY = {
       thoughtForFew: "Berpikir selama beberapa detik",
     },
     map: {
-      ariaLabel: "Peta pemantauan Jakarta",
-      heading: "Peta pemantauan Jakarta",
+      ariaLabel: "Peta kualitas udara Jakarta",
+      heading: "Peta kualitas udara Jakarta",
       loadingReadings: "Memuat pembacaan stasiun…",
       latestReadings: "Pembacaan terbaru",
       latestAvailableStale: "Pembacaan terbaru yang tersedia · usang",

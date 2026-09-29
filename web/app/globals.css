@@ -304,7 +304,7 @@ textarea {
 .map-panel { display: flex; flex-direction: column; background: #edf0e5; container: map-panel / inline-size; }
 .map-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "title filters" "kpis filters"; align-items: end; gap: 10px 20px; flex: none; min-height: 156px; padding: 15px 23px; border-bottom: 1px solid var(--od-border); background: var(--od-surface); }
 .map-head-title { grid-area: title; min-width: 0; }
-.map-head h2 { margin: 0; color: var(--od-fg); font-family: "Cantarell", "Avenir Next", "Trebuchet MS", sans-serif; font-size: 21px; font-weight: 700; letter-spacing: -.02em; line-height: 1.15; }
+.map-head h1 { margin: 0; color: var(--od-fg); font-family: "Cantarell", "Avenir Next", "Trebuchet MS", sans-serif; font-size: 21px; font-weight: 700; letter-spacing: -.02em; line-height: 1.15; }
 .map-subtitle { margin: 5px 0 0; color: var(--od-muted); font-size: 11px; }
 .map-kpis { display: flex; grid-area: kpis; align-items: stretch; gap: 8px; }
 .map-kpi { display: grid; grid-template-columns: 7px minmax(0, 1fr); align-items: start; gap: 8px; min-width: 0; flex: 1 1 122px; overflow: hidden; padding: 8px 10px; border: 1px solid var(--od-border); border-top: 2px solid var(--kpi-accent); border-radius: 9px; background: var(--od-bg); }
@@ -577,7 +577,7 @@ textarea {
   .brand img { width: 35px; height: 35px; }
   .brand-title { font-size: 16px; }
   .map-head { display: block; padding: 16px; }
-  .map-head h2 { font-size: 19px; }
+  .map-head h1 { font-size: 19px; }
   .map-kpis { margin-top: 12px; }
   .map-kpi { min-width: 0; flex: 1; }
   .map-kpi small { display: none; }
@@ -1248,7 +1248,7 @@ textarea {
     align-self: center;
   }
 
-  .map-head h2 {
+  .map-head h1 {
     font-size: clamp(18px, 1.5vw, 21px);
   }
 
@@ -1687,7 +1687,7 @@ textarea {
     padding: 9px 12px;
   }
 
-  .map-head h2 {
+  .map-head h1 {
     font-size: clamp(18px, 3vw, 20px);
   }
 

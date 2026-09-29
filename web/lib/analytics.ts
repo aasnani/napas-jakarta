@@ -55,6 +55,7 @@ declare global {
 export function isPublicAnalyticsPath(pathname: string): boolean {
   return [
     "/",
+    "/id",
     "/about",
     "/id/tentang",
     "/air-quality-jakarta",

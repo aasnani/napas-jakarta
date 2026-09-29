@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { sanitizeAnalyticsUrl, trackNapasEvent } from "./analytics.ts";
+import { isPublicAnalyticsPath, sanitizeAnalyticsUrl, trackNapasEvent } from "./analytics.ts";
 
 test("sanitizes analytics page locations by removing query strings and fragments", () => {
   assert.equal(
@@ -54,4 +54,10 @@ test("sets sanitized page context before sending an opted-in interaction event",
     if (previousDocument) Object.defineProperty(globalThis, "document", previousDocument);
     else Reflect.deleteProperty(globalThis, "document");
   }
+});
+
+test("the Indonesian homepage is a public analytics path", () => {
+  assert.equal(isPublicAnalyticsPath("/id"), true);
+  assert.equal(isPublicAnalyticsPath("/"), true);
+  assert.equal(isPublicAnalyticsPath("/id/unknown"), false);
 });

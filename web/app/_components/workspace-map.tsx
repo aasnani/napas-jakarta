@@ -547,7 +547,7 @@ export function WorkspaceMap({
     >
       <header className="map-head">
         <div className="map-head-title">
-          <h2>{copy.map.heading}</h2>
+          <h1>{copy.map.heading}</h1>
           <p className="map-subtitle">
             {stationSummary?.latest_observed_at
               ? `${latestObservationIsStale ? copy.map.latestAvailableStale : copy.map.latestReadings} · ${formatObservationTime(stationSummary.latest_observed_at, language)}`

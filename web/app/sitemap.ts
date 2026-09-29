@@ -3,9 +3,11 @@ import {
   absoluteUrl,
   EN_ABOUT_PATH,
   EN_GUIDE_PATH,
+  EN_HOME_PATH,
   EN_PRIVACY_PATH,
   ID_ABOUT_PATH,
   ID_GUIDE_PATH,
+  ID_HOME_PATH,
   ID_PRIVACY_PATH,
 } from "@/lib/site";
 
@@ -16,12 +18,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const indonesianAbout = absoluteUrl(ID_ABOUT_PATH);
   const englishPrivacy = absoluteUrl(EN_PRIVACY_PATH);
   const indonesianPrivacy = absoluteUrl(ID_PRIVACY_PATH);
-  const guideAlternates = { en: englishGuide, id: indonesianGuide };
-  const aboutAlternates = { en: englishAbout, id: indonesianAbout };
-  const privacyAlternates = { en: englishPrivacy, id: indonesianPrivacy };
+  const guideAlternates = { en: englishGuide, id: indonesianGuide, "x-default": englishGuide };
+  const aboutAlternates = { en: englishAbout, id: indonesianAbout, "x-default": englishAbout };
+  const privacyAlternates = { en: englishPrivacy, id: indonesianPrivacy, "x-default": englishPrivacy };
+
+  const homeAlternates = { en: absoluteUrl(EN_HOME_PATH), id: absoluteUrl(ID_HOME_PATH), "x-default": absoluteUrl(EN_HOME_PATH) };
 
   return [
-    { url: absoluteUrl("/") },
+    { url: absoluteUrl(EN_HOME_PATH), alternates: { languages: homeAlternates } },
+    { url: absoluteUrl(ID_HOME_PATH), alternates: { languages: homeAlternates } },
     { url: englishAbout, alternates: { languages: aboutAlternates } },
     { url: indonesianAbout, alternates: { languages: aboutAlternates } },
     { url: englishPrivacy, alternates: { languages: privacyAlternates } },

@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { GuideLayout } from "@/app/_components/guide-layout";
+import { JsonLd } from "@/app/_components/site-schema";
+import { GUIDE_FAQS, guideSchema, UPDATED_LABEL } from "@/lib/guide-content";
 import { absoluteUrl, EN_GUIDE_PATH, ID_GUIDE_PATH } from "@/lib/site";
 import styles from "@/app/_components/guide-layout.module.css";
 
 const title = "Jakarta Air Quality: PM2.5, PM10 & ISPU | Napas Jakarta";
 const description =
-  "A clear guide to Jakarta air-quality readings: learn what PM2.5, PM10, ISPU and station timestamps mean, in English and Indonesian.";
+  "A clear guide to Jakarta air-quality readings: what PM2.5, PM10 and ISPU mean, how to read station timestamps and sources, and where to verify official data.";
 
 export const metadata: Metadata = {
   title,
@@ -14,6 +16,7 @@ export const metadata: Metadata = {
     canonical: absoluteUrl(EN_GUIDE_PATH),
     languages: {
       en: absoluteUrl(EN_GUIDE_PATH),
+      "x-default": absoluteUrl(EN_GUIDE_PATH),
       id: absoluteUrl(ID_GUIDE_PATH),
     },
   },
@@ -21,17 +24,21 @@ export const metadata: Metadata = {
   twitter: { card: "summary", title, description },
 };
 
+const headline = "Jakarta air quality: PM2.5, PM10 and ISPU explained";
+
 export default function JakartaAirQualityGuide() {
   return (
     <GuideLayout lang="en">
+      <JsonLd data={guideSchema("en", headline, description)} />
       <p className={styles.eyebrow}>Napas Jakarta · Air quality explained</p>
-      <h1 className={styles.title}>Jakarta air quality: PM2.5, PM10 and ISPU explained</h1>
+      <h1 className={styles.title}>{headline}</h1>
       <p className={styles.intro}>
         Jakarta air quality is measured at individual monitoring stations. PM2.5 and PM10 are
         particle measurements; ISPU is Indonesia's unitless air-quality index. Check the station,
         observation time and source together: one station reading is not automatically a
         city-wide average.
       </p>
+      <p className={styles.updated}>{UPDATED_LABEL.en}</p>
 
       <section aria-labelledby="what-napas-shows" className={styles.section}>
         <h2 id="what-napas-shows">What does the Napas Jakarta map show?</h2>
@@ -73,20 +80,20 @@ export default function JakartaAirQualityGuide() {
 
       <section aria-labelledby="questions" className={styles.section}>
         <h2 id="questions">Common questions about Jakarta air quality</h2>
-        <h3>Can one air-quality station represent all of Jakarta?</h3>
-        <p>
-          No. A monitor records conditions at its own location and time. Compare multiple stations
-          and their timestamps before drawing conclusions about a wider area.
-        </p>
-        <h3>Are PM2.5 and ISPU the same?</h3>
-        <p>
-          No. PM2.5 is a particle concentration, commonly reported in µg/m³. ISPU is a
-          unitless Indonesian index based on pollutant information.
-        </p>
-        <h3>Where can I verify an official Jakarta station reading?</h3>
-        <p>
-          Open the <a href="https://udara.jakarta.go.id/" rel="noreferrer" target="_blank">DKI Jakarta air-quality portal</a> and check the station and update time shown there.
-        </p>
+        {GUIDE_FAQS.en.map((faq) => (
+          <div key={faq.question}>
+            <h3>{faq.question}</h3>
+            <p>
+              {faq.answer}
+              {faq.source ? (
+                <>
+                  {" "}
+                  <a href={faq.source.href} rel="noreferrer" target="_blank">{faq.source.label}</a>
+                </>
+              ) : null}
+            </p>
+          </div>
+        ))}
       </section>
 
       <section aria-labelledby="sources" className={styles.section}>
