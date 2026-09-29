@@ -33,8 +33,10 @@ export async function superviseProduction({
       { env: childEnv, stdio: "inherit" },
     ),
     spawnProcess(
-      "npm",
-      ["run", "start", "--", "--hostname", "0.0.0.0", "--port", nextPort],
+      // Run Next directly: going through `npm run` keeps an extra idle Node
+      // process (and its memory) alive for the life of the service.
+      "./node_modules/.bin/next",
+      ["start", "--hostname", "0.0.0.0", "--port", nextPort],
       { env: childEnv, stdio: "inherit" },
     ),
   ];

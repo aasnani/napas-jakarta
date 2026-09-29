@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { fetchNapasJson } from "./server-api.ts";
+import { fetchApiWithWake, fetchNapasJson } from "./server-api.ts";
 
 test("fetchNapasJson forwards the internal API token server-side", async () => {
   const previousOrigin = process.env.NAPAS_API_ORIGIN;
@@ -35,5 +35,39 @@ test("fetchNapasJson forwards the internal API token server-side", async () => {
     else process.env.NAPAS_API_ORIGIN = previousOrigin;
     if (previousToken === undefined) delete process.env.NAPAS_INTERNAL_TOKEN;
     else process.env.NAPAS_INTERNAL_TOKEN = previousToken;
+  }
+});
+
+test("fetchApiWithWake retries a cold-start 502 and then succeeds", async () => {
+  const previousFetch = globalThis.fetch;
+  let calls = 0;
+  globalThis.fetch = async () => {
+    calls += 1;
+    return calls < 2 ? new Response("waking", { status: 502 }) : new Response("ok", { status: 200 });
+  };
+
+  try {
+    const response = await fetchApiWithWake("http://api.internal/health");
+    assert.equal(response.status, 200);
+    assert.equal(calls, 2);
+  } finally {
+    globalThis.fetch = previousFetch;
+  }
+});
+
+test("fetchApiWithWake does not retry client errors", async () => {
+  const previousFetch = globalThis.fetch;
+  let calls = 0;
+  globalThis.fetch = async () => {
+    calls += 1;
+    return new Response("nope", { status: 401 });
+  };
+
+  try {
+    const response = await fetchApiWithWake("http://api.internal/health");
+    assert.equal(response.status, 401);
+    assert.equal(calls, 1);
+  } finally {
+    globalThis.fetch = previousFetch;
   }
 });

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { internalApiHeaders, napasApiOrigin } from "@/lib/server-api";
+import { fetchApiWithWake, internalApiHeaders, napasApiOrigin } from "@/lib/server-api";
 
 export const dynamic = "force-dynamic";
 
@@ -13,10 +13,9 @@ export async function GET(request: Request) {
   const target = `${apiOrigin}/stations?pollutant=${encodeURIComponent(requestedPollutant)}`;
 
   try {
-    const response = await fetch(target, {
+    const response = await fetchApiWithWake(target, {
       cache: "no-store",
       headers: internalApiHeaders(),
-      signal: AbortSignal.timeout(8_000),
     });
     if (!response.ok) {
       return NextResponse.json({ error: "station_data_unavailable" }, { status: 502 });
