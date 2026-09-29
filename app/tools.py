@@ -9,6 +9,39 @@ from typing import TypedDict
 from .data import district_matches, latest_by_station
 from .models import Document, Measurement
 
+# The official portal names districts in Indonesian ("Jakarta Utara"). Users and
+# the model naturally say "North Jakarta", so whole-string aliases resolve to
+# the portal name before substring matching.
+_DISTRICT_ALIASES = {
+    "north jakarta": "jakarta utara",
+    "the north": "jakarta utara",
+    "north": "jakarta utara",
+    "jakut": "jakarta utara",
+    "south jakarta": "jakarta selatan",
+    "the south": "jakarta selatan",
+    "south": "jakarta selatan",
+    "jaksel": "jakarta selatan",
+    "west jakarta": "jakarta barat",
+    "the west": "jakarta barat",
+    "west": "jakarta barat",
+    "jakbar": "jakarta barat",
+    "east jakarta": "jakarta timur",
+    "the east": "jakarta timur",
+    "east": "jakarta timur",
+    "jaktim": "jakarta timur",
+    "central jakarta": "jakarta pusat",
+    "the centre": "jakarta pusat",
+    "the center": "jakarta pusat",
+    "jakpus": "jakarta pusat",
+    "thousand islands": "kepulauan seribu",
+}
+
+
+def _location_needle(location: str) -> str:
+    """Lower-cased search needle with English/short district names resolved."""
+    needle = " ".join(location.lower().split())
+    return _DISTRICT_ALIASES.get(needle, needle)
+
 
 class CategoryOccurrence(TypedDict):
     """Most-recent station observation matching an ISPU category threshold."""
@@ -279,7 +312,7 @@ def get_latest_measurements(
 ) -> list[dict]:
     rows = latest_by_station(measurements, pollutant)
     if location:
-        needle = location.lower()
+        needle = _location_needle(location)
         rows = [x for x in rows if needle in (x.district + " " + x.station_name).lower()]
     output = []
     for x in rows:
@@ -320,7 +353,7 @@ def get_historical_summary(
         x
         for x in measurements
         if x.pollutant == pollutant
-        and location.lower() in (x.district + " " + x.station_name).lower()
+        and _location_needle(location) in (x.district + " " + x.station_name).lower()
         and start <= x.observed_at.date() <= end
     ]
     selected = [x for x in matching if x.concentration is not None]
@@ -366,7 +399,7 @@ def compare_measurement_with_standard(value: float, pollutant: str = "PM2.5") ->
 def get_unhealthy_day_count(
     measurements: list[Measurement], location: str, start: date, end: date
 ) -> dict:
-    needle = location.lower()
+    needle = _location_needle(location)
     matching = [
         x
         for x in measurements
@@ -393,11 +426,23 @@ def compare_locations(
     output = []
     for location in locations:
         rows = get_latest_measurements(measurements, location, pollutant)
+        fresh = [
+            row["concentration"]
+            for row in rows
+            if row["concentration"] is not None and not row["freshness"]["stale"]
+        ]
         output.append(
             {
                 "location": location,
                 "available": bool(rows),
                 "latest": rows[0] if rows else None,
+                # A district is many stations; summarise the fresh ones so a
+                # comparison is not decided by one arbitrary monitor.
+                "matched_station_count": len(rows),
+                "fresh_station_count": len(fresh),
+                "fresh_mean_concentration": round(sum(fresh) / len(fresh), 2) if fresh else None,
+                "fresh_min_concentration": min(fresh) if fresh else None,
+                "fresh_max_concentration": max(fresh) if fresh else None,
                 "warning": None if rows else "No observation available",
             }
         )
