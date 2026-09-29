@@ -16,9 +16,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const indonesianAbout = absoluteUrl(ID_ABOUT_PATH);
   const englishPrivacy = absoluteUrl(EN_PRIVACY_PATH);
   const indonesianPrivacy = absoluteUrl(ID_PRIVACY_PATH);
-  const guideAlternates = { en: englishGuide, id: indonesianGuide };
-  const aboutAlternates = { en: englishAbout, id: indonesianAbout };
-  const privacyAlternates = { en: englishPrivacy, id: indonesianPrivacy };
+  const guideAlternates = { en: englishGuide, id: indonesianGuide, "x-default": englishGuide };
+  const aboutAlternates = { en: englishAbout, id: indonesianAbout, "x-default": englishAbout };
+  const privacyAlternates = { en: englishPrivacy, id: indonesianPrivacy, "x-default": englishPrivacy };
 
   return [
     { url: absoluteUrl("/") },

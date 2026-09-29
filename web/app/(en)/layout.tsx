@@ -1,11 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import "maplibre-gl/dist/maplibre-gl.css";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { AnalyticsConsent } from "@/app/_components/analytics-consent";
-import { SiteSchema } from "@/app/_components/site-schema";
+import { RootShell } from "@/app/_components/root-shell";
 import { SITE_URL } from "@/lib/site";
-import "./globals.css";
 
 const description =
   "Explore Jakarta station-level air-quality readings and clear explanations of PM2.5, PM10, ISPU, sources, and data freshness—in English and Indonesian.";
@@ -45,15 +41,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { readonly children: ReactNode }) {
-  return (
-    <html lang="en">
-      <body>
-        <TooltipProvider>
-          <SiteSchema />
-          {children}
-          <AnalyticsConsent />
-        </TooltipProvider>
-      </body>
-    </html>
-  );
+  return <RootShell lang="en">{children}</RootShell>;
 }

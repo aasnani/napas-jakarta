@@ -14,6 +14,7 @@ export const metadata: Metadata = {
     canonical: absoluteUrl(ID_GUIDE_PATH),
     languages: {
       en: absoluteUrl(EN_GUIDE_PATH),
+      "x-default": absoluteUrl(EN_GUIDE_PATH),
       id: absoluteUrl(ID_GUIDE_PATH),
     },
   },
