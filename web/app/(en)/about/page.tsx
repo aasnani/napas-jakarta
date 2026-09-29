@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import { PublicInfoLayout, ABOUT_PATHS } from "@/app/_components/public-info-layout";
 import styles from "@/app/_components/guide-layout.module.css";
+import { JsonLd } from "@/app/_components/site-schema";
+import { pageSchema } from "@/lib/guide-content";
 import { absoluteUrl } from "@/lib/site";
 import { getUiCopy } from "@/lib/i18n";
 
 const copy = getUiCopy("en");
 const title = "About Napas Jakarta | Air Quality Monitor";
-const description = copy.about.aboutBody[0];
+const description =
+  "Napas Jakarta is a conversational guide to Jakarta air quality, bringing the map, station readings and plain-language explanations together in one place.";
 
 export const metadata: Metadata = {
   title,
@@ -26,6 +29,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <PublicInfoLayout lang="en" localizedPaths={ABOUT_PATHS}>
+      <JsonLd data={pageSchema("en", "AboutPage", title, description, ABOUT_PATHS.en)} />
       <p className={styles.eyebrow}>{copy.about.kicker}</p>
       <h1 className={styles.title}>{copy.about.aboutTitle}</h1>
       <section aria-label="About Napas Jakarta" className={styles.section}>

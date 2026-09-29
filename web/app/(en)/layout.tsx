@@ -8,7 +8,7 @@ const description =
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Napas Jakarta | Air Quality Monitor",
+  title: "Jakarta Air Quality Map: PM2.5 & ISPU | Napas Jakarta",
   description,
   applicationName: "Napas Jakarta",
   alternates: { canonical: "/" },
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "Napas Jakarta",
-    title: "Jakarta Air Quality Map & ISPU Guide | Napas Jakarta",
+    title: "Jakarta Air Quality Map: PM2.5 & ISPU | Napas Jakarta",
     description,
     url: "/",
     images: [
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Jakarta Air Quality Map & ISPU Guide | Napas Jakarta",
+    title: "Jakarta Air Quality Map: PM2.5 & ISPU | Napas Jakarta",
     description,
     images: ["/napas-jakarta-air-icon.png"],
   },

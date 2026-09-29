@@ -6,9 +6,11 @@ import { getUiCopy, type Language } from "@/lib/i18n";
 import {
   EN_ABOUT_PATH,
   EN_GUIDE_PATH,
+  EN_HOME_PATH,
   EN_PRIVACY_PATH,
   ID_ABOUT_PATH,
   ID_GUIDE_PATH,
+  ID_HOME_PATH,
   ID_PRIVACY_PATH,
 } from "@/lib/site";
 
@@ -42,7 +44,7 @@ export function SiteHeader({
           <Link aria-current={isActive(privacyPath) ? "page" : undefined} className="topbar-link" href={privacyPath} lang={language}>{copy.navbar.privacy}</Link>
         </nav>
       </div>
-      <Link aria-label={copy.navbar.brandHome} className="brand" href="/" data-od-id="napas-logo">
+      <Link aria-label={copy.navbar.brandHome} className="brand" href={language === "id" ? ID_HOME_PATH : EN_HOME_PATH} data-od-id="napas-logo">
         <img alt="" height={1254} src="/napas-jakarta-air-icon.png" width={1254} />
         <span className="brand-title">Napas <small>Jakarta</small></span>
       </Link>
@@ -55,8 +57,8 @@ export function SiteHeader({
             </>
           ) : (
             <>
-              <Link aria-current={language === "en" ? "page" : undefined} aria-label={copy.navbar.switchEnglish} className={language === "en" ? "is-active" : undefined} href={localizedPaths?.en ?? "/"} lang="en">EN</Link>
-              <Link aria-current={language === "id" ? "page" : undefined} aria-label={copy.navbar.switchIndonesian} className={language === "id" ? "is-active" : undefined} href={localizedPaths?.id ?? "/"} lang="id">ID</Link>
+              <Link aria-current={language === "en" ? "page" : undefined} aria-label={copy.navbar.switchEnglish} className={language === "en" ? "is-active" : undefined} href={localizedPaths?.en ?? EN_HOME_PATH} lang="en">EN</Link>
+              <Link aria-current={language === "id" ? "page" : undefined} aria-label={copy.navbar.switchIndonesian} className={language === "id" ? "is-active" : undefined} href={localizedPaths?.id ?? ID_HOME_PATH} lang="id">ID</Link>
             </>
           )}
         </div>

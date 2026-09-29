@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { GuideLayout } from "@/app/_components/guide-layout";
+import { JsonLd } from "@/app/_components/site-schema";
+import { GUIDE_FAQS, guideSchema, UPDATED_LABEL } from "@/lib/guide-content";
 import { absoluteUrl, EN_GUIDE_PATH, ID_GUIDE_PATH } from "@/lib/site";
 import styles from "@/app/_components/guide-layout.module.css";
 
 const title = "Kualitas Udara Jakarta: PM2.5, PM10 & ISPU | Napas Jakarta";
 const description =
-  "Panduan membaca kualitas udara Jakarta: pahami PM2.5, PM10, ISPU, nama stasiun, waktu pengamatan, dan sumber data.";
+  "Panduan membaca kualitas udara Jakarta: arti PM2.5, PM10, dan ISPU, cara membaca waktu dan sumber pengamatan stasiun, serta tempat memeriksa data resmi.";
 
 export const metadata: Metadata = {
   title,
@@ -22,17 +24,21 @@ export const metadata: Metadata = {
   twitter: { card: "summary", title, description },
 };
 
+const headline = "Kualitas udara Jakarta: memahami PM2.5, PM10, dan ISPU";
+
 export default function PanduanKualitasUdaraJakarta() {
   return (
     <GuideLayout lang="id">
+      <JsonLd data={guideSchema("id", headline, description)} />
       <p className={styles.eyebrow}>Napas Jakarta · Memahami kualitas udara</p>
-      <h1 className={styles.title}>Kualitas udara Jakarta: memahami PM2.5, PM10, dan ISPU</h1>
+      <h1 className={styles.title}>{headline}</h1>
       <p className={styles.intro}>
         Kualitas udara Jakarta dipantau melalui stasiun di lokasi tertentu. PM2.5 dan PM10 adalah
         ukuran partikel, sedangkan ISPU adalah indeks kualitas udara tanpa satuan. Periksa nama
         stasiun, waktu pengamatan, dan sumber data secara bersamaan; satu angka stasiun tidak
         otomatis mewakili seluruh Jakarta.
       </p>
+      <p className={styles.updated}>{UPDATED_LABEL.id}</p>
 
       <section aria-labelledby="tampilan-napas" className={styles.section}>
         <h2 id="tampilan-napas">Apa yang ditampilkan peta Napas Jakarta?</h2>
@@ -74,21 +80,20 @@ export default function PanduanKualitasUdaraJakarta() {
 
       <section aria-labelledby="pertanyaan" className={styles.section}>
         <h2 id="pertanyaan">Pertanyaan umum tentang kualitas udara Jakarta</h2>
-        <h3>Apakah satu stasiun mewakili seluruh Jakarta?</h3>
-        <p>
-          Tidak. Monitor mencatat kondisi di lokasi dan waktu pengukurannya sendiri. Bandingkan
-          beberapa stasiun beserta waktu pengamatannya sebelum menarik kesimpulan untuk wilayah
-          yang lebih luas.
-        </p>
-        <h3>Apakah PM2.5 sama dengan ISPU?</h3>
-        <p>
-          Tidak. PM2.5 adalah konsentrasi partikel, biasanya dilaporkan dalam µg/m³. ISPU adalah
-          indeks tanpa satuan yang dihitung dari informasi polutan.
-        </p>
-        <h3>Di mana saya dapat memeriksa data stasiun resmi Jakarta?</h3>
-        <p>
-          Buka <a href="https://udara.jakarta.go.id/" rel="noreferrer" target="_blank">portal kualitas udara DKI Jakarta</a>, lalu periksa stasiun dan waktu pembaruannya.
-        </p>
+        {GUIDE_FAQS.id.map((faq) => (
+          <div key={faq.question}>
+            <h3>{faq.question}</h3>
+            <p>
+              {faq.answer}
+              {faq.source ? (
+                <>
+                  {" "}
+                  <a href={faq.source.href} rel="noreferrer" target="_blank">{faq.source.label}</a>
+                </>
+              ) : null}
+            </p>
+          </div>
+        ))}
       </section>
 
       <section aria-labelledby="sumber" className={styles.section}>

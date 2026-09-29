@@ -1,12 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AgentChat } from "./agent-chat";
 import { SiteHeader } from "./site-header";
 import { WorkspaceMap } from "./workspace-map";
 import { trackNapasEvent } from "@/lib/analytics";
 import {
-  DEFAULT_LANGUAGE,
   getUiCopy,
   LANGUAGE_CHANGE_EVENT,
   LANGUAGE_STORAGE_KEY,
@@ -15,24 +14,34 @@ import {
 } from "@/lib/i18n";
 import { type DemoStation } from "@/lib/napas";
 import { toggleMobileMapOverlay } from "@/lib/mobile-layout";
+import { EN_HOME_PATH, HOME_TITLES, ID_HOME_PATH } from "@/lib/site";
 import { reconcileStationId, resolveStation } from "@/lib/station-selection";
 
-export function Workspace() {
+export function Workspace({ initialLanguage }: { readonly initialLanguage: Language }) {
   const [selectedStationId, setSelectedStationId] = useState<string>();
   const [stationOptions, setStationOptions] = useState<readonly DemoStation[]>([]);
   const [mapOverlayOpen, setMapOverlayOpen] = useState(false);
   const [mobileLegendOpen, setMobileLegendOpen] = useState(false);
-  const language = useSyncExternalStore(subscribeToLanguageChanges, getStoredLanguage, () => DEFAULT_LANGUAGE);
+  const [language, setLanguage] = useState<Language>(initialLanguage);
   const copy = getUiCopy(language);
   const selectedStation = resolveStation(stationOptions, selectedStationId);
 
   useEffect(() => {
     syncDocumentLanguage(language);
+    document.title = HOME_TITLES[language];
   }, [language]);
 
   const changeLanguage = (nextLanguage: Language) => {
     if (nextLanguage === language) return;
-    window.localStorage.setItem(LANGUAGE_STORAGE_KEY, nextLanguage);
+    setLanguage(nextLanguage);
+    try {
+      window.localStorage.setItem(LANGUAGE_STORAGE_KEY, nextLanguage);
+    } catch {
+      // The URL and in-memory state still carry the choice if storage is unavailable.
+    }
+    // Keep the URL, canonical language and visible language aligned without navigating,
+    // so the map and chat state survive the switch.
+    window.history.replaceState(window.history.state, "", nextLanguage === "id" ? ID_HOME_PATH : EN_HOME_PATH);
     window.dispatchEvent(new Event(LANGUAGE_CHANGE_EVENT));
   };
 
@@ -91,21 +100,4 @@ export function Workspace() {
 
     </main>
   );
-}
-
-function getStoredLanguage(): Language {
-  try {
-    return window.localStorage.getItem(LANGUAGE_STORAGE_KEY) === "id" ? "id" : DEFAULT_LANGUAGE;
-  } catch {
-    return DEFAULT_LANGUAGE;
-  }
-}
-
-function subscribeToLanguageChanges(onStoreChange: () => void): () => void {
-  window.addEventListener("storage", onStoreChange);
-  window.addEventListener(LANGUAGE_CHANGE_EVENT, onStoreChange);
-  return () => {
-    window.removeEventListener("storage", onStoreChange);
-    window.removeEventListener(LANGUAGE_CHANGE_EVENT, onStoreChange);
-  };
 }

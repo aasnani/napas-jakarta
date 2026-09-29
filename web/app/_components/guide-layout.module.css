@@ -156,3 +156,9 @@
     margin-top: 0.25rem;
   }
 }
+
+.updated {
+  margin: -1.25rem 0 2rem;
+  color: #56707f;
+  font-size: 0.85rem;
+}
