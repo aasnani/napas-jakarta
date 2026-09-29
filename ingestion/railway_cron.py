@@ -1,4 +1,4 @@
-"""Railway hourly cron entrypoint for station and daily city-history refreshes.
+"""Railway scheduled cron entrypoint for station and daily city-history refreshes.
 
 Railway cron services have one schedule. This process therefore runs the
 official station refresh every time and dispatches the more expensive
