@@ -21,6 +21,9 @@ export async function superviseProduction({
   const evePort = env.EVE_NEXT_PRODUCTION_PORT ?? DEFAULT_EVE_PORT;
   const nextPort = env.PORT ?? "3000";
   const childEnv = {
+    // glibc creates a malloc arena per thread; two arenas is plenty here and
+    // trims resident memory in small containers.
+    MALLOC_ARENA_MAX: "2",
     ...env,
     EVE_NEXT_PRODUCTION_ORIGIN:
       env.EVE_NEXT_PRODUCTION_ORIGIN ?? `http://127.0.0.1:${evePort}`,
@@ -33,8 +36,10 @@ export async function superviseProduction({
       { env: childEnv, stdio: "inherit" },
     ),
     spawnProcess(
-      "npm",
-      ["run", "start", "--", "--hostname", "0.0.0.0", "--port", nextPort],
+      // Run Next directly: going through `npm run` keeps an extra idle Node
+      // process (and its memory) alive for the life of the service.
+      "./node_modules/.bin/next",
+      ["start", "--hostname", "0.0.0.0", "--port", nextPort],
       { env: childEnv, stdio: "inherit" },
     ),
   ];
