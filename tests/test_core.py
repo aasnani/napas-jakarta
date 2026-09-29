@@ -626,3 +626,17 @@ def test_demo_loader_prefers_processed_measurements(tmp_path):
 
     _, measurements = load_demo_state(tmp_path)
     assert len(measurements) == 5
+
+
+def test_english_district_names_resolve_to_portal_districts():
+    measurements = load_measurements(ROOT / "data/demo/measurements.csv")
+    districts = {item.district for item in measurements}
+    assert "Jakarta Pusat" in districts
+    assert get_latest_measurements(measurements, "Central Jakarta") == get_latest_measurements(
+        measurements, "Jakarta Pusat"
+    )
+    comparison = compare_locations(measurements, ["Central Jakarta", "Nowhere"])
+    assert comparison[0]["available"] is True
+    assert comparison[0]["matched_station_count"] >= 1
+    assert comparison[1]["available"] is False
+    assert comparison[1]["fresh_mean_concentration"] is None
