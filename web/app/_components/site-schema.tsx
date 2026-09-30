@@ -1,4 +1,3 @@
-import { OPERATOR_SAME_AS } from "@/lib/guide-content";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 export function JsonLd({ data }: { readonly data: unknown }) {
@@ -19,7 +18,6 @@ const siteSchema = {
       name: SITE_NAME,
       url: SITE_URL,
       logo: `${SITE_URL}/napas-jakarta-air-icon.png`,
-      sameAs: OPERATOR_SAME_AS,
     },
     {
       "@type": "WebSite",

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { PublicInfoLayout, ABOUT_PATHS } from "@/app/_components/public-info-layout";
 import styles from "@/app/_components/guide-layout.module.css";
+import { AboutContent } from "@/app/_components/about-content";
 import { JsonLd } from "@/app/_components/site-schema";
 import { pageSchema } from "@/lib/guide-content";
 import { absoluteUrl } from "@/lib/site";
@@ -32,9 +33,7 @@ export default function AboutPage() {
       <JsonLd data={pageSchema("en", "AboutPage", title, description, ABOUT_PATHS.en)} />
       <p className={styles.eyebrow}>{copy.about.kicker}</p>
       <h1 className={styles.title}>{copy.about.aboutTitle}</h1>
-      <section aria-label="About Napas Jakarta" className={styles.section}>
-        {copy.about.aboutBody.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
-      </section>
+      <AboutContent lang="en" />
     </PublicInfoLayout>
   );
 }

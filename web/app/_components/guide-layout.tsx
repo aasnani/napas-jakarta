@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { EN_GUIDE_PATH, ID_GUIDE_PATH } from "@/lib/site";
+import { EN_ABOUT_PATH, EN_GUIDE_PATH, ID_ABOUT_PATH, ID_GUIDE_PATH } from "@/lib/site";
 import { SiteHeader } from "./site-header";
 import styles from "./guide-layout.module.css";
 
@@ -21,6 +21,9 @@ export function GuideLayout({
         <nav aria-label={isEnglish ? "Related pages" : "Halaman terkait"} className={styles.related}>
           <Link href="/">
             {isEnglish ? "Open the Napas Jakarta workspace" : "Buka ruang kerja Napas Jakarta"}
+          </Link>
+          <Link href={isEnglish ? EN_ABOUT_PATH : ID_ABOUT_PATH} lang={lang}>
+            {isEnglish ? "How Napas Jakarta sources and checks its data" : "Cara Napas Jakarta memperoleh dan memeriksa datanya"}
           </Link>
           <Link href={isEnglish ? ID_GUIDE_PATH : EN_GUIDE_PATH} lang={isEnglish ? "id" : "en"}>
             {isEnglish ? "Baca dalam Bahasa Indonesia" : "Read in English"}
