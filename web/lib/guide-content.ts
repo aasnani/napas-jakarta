@@ -2,7 +2,7 @@ import { absoluteUrl, EN_GUIDE_PATH, ID_GUIDE_PATH, SITE_NAME, SITE_URL } from "
 
 export const GUIDE_DATE_PUBLISHED = "2026-09-28";
 export const GUIDE_DATE_MODIFIED = "2026-09-30";
-export const OPERATOR_SAME_AS = ["https://github.com/aasnani/napas-jakarta"] as const;
+export const ABOUT_DATE_MODIFIED = "2026-10-01";
 
 export type GuideLanguage = "en" | "id";
 

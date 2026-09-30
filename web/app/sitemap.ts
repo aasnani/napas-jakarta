@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { ABOUT_DATE_MODIFIED, GUIDE_DATE_MODIFIED } from "@/lib/guide-content";
 import {
   absoluteUrl,
   EN_ABOUT_PATH,
@@ -27,16 +28,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: absoluteUrl(EN_HOME_PATH), alternates: { languages: homeAlternates } },
     { url: absoluteUrl(ID_HOME_PATH), alternates: { languages: homeAlternates } },
-    { url: englishAbout, alternates: { languages: aboutAlternates } },
-    { url: indonesianAbout, alternates: { languages: aboutAlternates } },
+    { url: englishAbout, lastModified: ABOUT_DATE_MODIFIED, alternates: { languages: aboutAlternates } },
+    { url: indonesianAbout, lastModified: ABOUT_DATE_MODIFIED, alternates: { languages: aboutAlternates } },
     { url: englishPrivacy, alternates: { languages: privacyAlternates } },
     { url: indonesianPrivacy, alternates: { languages: privacyAlternates } },
     {
       url: englishGuide,
+      lastModified: GUIDE_DATE_MODIFIED,
       alternates: { languages: guideAlternates },
     },
     {
       url: indonesianGuide,
+      lastModified: GUIDE_DATE_MODIFIED,
       alternates: { languages: guideAlternates },
     },
   ];
