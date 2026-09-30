@@ -12,35 +12,19 @@ import {
   ID_PRIVACY_PATH,
 } from "@/lib/site";
 
+// Language alternates (hreflang) live in each page's <link rel="alternate">
+// metadata, which Google accepts on its own. Keeping them out of the sitemap
+// leaves a plain sitemap that browsers show as an XML tree and avoids two
+// places that must stay in agreement.
 export default function sitemap(): MetadataRoute.Sitemap {
-  const englishGuide = absoluteUrl(EN_GUIDE_PATH);
-  const indonesianGuide = absoluteUrl(ID_GUIDE_PATH);
-  const englishAbout = absoluteUrl(EN_ABOUT_PATH);
-  const indonesianAbout = absoluteUrl(ID_ABOUT_PATH);
-  const englishPrivacy = absoluteUrl(EN_PRIVACY_PATH);
-  const indonesianPrivacy = absoluteUrl(ID_PRIVACY_PATH);
-  const guideAlternates = { en: englishGuide, id: indonesianGuide, "x-default": englishGuide };
-  const aboutAlternates = { en: englishAbout, id: indonesianAbout, "x-default": englishAbout };
-  const privacyAlternates = { en: englishPrivacy, id: indonesianPrivacy, "x-default": englishPrivacy };
-
-  const homeAlternates = { en: absoluteUrl(EN_HOME_PATH), id: absoluteUrl(ID_HOME_PATH), "x-default": absoluteUrl(EN_HOME_PATH) };
-
   return [
-    { url: absoluteUrl(EN_HOME_PATH), alternates: { languages: homeAlternates } },
-    { url: absoluteUrl(ID_HOME_PATH), alternates: { languages: homeAlternates } },
-    { url: englishAbout, lastModified: ABOUT_DATE_MODIFIED, alternates: { languages: aboutAlternates } },
-    { url: indonesianAbout, lastModified: ABOUT_DATE_MODIFIED, alternates: { languages: aboutAlternates } },
-    { url: englishPrivacy, alternates: { languages: privacyAlternates } },
-    { url: indonesianPrivacy, alternates: { languages: privacyAlternates } },
-    {
-      url: englishGuide,
-      lastModified: GUIDE_DATE_MODIFIED,
-      alternates: { languages: guideAlternates },
-    },
-    {
-      url: indonesianGuide,
-      lastModified: GUIDE_DATE_MODIFIED,
-      alternates: { languages: guideAlternates },
-    },
+    { url: absoluteUrl(EN_HOME_PATH) },
+    { url: absoluteUrl(ID_HOME_PATH) },
+    { url: absoluteUrl(EN_ABOUT_PATH), lastModified: ABOUT_DATE_MODIFIED },
+    { url: absoluteUrl(ID_ABOUT_PATH), lastModified: ABOUT_DATE_MODIFIED },
+    { url: absoluteUrl(EN_PRIVACY_PATH) },
+    { url: absoluteUrl(ID_PRIVACY_PATH) },
+    { url: absoluteUrl(EN_GUIDE_PATH), lastModified: GUIDE_DATE_MODIFIED },
+    { url: absoluteUrl(ID_GUIDE_PATH), lastModified: GUIDE_DATE_MODIFIED },
   ];
 }
